@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,12 +23,22 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.susumunoda.kansha.data.DataSource
 import com.susumunoda.kansha.data.Message
 
 @Composable
 fun KanshaApp(messages: List<Message> = DataSource.allMessages()) {
     Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /*TODO*/ },
+                shape = CircleShape,
+                modifier = Modifier.size(80.dp)
+            ) {
+                Text("🙏", fontSize = 30.sp)
+            }
+        },
         topBar = {}
     ) { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
