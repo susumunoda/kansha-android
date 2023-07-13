@@ -1,11 +1,18 @@
 package com.susumunoda.kansha.data
 
-data class Message(val from: String, val to: String, val message: String)
+import androidx.annotation.DrawableRes
+
+data class Message(
+    @DrawableRes val senderPhotoId: Int,
+    val sender: String,
+    val recipient: String,
+    val message: String
+)
 
 fun List<Message>.filterBySender(sender: String) {
-    filter { it.from == sender }
+    filter { it.sender == sender }
 }
 
 fun List<Message>.filterByRecipient(recipient: String) {
-    filter { it.to == recipient }
+    filter { it.recipient == recipient }
 }
