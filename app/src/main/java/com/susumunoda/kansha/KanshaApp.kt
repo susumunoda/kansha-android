@@ -41,41 +41,51 @@ fun KanshaApp(messages: List<Message> = DataSource.allMessages()) {
         },
         topBar = {}
     ) { contentPadding ->
-        Column(modifier = Modifier.padding(contentPadding)) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                modifier = Modifier.padding(16.dp)
+        MessageList(messages, modifier = Modifier.padding(contentPadding))
+    }
+}
+
+@Composable
+private fun MessageList(messages: List<Message>, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(16.dp)
+        ) {
+            items(messages) { message ->
+                MessageCard(message)
+            }
+        }
+    }
+}
+
+@Composable
+private fun MessageCard(message: Message, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .height(100.dp)
+            .fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            Image(
+                painterResource(message.senderPhotoId),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(80.dp)
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 16.dp)
             ) {
-                items(messages) { message ->
-                    Card(
-                        modifier = Modifier
-                            .height(100.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(8.dp)
-                        ) {
-                            Image(
-                                painterResource(message.senderPhotoId),
-                                contentDescription = null,
-                                contentScale = ContentScale.Crop,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(80.dp)
-                            )
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(start = 16.dp)
-                            ) {
-                                Text("From ${message.sender} to ${message.recipient}")
-                                Text(message.message)
-                            }
-                        }
-                    }
-                }
+                Text("From ${message.sender} to ${message.recipient}")
+                Text(message.message)
             }
         }
     }
@@ -83,6 +93,6 @@ fun KanshaApp(messages: List<Message> = DataSource.allMessages()) {
 
 @Preview
 @Composable
-fun KanshaAppPreview() {
+private fun KanshaAppPreview() {
     KanshaApp()
 }
