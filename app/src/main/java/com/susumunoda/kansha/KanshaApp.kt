@@ -1,9 +1,12 @@
 package com.susumunoda.kansha
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,19 +31,34 @@ fun KanshaApp(messages: List<Message> = DataSource.allMessages()) {
         topBar = {}
     ) { contentPadding ->
         Column(modifier = Modifier.padding(contentPadding)) {
-            LazyColumn {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.padding(16.dp)
+            ) {
                 items(messages) { message ->
-                    Card(modifier = Modifier.fillMaxWidth()) {
-                        Row {
+                    Card(
+                        modifier = Modifier
+                            .height(100.dp)
+                            .fillMaxWidth()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(8.dp)
+                        ) {
                             Image(
                                 painterResource(message.senderPhotoId),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
                                     .clip(CircleShape)
-                                    .size(100.dp)
+                                    .size(80.dp)
                             )
-                            Column {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(start = 16.dp)
+                            ) {
                                 Text("From ${message.sender} to ${message.recipient}")
                                 Text(message.message)
                             }
