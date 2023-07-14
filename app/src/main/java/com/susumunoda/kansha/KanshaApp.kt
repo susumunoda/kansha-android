@@ -18,11 +18,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,15 +85,16 @@ private fun FilterOptions(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 16.dp)
     ) {
         FilterType.values().forEach { filterType ->
             FilterChip(
                 selected = filterType == uiState.filterType,
                 onClick = { viewModel.setFilter(filterType) },
-                shape = RoundedCornerShape(50.dp),
-                label = { Text(filterType.label) },
-                modifier = modifier.height(FilterChipDefaults.Height)
+                label = { Text(filterType.label, fontSize = 16.sp, fontWeight = FontWeight.Bold) },
+                modifier = modifier.height(40.dp)
             )
         }
     }
@@ -104,10 +104,6 @@ private fun FilterOptions(
 private fun MessageList(messages: List<Message>, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            item {
-                // Empty spacer to provide even padding before list content
-                Spacer(Modifier)
-            }
             items(messages) { message ->
                 MessageCard(message)
             }
