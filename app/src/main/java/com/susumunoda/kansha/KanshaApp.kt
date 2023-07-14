@@ -18,12 +18,18 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -31,11 +37,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.susumunoda.kansha.data.DataSource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.susumunoda.kansha.ListViewViewModel.FilterType
 import com.susumunoda.kansha.data.Message
 
 @Composable
-fun KanshaApp(messages: List<Message> = DataSource.allMessages()) {
+fun KanshaApp(listViewViewModel: ListViewViewModel = viewModel()) {
+    val uiState by listViewViewModel.uiState.collectAsState()
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -52,19 +60,43 @@ fun KanshaApp(messages: List<Message> = DataSource.allMessages()) {
                     .fillMaxWidth()
                     .background(MaterialTheme.colorScheme.primary)
                     .windowInsetsPadding(WindowInsets.statusBars)
-            ) {
-                Text("test")
-            }
+            )
         }
     ) { contentPadding ->
-        MessageList(
-            messages,
+        Column(
             modifier = Modifier.padding(
                 top = contentPadding.calculateTopPadding(),
                 start = 16.dp,
                 end = 16.dp
+                // Don't pad bottom because we want the edge-to-edge effect
             )
-        )
+        ) {
+            FilterOptions(listViewViewModel, uiState)
+            MessageList(uiState.entries)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun FilterOptions(
+    viewModel: ListViewViewModel,
+    uiState: ListViewState,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.fillMaxWidth()
+    ) {
+        FilterType.values().forEach { filterType ->
+            FilterChip(
+                selected = filterType == uiState.filterType,
+                onClick = { viewModel.setFilter(filterType) },
+                shape = RoundedCornerShape(50.dp),
+                label = { Text(filterType.label) },
+                modifier = modifier.height(FilterChipDefaults.Height)
+            )
+        }
     }
 }
 
