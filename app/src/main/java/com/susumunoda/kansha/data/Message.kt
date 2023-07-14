@@ -9,10 +9,6 @@ data class Message(
     val message: String
 )
 
-fun List<Message>.filterBySender(sender: String) {
-    filter { it.sender == sender }
-}
+fun List<Message>.filterBySender(sender: String) = filter { it.sender == sender }
 
-fun List<Message>.filterByRecipient(recipient: String) {
-    filter { it.recipient == recipient }
-}
+fun List<Message>.filterByRecipient(recipient: String) = filter { it.recipient == recipient }
