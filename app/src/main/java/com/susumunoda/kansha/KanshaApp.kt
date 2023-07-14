@@ -24,6 +24,7 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.susumunoda.kansha.ListViewViewModel.FilterType
 import com.susumunoda.kansha.data.Message
@@ -63,15 +65,21 @@ fun KanshaApp(listViewViewModel: ListViewViewModel = viewModel()) {
         }
     ) { contentPadding ->
         Column(
-            modifier = Modifier.padding(
-                top = contentPadding.calculateTopPadding(),
-                start = 16.dp,
-                end = 16.dp
-                // Don't pad bottom because we want the edge-to-edge effect
-            )
+            modifier = Modifier.padding(top = contentPadding.calculateTopPadding())
         ) {
-            FilterOptions(listViewViewModel, uiState)
-            MessageList(uiState.entries)
+            Surface(shadowElevation = 10.dp, modifier = Modifier.zIndex(1f)) {
+                FilterOptions(
+                    viewModel = listViewViewModel,
+                    uiState = uiState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                )
+            }
+            MessageList(
+                messages = uiState.entries,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            )
         }
     }
 }
@@ -83,18 +91,13 @@ private fun FilterOptions(
     uiState: ListViewState,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp, bottom = 16.dp)
-    ) {
+    Row(horizontalArrangement = Arrangement.spacedBy(16.dp), modifier = modifier) {
         FilterType.values().forEach { filterType ->
             FilterChip(
                 selected = filterType == uiState.filterType,
                 onClick = { viewModel.setFilter(filterType) },
                 label = { Text(filterType.label, fontSize = 16.sp, fontWeight = FontWeight.Bold) },
-                modifier = modifier.height(40.dp)
+                modifier = Modifier.height(40.dp)
             )
         }
     }
