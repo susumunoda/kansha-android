@@ -43,7 +43,12 @@ import com.susumunoda.kansha.ListViewViewModel.FilterType
 import com.susumunoda.kansha.data.Message
 
 @Composable
-fun KanshaApp(listViewViewModel: ListViewViewModel = viewModel()) {
+fun KanshaApp() {
+    MessageListView()
+}
+
+@Composable
+private fun MessageListView(listViewViewModel: ListViewViewModel = viewModel()) {
     val uiState by listViewViewModel.uiState.collectAsState()
     Scaffold(
         floatingActionButton = {
