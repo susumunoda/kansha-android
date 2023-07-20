@@ -1,5 +1,7 @@
 package com.susumunoda.kansha
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
@@ -20,7 +22,21 @@ fun KanshaApp(navController: NavHostController = rememberNavController()) {
         composable(Screen.LIST_VIEW.name) {
             ListViewScreen(navController = navController)
         }
-        composable(Screen.NEW_MESSAGE.name) {
+        composable(
+            route = Screen.NEW_MESSAGE.name,
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            }
+        ) {
             NewMessageScreen()
         }
     }
