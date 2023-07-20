@@ -1,4 +1,4 @@
-package com.susumunoda.kansha
+package com.susumunoda.kansha.ui.screen.listview
 
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.data.DataSource
