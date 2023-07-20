@@ -41,7 +41,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.susumunoda.kansha.data.Message
 
 @Composable
-fun MessagesListView(listViewViewModel: ListViewViewModel = viewModel()) {
+fun ListViewScreen(listViewViewModel: ListViewViewModel = viewModel()) {
     val uiState by listViewViewModel.uiState.collectAsState()
     Scaffold(
         floatingActionButton = {

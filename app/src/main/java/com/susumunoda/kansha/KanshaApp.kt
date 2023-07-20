@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.susumunoda.kansha.ui.screen.listview.MessagesListView
+import com.susumunoda.kansha.ui.screen.listview.ListViewScreen
 
 enum class Screen {
     LIST_VIEW
@@ -16,7 +16,7 @@ enum class Screen {
 fun KanshaApp(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = Screen.LIST_VIEW.name) {
         composable(Screen.LIST_VIEW.name) {
-            MessagesListView()
+            ListViewScreen()
         }
     }
 }
