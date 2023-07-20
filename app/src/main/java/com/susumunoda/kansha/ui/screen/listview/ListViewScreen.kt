@@ -38,15 +38,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import com.susumunoda.kansha.Screen
 import com.susumunoda.kansha.data.Message
 
 @Composable
-fun ListViewScreen(listViewViewModel: ListViewViewModel = viewModel()) {
+fun ListViewScreen(
+    listViewViewModel: ListViewViewModel = viewModel(),
+    navController: NavHostController
+) {
     val uiState by listViewViewModel.uiState.collectAsState()
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { navController.navigate(Screen.NEW_MESSAGE.name) },
                 shape = CircleShape,
                 modifier = Modifier.size(80.dp)
             ) {
