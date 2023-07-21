@@ -102,7 +102,7 @@ fun ListViewScreen(
                 ) {
                     Surface(shadowElevation = 5.dp) {
                         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
-                            // Force the dividers to take up the least amount of width necessary
+                            // Force the column to take up the least amount of width necessary
                             Column(modifier = Modifier.width(IntrinsicSize.Min)) {
                                 ListViewViewModel.FilterType.values()
                                     .forEachIndexed { index, filterType ->
@@ -112,21 +112,24 @@ fun ListViewScreen(
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
-                                                .padding(8.dp)
+                                                // Make area clickable before padding
                                                 .clickable { listViewViewModel.setFilter(filterType) }
+                                                .fillMaxWidth()
+                                                .padding(16.dp)
                                         ) {
-                                            Box(modifier = Modifier.size(16.dp)) {
+                                            Box(modifier = Modifier.size(24.dp)) {
                                                 if (uiState.filterType == filterType) {
                                                     Icon(
-                                                        Icons.Rounded.Check,
-                                                        contentDescription = "Filtered by ${filterType.label}"
+                                                        imageVector = Icons.Rounded.Check,
+                                                        contentDescription = "Filtered by ${filterType.label}",
+                                                        modifier = Modifier.fillMaxSize()
                                                     )
                                                 }
                                             }
                                             Spacer(Modifier.size(8.dp))
                                             Text(
                                                 text = filterType.label,
-                                                fontSize = 16.sp,
+                                                fontSize = 18.sp,
                                                 // Force text to take up max width without wrapping
                                                 modifier = Modifier.width(IntrinsicSize.Max)
                                             )
