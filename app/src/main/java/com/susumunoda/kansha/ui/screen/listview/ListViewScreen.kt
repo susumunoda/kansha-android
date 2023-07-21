@@ -31,6 +31,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,18 +59,17 @@ fun ListViewScreen(
                 Text("🙏", fontSize = 30.sp)
             }
         },
-        topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary)
-                    .windowInsetsPadding(WindowInsets.statusBars)
-            )
-        }
+        /**
+         * It looks like [androidx.compose.foundation.layout.PaddingValues.calculateTopPadding]
+         * includes the status bar padding of [androidx.compose.foundation.layout.WindowInsets]
+         * if topBar does not have an explicit size of 0. This is an issue because the status bar
+         * inset is already consumed at a higher level so that this scaffold composable is displayed
+         * below the status bar. This is needed so that animating the scaffold (e.g. when composing
+         * a new message) does not include the status bar area.
+         */
+        topBar = { Spacer(Modifier.size(0.dp)) }
     ) { contentPadding ->
-        Column(
-            modifier = Modifier.padding(top = contentPadding.calculateTopPadding())
-        ) {
+        Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
             Surface(shadowElevation = 10.dp, modifier = Modifier.zIndex(1f)) {
                 FilterOptions(
                     viewModel = listViewViewModel,
