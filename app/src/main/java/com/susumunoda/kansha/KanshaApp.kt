@@ -46,7 +46,7 @@ fun KanshaApp(navController: NavHostController = rememberNavController()) {
                 )
             }
         ) {
-            NewMessageScreen()
+            NewMessageScreen(navController = navController)
         }
     }
 }
