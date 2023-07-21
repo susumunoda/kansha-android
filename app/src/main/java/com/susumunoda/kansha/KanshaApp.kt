@@ -1,6 +1,7 @@
 package com.susumunoda.kansha
 
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -16,6 +17,8 @@ enum class Screen {
     NEW_MESSAGE
 }
 
+private const val DIALOG_EASING_MILLIS = 350
+
 @Composable
 fun KanshaApp(navController: NavHostController = rememberNavController()) {
     NavHost(navController = navController, startDestination = Screen.LIST_VIEW.name) {
@@ -27,13 +30,19 @@ fun KanshaApp(navController: NavHostController = rememberNavController()) {
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(durationMillis = 500)
+                    animationSpec = tween(
+                        durationMillis = DIALOG_EASING_MILLIS,
+                        easing = FastOutSlowInEasing
+                    )
                 )
             },
             exitTransition = {
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    animationSpec = tween(durationMillis = 500)
+                    animationSpec = tween(
+                        durationMillis = DIALOG_EASING_MILLIS,
+                        easing = FastOutSlowInEasing
+                    )
                 )
             }
         ) {
