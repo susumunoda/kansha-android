@@ -96,10 +96,7 @@ fun ListViewScreen(
     ) { contentPadding ->
         Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
             if (isFiltersPopupVisible) {
-                Popup(
-                    alignment = Alignment.TopEnd,
-                    onDismissRequest = { isFiltersPopupVisible = false }
-                ) {
+                Popup(alignment = Alignment.TopEnd) {
                     Surface(shadowElevation = 5.dp) {
                         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
                             // Force the column to take up the least amount of width necessary
