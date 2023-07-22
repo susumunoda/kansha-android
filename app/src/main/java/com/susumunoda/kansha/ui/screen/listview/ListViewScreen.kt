@@ -32,9 +32,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -54,7 +51,6 @@ fun ListViewScreen(
     navController: NavHostController
 ) {
     val uiState by listViewViewModel.uiState.collectAsState()
-    var isFiltersPopupVisible by remember { mutableStateOf(false) }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -69,13 +65,7 @@ fun ListViewScreen(
             CenterAlignedTopAppBar(
                 title = { Text("Kansha", color = MaterialTheme.colorScheme.onPrimary) },
                 actions = {
-                    FilterAction(
-                        onClick = { isFiltersPopupVisible = true },
-                        onDismiss = { isFiltersPopupVisible = false },
-                        isExpanded = isFiltersPopupVisible,
-                        listViewViewModel = listViewViewModel,
-                        uiState = uiState
-                    )
+                    FilterAction(listViewViewModel = listViewViewModel)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
@@ -93,17 +83,11 @@ fun ListViewScreen(
 }
 
 @Composable
-private fun FilterAction(
-    onClick: () -> Unit,
-    onDismiss: () -> Unit,
-    isExpanded: Boolean,
-    listViewViewModel: ListViewViewModel,
-    uiState: ListViewState,
-    modifier: Modifier = Modifier
-) {
+fun FilterAction(listViewViewModel: ListViewViewModel, modifier: Modifier = Modifier) {
+    val uiState by listViewViewModel.uiState.collectAsState()
     Box(modifier = modifier) {
         IconButton(
-            onClick = onClick,
+            onClick = { listViewViewModel.setIsFilterExpanded(true) },
             colors = IconButtonDefaults.iconButtonColors(
                 contentColor = MaterialTheme.colorScheme.onPrimary
             )
@@ -115,15 +99,26 @@ private fun FilterAction(
             )
         }
         DropdownMenu(
-            expanded = isExpanded,
-            onDismissRequest = onDismiss
+            expanded = uiState.isFilterExpanded,
+            onDismissRequest = { listViewViewModel.setIsFilterExpanded(false) }
         ) {
             ListViewViewModel.FilterType.values().forEach { filterType ->
                 DropdownMenuItem(
                     text = { Text(filterType.label, fontSize = 16.sp) },
-                    onClick = { listViewViewModel.setFilter(filterType) },
+                    onClick = {
+                        listViewViewModel.setFilter(filterType)
+                        listViewViewModel.setIsFilterExpanded(false)
+                    },
                     leadingIcon = {
-                        if (filterType == uiState.filterType) {
+                        // Delay the leading icon by enough time so that a checkbox does not appear
+                        // to flash in front of the new selection before the menu closes.
+                        // By using `uiState` as the initial state, we are guaranteed that the menu
+                        // will show the up-to-date item as being selected the next time that it
+                        // opens, as `ListViewViewModel` updates `uiState` when calling `setFilter`
+                        // in the DropdownMenuItem callback above.
+                        val delayedState by listViewViewModel.uiStateWithDelay(100)
+                            .collectAsState(uiState)
+                        if (filterType == delayedState.filterType) {
                             Icon(
                                 imageVector = Icons.Rounded.Check,
                                 contentDescription = "Filtered by ${filterType.label}"

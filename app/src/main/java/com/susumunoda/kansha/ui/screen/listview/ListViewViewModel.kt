@@ -4,8 +4,10 @@ import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.data.DataSource
 import com.susumunoda.kansha.data.filterByRecipient
 import com.susumunoda.kansha.data.filterBySender
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 class ListViewViewModel : ViewModel() {
@@ -19,6 +21,8 @@ class ListViewViewModel : ViewModel() {
         TO_ME("To me"),
     }
 
+    fun uiStateWithDelay(delayMillis: Long) = _uiState.onEach { delay(delayMillis) }
+
     fun setFilter(filterType: FilterType) {
         _uiState.update { current ->
             current.copy(
@@ -30,5 +34,12 @@ class ListViewViewModel : ViewModel() {
                 }
             )
         }
+    }
+
+    fun setIsFilterExpanded(isFilterExpanded: Boolean) {
+        _uiState.update { current ->
+            current.copy(isFilterExpanded = isFilterExpanded)
+        }
+
     }
 }
