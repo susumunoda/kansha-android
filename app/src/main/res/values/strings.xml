@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Kansha</string>
+    <string name="list_view_top_bar_text">Kansha</string>
+    <string name="list_view_new_message_button_text">🙏</string>
+    <string name="list_view_filter_description">Filter list</string>
+    <string name="list_view_filter_choice_description">Filtered by %s</string>
+    <string name="new_message_top_bar_text">Send Thank You</string>
+    <string name="back_button_description">Back button</string>
 </resources>
