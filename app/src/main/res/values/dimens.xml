@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_small">8.dp</dimen>
+    <dimen name="padding_medium">16.dp</dimen>
+    <dimen name="top_bar_icon_size">24.dp</dimen>
+    <dimen name="list_view_card_height">100.dp</dimen>
+    <dimen name="floating_action_button_size">80.dp</dimen>
+    <dimen name="profile_photo_size">80.dp</dimen>
+</resources>

@@ -16,8 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 
@@ -43,10 +43,9 @@ fun NewMessageScreen(navController: NavHostController) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.back_button_description),
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(dimensionResource(R.dimen.top_bar_icon_size))
                         )
                     }
-
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary

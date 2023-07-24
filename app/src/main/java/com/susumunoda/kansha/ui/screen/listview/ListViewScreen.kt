@@ -35,9 +35,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -57,7 +57,7 @@ fun ListViewScreen(
             FloatingActionButton(
                 onClick = { navController.navigate(Screen.NEW_MESSAGE.name) },
                 shape = CircleShape,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(dimensionResource(R.dimen.floating_action_button_size))
             ) {
                 Text(stringResource(R.string.list_view_new_message_button_text), fontSize = 30.sp)
             }
@@ -82,7 +82,10 @@ fun ListViewScreen(
         Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
             MessagesList(
                 messages = uiState.entries,
-                modifier = Modifier.padding(start = 8.dp, end = 8.dp)
+                modifier = Modifier.padding(
+                    start = dimensionResource(R.dimen.padding_small),
+                    end = dimensionResource(R.dimen.padding_small)
+                )
             )
         }
     }
@@ -101,7 +104,7 @@ fun FilterAction(listViewViewModel: ListViewViewModel, modifier: Modifier = Modi
             Icon(
                 painter = painterResource(R.drawable.filter_list),
                 contentDescription = stringResource(R.string.list_view_filter_description),
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(dimensionResource(R.dimen.top_bar_icon_size))
             )
         }
         DropdownMenu(
@@ -143,7 +146,7 @@ fun FilterAction(listViewViewModel: ListViewViewModel, modifier: Modifier = Modi
 @Composable
 fun MessagesList(messages: List<Message>, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))) {
             item {
                 // Empty spacer to provide even padding after list content
                 Spacer(Modifier)
@@ -163,13 +166,13 @@ fun MessagesList(messages: List<Message>, modifier: Modifier = Modifier) {
 fun MessageCard(message: Message, modifier: Modifier = Modifier) {
     Card(
         modifier = modifier
-            .height(100.dp)
+            .height(dimensionResource(R.dimen.list_view_card_height))
             .fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+                .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Image(
                 painterResource(message.senderPhotoId),
@@ -177,12 +180,12 @@ fun MessageCard(message: Message, modifier: Modifier = Modifier) {
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .size(80.dp)
+                    .size(dimensionResource(R.dimen.profile_photo_size))
             )
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = 16.dp)
+                    .padding(start = dimensionResource(R.dimen.padding_medium))
             ) {
                 Text("From ${message.sender} to ${message.recipient}")
                 Text(message.message)
