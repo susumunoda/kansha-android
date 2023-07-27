@@ -175,7 +175,7 @@ fun MessageCard(message: Message, modifier: Modifier = Modifier) {
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
             Image(
-                painterResource(message.senderPhotoId),
+                painterResource(message.sender.profilePhotoId),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -187,7 +187,7 @@ fun MessageCard(message: Message, modifier: Modifier = Modifier) {
                     .fillMaxSize()
                     .padding(start = dimensionResource(R.dimen.padding_medium))
             ) {
-                Text("From ${message.sender} to ${message.recipient}")
+                Text("From ${message.sender.name} to ${message.recipient.name}")
                 Text(message.message)
             }
         }

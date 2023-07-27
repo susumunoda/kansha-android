@@ -2,6 +2,7 @@ package com.susumunoda.kansha.ui.screen.listview
 
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.data.DataSource
+import com.susumunoda.kansha.data.User
 import com.susumunoda.kansha.data.filterByRecipient
 import com.susumunoda.kansha.data.filterBySender
 import kotlinx.coroutines.delay
@@ -13,7 +14,7 @@ import kotlinx.coroutines.flow.update
 class ListViewViewModel : ViewModel() {
     private var _uiState = MutableStateFlow(ListViewState(entries = DataSource.allMessages()))
     val uiState = _uiState.asStateFlow()
-    private val currentUser = "Bob" // TODO: Implement proper auth
+    private val currentUser = User.BOB // TODO: Implement proper auth
 
     enum class FilterType(val label: String) {
         ALL("All"),

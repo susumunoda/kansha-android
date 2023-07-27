@@ -1,26 +1,26 @@
 package com.susumunoda.kansha.data
 
-import com.susumunoda.kansha.R
-
 object DataSource {
     fun allMessages() = listOf(
-        Message(R.drawable.bob, "Bob", "Alice", "Thanks for your help!"),
-        Message(R.drawable.bob, "Bob", "Alice", "Dinner was delicious :)"),
-        Message(R.drawable.alice, "Alice", "Bob", "Thanks for a fun weekend :D"),
-        Message(R.drawable.bob, "Bob", "Bill", "Appreciate the help moving"),
-        Message(R.drawable.alice, "Alice", "Bob", "What a thoughtful gift!"),
-        Message(R.drawable.bob, "Bob", "Alice", "Thank you for the birthday card ❤️"),
-        Message(R.drawable.alice, "Alice", "Jane", "Thank you for the ride yesterday!"),
-        Message(R.drawable.alice, "Alice", "Bob", "Thanks for getting us tickets!"),
-        Message(R.drawable.bill, "Bill", "Jane", "That was a fun game night!"),
-        Message(R.drawable.jane, "Jane", "Chris", "Thanks for the coffee ☕️"),
-        Message(R.drawable.chris, "Chris", "Marge", "Thanks for your help!"),
-        Message(R.drawable.chris, "Chris", "Marge", "Dinner was delicious :)"),
-        Message(R.drawable.marge, "Marge", "Chris", "Thanks for a fun weekend :D"),
-        Message(R.drawable.chris, "Chris", "Bill", "Appreciate the help moving"),
-        Message(R.drawable.marge, "Marge", "Chris", "What a thoughtful gift!"),
-        Message(R.drawable.chris, "Chris", "Marge", "Thank you for the birthday card ❤️"),
-        Message(R.drawable.marge, "Marge", "Jane", "Thank you for the ride yesterday!"),
-        Message(R.drawable.marge, "Marge", "Chris", "Thanks for getting us tickets!"),
+        Message(User.BOB, User.ALICE, "Thanks for your help!"),
+        Message(User.BOB, User.ALICE, "Dinner was delicious :)"),
+        Message(User.ALICE, User.BOB, "Thanks for a fun weekend :D"),
+        Message(User.BOB, User.BILL, "Appreciate the help moving"),
+        Message(User.ALICE, User.BOB, "What a thoughtful gift!"),
+        Message(User.BOB, User.ALICE, "Thank you for the birthday card ❤️"),
+        Message(User.ALICE, User.JANE, "Thank you for the ride yesterday!"),
+        Message(User.ALICE, User.BOB, "Thanks for getting us tickets!"),
+        Message(User.BILL, User.JANE, "That was a fun game night!"),
+        Message(User.JANE, User.CHRIS, "Thanks for the coffee ☕️"),
+        Message(User.CHRIS, User.MARGE, "Thanks for your help!"),
+        Message(User.CHRIS, User.MARGE, "Dinner was delicious :)"),
+        Message(User.MARGE, User.CHRIS, "Thanks for a fun weekend :D"),
+        Message(User.CHRIS, User.BILL, "Appreciate the help moving"),
+        Message(User.MARGE, User.CHRIS, "What a thoughtful gift!"),
+        Message(User.CHRIS, User.MARGE, "Thank you for the birthday card ❤️"),
+        Message(User.MARGE, User.JANE, "Thank you for the ride yesterday!"),
+        Message(User.MARGE, User.CHRIS, "Thanks for getting us tickets!"),
     )
+
+    fun allUsers() = allMessages().map { it.sender }.distinct().sortedBy { it.name }
 }
