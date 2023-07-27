@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 class ListViewViewModel : ViewModel() {
-    private var _uiState = MutableStateFlow(ListViewState(entries = DataSource.allMessages()))
+    private val _uiState = MutableStateFlow(ListViewState(entries = DataSource.allMessages()))
     val uiState = _uiState.asStateFlow()
     private val currentUser = User.BOB // TODO: Implement proper auth
 
