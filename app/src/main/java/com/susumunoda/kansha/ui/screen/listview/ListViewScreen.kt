@@ -1,6 +1,5 @@
 package com.susumunoda.kansha.ui.screen.listview
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,8 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -44,6 +41,7 @@ import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.Screen
 import com.susumunoda.kansha.data.Message
+import com.susumunoda.kansha.ui.CircularUserPhoto
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -174,13 +172,9 @@ fun MessageCard(message: Message, modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            Image(
-                painterResource(message.sender.profilePhotoId),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(dimensionResource(R.dimen.profile_photo_size))
+            CircularUserPhoto(
+                user = message.sender,
+                size = dimensionResource(R.dimen.profile_photo_size)
             )
             Column(
                 modifier = Modifier
