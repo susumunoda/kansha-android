@@ -43,6 +43,8 @@ import com.susumunoda.kansha.Screen
 import com.susumunoda.kansha.data.Message
 import com.susumunoda.kansha.ui.CircularUserPhoto
 
+private const val TAG = "ListViewScreen"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListViewScreen(
@@ -174,7 +176,7 @@ fun MessageCard(message: Message, modifier: Modifier = Modifier) {
         ) {
             CircularUserPhoto(
                 user = message.sender,
-                size = dimensionResource(R.dimen.profile_photo_size)
+                size = dimensionResource(R.dimen.profile_photo_size_medium)
             )
             Column(
                 modifier = Modifier

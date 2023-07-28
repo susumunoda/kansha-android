@@ -5,12 +5,13 @@ import com.susumunoda.kansha.R
 
 data class User(val id: Int, val name: String, @DrawableRes val profilePhotoId: Int) {
     companion object {
-        val ALICE = User(1, "Alice", R.drawable.alice)
-        val BILL = User(2, "Bill", R.drawable.bill)
-        val BOB = User(3, "Bob", R.drawable.bob)
-        val CHRIS = User(4, "Chris", R.drawable.chris)
-        val JANE = User(5, "Jane", R.drawable.jane)
-        val MARGE = User(6, "Marge", R.drawable.marge)
+        val NONE = User(-1, "", R.drawable.blank_profile_picture)
+        val ALICE = User(0, "Alice", R.drawable.alice)
+        val BILL = User(1, "Bill", R.drawable.bill)
+        val BOB = User(2, "Bob", R.drawable.bob)
+        val CHRIS = User(3, "Chris", R.drawable.chris)
+        val JANE = User(4, "Jane", R.drawable.jane)
+        val MARGE = User(5, "Marge", R.drawable.marge)
     }
 }
 
