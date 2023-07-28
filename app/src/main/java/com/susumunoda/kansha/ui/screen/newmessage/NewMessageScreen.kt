@@ -1,6 +1,7 @@
 package com.susumunoda.kansha.ui.screen.newmessage
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,9 +22,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -84,88 +87,96 @@ fun NewMessageScreen(
             )
         }
     ) { contentPadding ->
-        Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
-            Column {
-                if (uiState.recipient == User.NONE) {
-                    SearchBar(
-                        modifier = Modifier.fillMaxWidth(),
-                        query = uiState.searchTerm,
-                        onQueryChange = { newMessageViewModel.setSearchTerm(it) },
-                        active = isSearchActive,
-                        onActiveChange = { isSearchActive = it },
-                        onSearch = { Log.i(TAG, "Searching for ${uiState.searchTerm}") },
-                        placeholder = { Text("Search recipients") },
-                        leadingIcon = {
-                            Icon(
-                                Icons.Rounded.Search,
-                                contentDescription = "Search recipients"
-                            )
-                        },
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    newMessageViewModel.setSearchTerm("")
+        Column(
+            modifier = Modifier
+                .background(Color.White)
+                .fillMaxWidth()
+                .padding(top = contentPadding.calculateTopPadding())
+        ) {
+            if (uiState.recipient == User.NONE) {
+                SearchBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = SearchBarDefaults.fullScreenShape,
+                    query = uiState.searchTerm,
+                    onQueryChange = { newMessageViewModel.setSearchTerm(it) },
+                    active = isSearchActive,
+                    onActiveChange = { isSearchActive = it },
+                    onSearch = { Log.i(TAG, "Searching for ${uiState.searchTerm}") },
+                    placeholder = { Text("Search recipients") },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Rounded.Search,
+                            contentDescription = "Search recipients"
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                newMessageViewModel.setSearchTerm("")
+                                isSearchActive = false
+                            }
+                        ) {
+                            Icon(Icons.Rounded.Close, contentDescription = "Clear search")
+                        }
+                    },
+                    windowInsets = WindowInsets(top = 0.dp),
+                    colors = SearchBarDefaults.colors(
+                        containerColor = Color.White
+                    )
+                ) {
+                    LazyColumn {
+                        itemsIndexed(uiState.searchResults) { index, searchResult ->
+                            if (index != 0) {
+                                Divider()
+                            }
+                            ListItem(
+                                headlineContent = { Text(searchResult.name) },
+                                leadingContent = {
+                                    CircularUserPhoto(
+                                        user = searchResult,
+                                        size = dimensionResource(R.dimen.profile_photo_size_small)
+                                    )
+                                },
+                                modifier = Modifier.clickable {
+                                    newMessageViewModel.setRecipient(searchResult)
                                     isSearchActive = false
-                                }
-                            ) {
-                                Icon(Icons.Rounded.Close, contentDescription = "Clear search")
-                            }
-                        },
-                        windowInsets = WindowInsets(top = 0.dp)
-                    ) {
-                        LazyColumn {
-                            itemsIndexed(uiState.searchResults) { index, searchResult ->
-                                if (index != 0) {
-                                    Divider()
-                                }
-                                ListItem(
-                                    headlineContent = { Text(searchResult.name) },
-                                    leadingContent = {
-                                        CircularUserPhoto(
-                                            user = searchResult,
-                                            size = dimensionResource(R.dimen.profile_photo_size_small)
-                                        )
-                                    },
-                                    modifier = Modifier.clickable {
-                                        newMessageViewModel.setRecipient(
-                                            searchResult
-                                        )
-                                        isSearchActive = false
-                                    }
+                                },
+                                colors = ListItemDefaults.colors(
+                                    containerColor = Color.White
                                 )
-                            }
+                            )
                         }
                     }
-                } else {
-                    InputChip(
-                        selected = true,
-                        onClick = {},
-                        avatar = {
-                            CircularUserPhoto(
-                                user = uiState.recipient,
-                                size = dimensionResource(R.dimen.profile_photo_size_small)
-                            )
-                        },
-                        trailingIcon = {
-                            IconButton(onClick = { newMessageViewModel.clearRecipient() }) {
-                                Icon(Icons.Rounded.Close, contentDescription = "Remove recipient")
-                            }
-                        },
-                        label = { Text(uiState.recipient.name) })
                 }
-                TextField(
-                    value = uiState.message,
-                    onValueChange = { newMessageViewModel.setMessage(it) },
-                    minLines = 5,
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        errorIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                    )
-                )
+            } else {
+                InputChip(
+                    selected = true,
+                    onClick = {},
+                    avatar = {
+                        CircularUserPhoto(
+                            user = uiState.recipient,
+                            size = dimensionResource(R.dimen.profile_photo_size_small)
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = { newMessageViewModel.clearRecipient() }) {
+                            Icon(Icons.Rounded.Close, contentDescription = "Remove recipient")
+                        }
+                    },
+                    label = { Text(uiState.recipient.name) })
             }
+            TextField(
+                value = uiState.message,
+                onValueChange = { newMessageViewModel.setMessage(it) },
+                minLines = 5,
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                )
+            )
         }
     }
 }
