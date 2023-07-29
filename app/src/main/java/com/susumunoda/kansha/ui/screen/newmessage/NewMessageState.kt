@@ -7,5 +7,8 @@ data class NewMessageState(
     val recipient: User = User.NONE,
     val message: String = "",
     val searchTerm: String = "",
-    val searchResults: List<User> = DataSource.allUsers()
-)
+    val searchResults: List<User> = DataSource.allUsers(),
+    val validationErrors: List<ValidationError> = emptyList()
+) {
+    val hasValidationErrors = validationErrors.isNotEmpty()
+}

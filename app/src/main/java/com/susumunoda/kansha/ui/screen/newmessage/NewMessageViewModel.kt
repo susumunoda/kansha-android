@@ -1,12 +1,19 @@
 package com.susumunoda.kansha.ui.screen.newmessage
 
+import android.content.Context
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
+import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.DataSource
 import com.susumunoda.kansha.data.User
 import com.susumunoda.kansha.data.filterByNameStartsWith
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+
+private object Constants {
+    const val MAX_MESSAGE_LENGTH = 250
+}
 
 class NewMessageViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(NewMessageState())
@@ -22,7 +29,25 @@ class NewMessageViewModel : ViewModel() {
     }
 
     fun setMessage(message: String) {
-        _uiState.update { current -> current.copy(message = message) }
+        _uiState.update { current ->
+            current.copy(
+                message = message,
+                validationErrors = validateMessage(message)
+            )
+        }
+    }
+
+    private fun validateMessage(message: String): List<ValidationError> {
+        val errors: MutableList<ValidationError> = mutableListOf()
+        if (message.length > Constants.MAX_MESSAGE_LENGTH) {
+            errors.add(
+                ValidationError(
+                    R.string.message_validation_length_exceeded,
+                    Constants.MAX_MESSAGE_LENGTH
+                )
+            )
+        }
+        return errors
     }
 
     fun setRecipient(recipient: User) {
@@ -32,4 +57,8 @@ class NewMessageViewModel : ViewModel() {
     fun clearRecipient() {
         setRecipient(User.NONE)
     }
+}
+
+class ValidationError(@StringRes private val messageId: Int, private vararg val formatArgs: Any) {
+    fun toLocalizedString(context: Context) = context.getString(messageId, *formatArgs)
 }

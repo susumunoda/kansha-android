@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -41,6 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,6 +55,7 @@ private const val TAG = "NewMessageScreen"
 private val SURFACE_ELEVATION = 6.dp
 private val SEARCH_INPUT_MIN_HEIGHT = 56.dp
 private val RECIPIENT_CHIP_CONTAINER_PADDING = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+private const val MIN_MESSAGE_LINES = 5
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +97,6 @@ fun NewMessageScreen(
     ) { contentPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(top = contentPadding.calculateTopPadding())
                 .background(backgroundColor)
         ) {
@@ -191,13 +191,19 @@ fun NewMessageScreen(
             TextField(
                 label = { Text(stringResource(R.string.new_message_field_label_text)) },
                 value = uiState.message,
-                onValueChange = { newMessageViewModel.setMessage(it) },
-                modifier = Modifier.fillMaxSize(),
+                onValueChange = newMessageViewModel::setMessage,
+                modifier = Modifier.fillMaxWidth(),
+                minLines = MIN_MESSAGE_LINES,
+                isError = uiState.hasValidationErrors,
+                supportingText = if (uiState.hasValidationErrors) {
+                    {
+                        val context = LocalContext.current
+                        // There may be multiple validation messages — show just the first one
+                        val validation = uiState.validationErrors[0].toLocalizedString(context)
+                        Text(validation)
+                    }
+                } else null,
                 colors = TextFieldDefaults.colors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    errorIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent,
                     errorContainerColor = Color.Transparent,
