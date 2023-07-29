@@ -52,9 +52,9 @@ import com.susumunoda.kansha.ui.CircularUserPhoto
 
 private const val TAG = "NewMessageScreen"
 
-private val SurfaceElevation = 6.dp
-private val SearchInputMinHeight = 56.dp
-private val SearchInputChipContainerPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+private val SURFACE_ELEVATION = 6.dp
+private val SEARCH_INPUT_MIN_HEIGHT = 56.dp
+private val RECIPIENT_CHIP_CONTAINER_PADDING = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +64,7 @@ fun NewMessageScreen(
 ) {
     val uiState by newMessageViewModel.uiState.collectAsState()
     var isSearchActive by remember { mutableStateOf(false) }
-    val backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SurfaceElevation)
+    val backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SURFACE_ELEVATION)
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -104,8 +104,8 @@ fun NewMessageScreen(
                 SearchBar(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = SearchInputMinHeight),
-                    tonalElevation = SurfaceElevation,
+                        .heightIn(min = SEARCH_INPUT_MIN_HEIGHT),
+                    tonalElevation = SURFACE_ELEVATION,
                     query = uiState.searchTerm,
                     onQueryChange = { newMessageViewModel.setSearchTerm(it) },
                     active = isSearchActive,
@@ -162,8 +162,8 @@ fun NewMessageScreen(
             } else {
                 Box(
                     modifier = Modifier
-                        .heightIn(min = SearchInputMinHeight)
-                        .padding(SearchInputChipContainerPadding)
+                        .heightIn(min = SEARCH_INPUT_MIN_HEIGHT)
+                        .padding(RECIPIENT_CHIP_CONTAINER_PADDING)
                 ) {
                     InputChip(
                         selected = true,
