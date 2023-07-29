@@ -12,4 +12,5 @@
     <string name="search_recipients_place_holder_text">Search recipients</string>
     <string name="search_recipients_description">Search recipients</string>
     <string name="message_validation_length_exceeded">Message cannot be greater than %d characters</string>
+    <string name="send_message_description">Send message</string>
 </resources>

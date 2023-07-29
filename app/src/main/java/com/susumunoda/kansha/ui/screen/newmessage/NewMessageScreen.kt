@@ -12,10 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -86,6 +90,20 @@ fun NewMessageScreen(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.back_button_description),
                             modifier = Modifier.size(dimensionResource(R.dimen.top_bar_icon_size))
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        enabled = uiState.isSubmittable(),
+                        onClick = { newMessageViewModel.sendMessage() },
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        )
+                    ) {
+                        Icon(
+                            Icons.Rounded.Send,
+                            contentDescription = stringResource(R.string.send_message_description)
                         )
                     }
                 },
@@ -194,6 +212,14 @@ fun NewMessageScreen(
                 onValueChange = newMessageViewModel::setMessage,
                 modifier = Modifier.fillMaxWidth(),
                 minLines = MIN_MESSAGE_LINES,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                keyboardActions = KeyboardActions(
+                    onSend = {
+                        if (uiState.isSubmittable()) {
+                            newMessageViewModel.sendMessage()
+                        }
+                    }
+                ),
                 isError = uiState.hasValidationErrors,
                 supportingText = if (uiState.hasValidationErrors) {
                     {
