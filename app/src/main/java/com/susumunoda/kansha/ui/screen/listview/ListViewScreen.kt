@@ -23,11 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -65,17 +62,11 @@ fun ListViewScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        stringResource(R.string.list_view_top_bar_text),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    Text(stringResource(R.string.list_view_top_bar_text))
                 },
                 actions = {
                     FilterAction(listViewViewModel = listViewViewModel)
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                }
             )
         }
     ) { contentPadding ->
@@ -95,12 +86,7 @@ fun ListViewScreen(
 fun FilterAction(listViewViewModel: ListViewViewModel, modifier: Modifier = Modifier) {
     val uiState by listViewViewModel.uiState.collectAsState()
     Box(modifier = modifier) {
-        IconButton(
-            onClick = { listViewViewModel.setIsFilterExpanded(true) },
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            )
-        ) {
+        IconButton(onClick = { listViewViewModel.setIsFilterExpanded(true) }) {
             Icon(
                 painter = painterResource(R.drawable.filter_list),
                 contentDescription = stringResource(R.string.list_view_filter_description),

@@ -1,6 +1,5 @@
 package com.susumunoda.kansha.ui.screen.newmessage
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,17 +23,13 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -69,23 +64,14 @@ fun NewMessageScreen(
 ) {
     val uiState by newMessageViewModel.uiState.collectAsState()
     var isSearchActive by remember { mutableStateOf(false) }
-    val backgroundColor = MaterialTheme.colorScheme.surfaceColorAtElevation(SURFACE_ELEVATION)
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        stringResource(R.string.new_message_top_bar_text),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
+                    Text(stringResource(R.string.new_message_top_bar_text))
                 },
                 navigationIcon = {
-                    IconButton(
-                        onClick = { navController.popBackStack() },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
-                    ) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.back_button_description),
@@ -96,28 +82,18 @@ fun NewMessageScreen(
                 actions = {
                     IconButton(
                         enabled = uiState.isSubmittable(),
-                        onClick = { newMessageViewModel.sendMessage() },
-                        colors = IconButtonDefaults.iconButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        )
+                        onClick = { newMessageViewModel.sendMessage() }
                     ) {
                         Icon(
                             Icons.Rounded.Send,
                             contentDescription = stringResource(R.string.send_message_description)
                         )
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                )
+                }
             )
         }
     ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .padding(top = contentPadding.calculateTopPadding())
-                .background(backgroundColor)
-        ) {
+        Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
             if (uiState.recipient == User.NONE) {
                 SearchBar(
                     modifier = Modifier
