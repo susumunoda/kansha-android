@@ -15,9 +15,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -86,7 +90,7 @@ fun AuthNavigation(
                 )
             }
         ) {
-            SignupScreen(authController)
+            SignupScreen(navController, authController)
         }
     }
 }
@@ -126,7 +130,7 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
 }
 
 @Composable
-fun SignupScreen(authController: AuthController) {
+fun SignupScreen(navController: NavHostController, authController: AuthController) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -149,6 +153,11 @@ fun SignupScreen(authController: AuthController) {
                     }
                 }
             }
+        },
+        navigationIcon = {
+            IconButton(onClick = { navController.popBackStack() }) {
+                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.back_button_description))
+            }
         }
     )
 }
@@ -160,7 +169,8 @@ fun UserCredentialsForm(
     submitButtonLabel: String,
     onSubmit: (String, String) -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    additionalSteps: @Composable (ColumnScope.() -> Unit)? = null
+    navigationIcon: @Composable () -> Unit = {},
+    additionalSteps: @Composable ColumnScope.() -> Unit = {}
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -177,7 +187,8 @@ fun UserCredentialsForm(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(title) }
+                title = { Text(title) },
+                navigationIcon = navigationIcon
             )
         }
     ) { paddingValues ->
@@ -235,9 +246,7 @@ fun UserCredentialsForm(
                     }
                 }
 
-                if (additionalSteps != null) {
-                    additionalSteps()
-                }
+                additionalSteps()
             }
         }
     }
