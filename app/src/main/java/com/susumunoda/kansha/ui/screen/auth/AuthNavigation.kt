@@ -43,6 +43,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.kansha.auth.Session
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 enum class AuthPath { LOGIN, SIGNUP }
@@ -244,17 +246,27 @@ fun validatePassword(password: String, context: Context) =
 
 @Preview
 @Composable
-fun LoginScreenPreview() {
-    UserCredentialsForm(
-        title = stringResource(R.string.login_top_bar_text),
-        submitButtonLabel = "Submit",
-        onSubmit = { _, _ -> }
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Text(stringResource(R.string.no_account_question_text))
-            OutlinedButton(onClick = { /*TODO*/ }) {
-                Text(stringResource(R.string.create_account_button_text))
+fun AuthNavigationPreview() {
+    AuthNavigation(
+        authController = object : AuthController {
+            override val sessionFlow: StateFlow<Session?>
+                get() = TODO("Not yet implemented")
+
+            override fun createUser(
+                email: String,
+                password: String,
+                onResult: (Throwable?) -> Unit
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun login(email: String, password: String, onResult: (Throwable?) -> Unit) {
+                TODO("Not yet implemented")
+            }
+
+            override fun logout() {
+                TODO("Not yet implemented")
             }
         }
-    }
+    )
 }
