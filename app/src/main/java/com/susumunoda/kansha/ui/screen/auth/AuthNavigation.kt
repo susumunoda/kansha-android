@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,6 +37,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -195,7 +198,10 @@ fun UserCredentialsForm(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         isError = emailValidation != null,
-                        supportingText = { if (emailValidation != null) Text(emailValidation!!) }
+                        supportingText = { if (emailValidation != null) Text(emailValidation!!) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email
+                        )
                     )
                     OutlinedTextField(
                         label = { Text(stringResource(R.string.password_label_text)) },
@@ -206,7 +212,11 @@ fun UserCredentialsForm(
                         },
                         modifier = Modifier.fillMaxWidth(),
                         isError = passwordValidation != null,
-                        supportingText = { if (passwordValidation != null) Text(passwordValidation!!) }
+                        supportingText = { if (passwordValidation != null) Text(passwordValidation!!) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password
+                        ),
+                        visualTransformation = PasswordVisualTransformation()
                     )
                     Button(
                         enabled = loginEnabled,
