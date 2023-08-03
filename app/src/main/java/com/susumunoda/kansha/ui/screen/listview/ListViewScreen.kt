@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -37,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.Screen
+import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.data.Message
 import com.susumunoda.kansha.ui.CircularUserPhoto
 
@@ -46,7 +48,8 @@ private const val TAG = "ListViewScreen"
 @Composable
 fun ListViewScreen(
     listViewViewModel: ListViewViewModel = viewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    authController: AuthController
 ) {
     val uiState by listViewViewModel.uiState.collectAsState()
     Scaffold(
@@ -61,6 +64,11 @@ fun ListViewScreen(
         },
         topBar = {
             CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { authController.logout() }) {
+                        Icon(Icons.Rounded.ExitToApp, stringResource(R.string.sign_out_description))
+                    }
+                },
                 title = {
                     Text(stringResource(R.string.list_view_top_bar_text))
                 },
