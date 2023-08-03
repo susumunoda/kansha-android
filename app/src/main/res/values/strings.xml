@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Kansha</string>
+    <!-- List view screen -->
     <string name="list_view_top_bar_text">Kansha</string>
     <string name="list_view_new_message_button_text">🙏</string>
     <string name="list_view_filter_description">Filter list</string>
     <string name="list_view_filter_choice_description">Filtered by %s</string>
+    <!-- New message screen -->
     <string name="new_message_top_bar_text">Send Thank You</string>
-    <string name="back_button_description">Back button</string>
     <string name="new_message_field_label_text">Message</string>
     <string name="remove_recipient_description">Remove recipient</string>
     <string name="clear_recipient_search_description">Clear recipient search</string>
@@ -13,17 +14,23 @@
     <string name="search_recipients_description">Search recipients</string>
     <string name="message_validation_length_exceeded">Message cannot be greater than %d characters</string>
     <string name="send_message_description">Send message</string>
+    <!-- Icon buttons -->
+    <string name="back_button_description">Back button</string>
+    <!-- Auth: login -->
     <string name="login_top_bar_text">Log In</string>
-    <string name="create_account_top_bar_text">Create Account</string>
-    <string name="email_label_text">Email</string>
-    <string name="password_label_text">Password</string>
     <string name="login_button_text">Log in</string>
-    <string name="signup_button_text">Sign up</string>
-    <string name="email_format_validation">Email must be of format email@example.com</string>
-    <string name="password_length_validation">Password must be %d or more characters</string>
     <string name="login_failed_message">Login failed: Please confirm your email and password and try again.</string>
-    <string name="user_creation_failed_message">Could not create user: %s</string>
+    <!-- Auth: signup -->
     <string name="no_account_question_text">Don\'t have an account?</string>
+    <string name="create_account_top_bar_text">Create Account</string>
     <string name="create_account_button_text">Create an account</string>
+    <string name="signup_button_text">Sign up</string>
+    <string name="user_creation_failed_message">Could not create user: %s</string>
+    <!-- Auth: shared -->
+    <string name="email_label_text">Email</string>
+    <string name="email_format_validation">Email must be of format email@example.com</string>
+    <string name="password_label_text">Password</string>
+    <string name="password_length_validation">Password must be %d or more characters</string>
+    <!-- Auth: logout -->
     <string name="sign_out_description">Sign out</string>
 </resources>
