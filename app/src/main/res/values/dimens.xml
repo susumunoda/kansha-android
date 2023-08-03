@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- General: padding -->
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
     <dimen name="padding_large">24dp</dimen>
+    <!-- General: icons -->
     <dimen name="top_bar_icon_size">24dp</dimen>
+    <!-- Screen: list view -->
     <dimen name="list_view_card_height">100dp</dimen>
     <dimen name="floating_action_button_size">80dp</dimen>
+    <!-- Profile photo -->
     <dimen name="profile_photo_size_small">40dp</dimen>
     <dimen name="profile_photo_size_medium">80dp</dimen>
 </resources>
