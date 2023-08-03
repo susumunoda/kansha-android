@@ -202,6 +202,7 @@ fun UserCredentialsForm(
                 Column {
                     OutlinedTextField(
                         label = { Text(stringResource(R.string.email_label_text)) },
+                        singleLine = true,
                         value = email,
                         onValueChange = {
                             email = it
@@ -216,6 +217,7 @@ fun UserCredentialsForm(
                     )
                     OutlinedTextField(
                         label = { Text(stringResource(R.string.password_label_text)) },
+                        singleLine = true,
                         value = password,
                         onValueChange = {
                             password = it
