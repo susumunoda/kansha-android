@@ -8,21 +8,16 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.InputChip
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Scaffold
@@ -47,7 +42,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.User
-import com.susumunoda.kansha.ui.CircularUserPhoto
+import com.susumunoda.kansha.ui.component.BackButton
+import com.susumunoda.kansha.ui.component.CircularUserPhoto
+import com.susumunoda.kansha.ui.component.RemoveButton
+import com.susumunoda.kansha.ui.component.SendButton
 
 private const val TAG = "NewMessageScreen"
 
@@ -67,28 +65,10 @@ fun NewMessageScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = {
-                    Text(stringResource(R.string.new_message_top_bar_text))
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.back_button_description),
-                            modifier = Modifier.size(dimensionResource(R.dimen.top_bar_icon_size))
-                        )
-                    }
-                },
+                title = { Text(stringResource(R.string.new_message_top_bar_text)) },
+                navigationIcon = { BackButton { navController.popBackStack() } },
                 actions = {
-                    IconButton(
-                        enabled = uiState.isSubmittable(),
-                        onClick = { newMessageViewModel.sendMessage() }
-                    ) {
-                        Icon(
-                            Icons.Rounded.Send,
-                            contentDescription = stringResource(R.string.send_message_description)
-                        )
-                    }
+                    SendButton(enabled = uiState.isSubmittable()) { newMessageViewModel.sendMessage() }
                 }
             )
         }
@@ -115,16 +95,9 @@ fun NewMessageScreen(
                     },
                     trailingIcon = {
                         if (isSearchActive) {
-                            IconButton(
-                                onClick = {
-                                    newMessageViewModel.setSearchTerm("")
-                                    isSearchActive = false
-                                }
-                            ) {
-                                Icon(
-                                    Icons.Rounded.Close,
-                                    contentDescription = stringResource(R.string.clear_recipient_search_description)
-                                )
+                            RemoveButton(contentDescription = stringResource(R.string.clear_recipient_search_description)) {
+                                newMessageViewModel.setSearchTerm("")
+                                isSearchActive = false
                             }
                         }
                     },
@@ -170,11 +143,8 @@ fun NewMessageScreen(
                             )
                         },
                         trailingIcon = {
-                            IconButton(onClick = { newMessageViewModel.clearRecipient() }) {
-                                Icon(
-                                    Icons.Rounded.Close,
-                                    contentDescription = stringResource(R.string.remove_recipient_description)
-                                )
+                            RemoveButton(contentDescription = stringResource(R.string.remove_recipient_description)) {
+                                newMessageViewModel.clearRecipient()
                             }
                         },
                         label = { Text(uiState.recipient.name) }

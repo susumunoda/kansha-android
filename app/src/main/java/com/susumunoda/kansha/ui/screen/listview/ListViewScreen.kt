@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -23,7 +22,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +29,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,7 +37,9 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.Screen
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.data.Message
-import com.susumunoda.kansha.ui.CircularUserPhoto
+import com.susumunoda.kansha.ui.component.CircularUserPhoto
+import com.susumunoda.kansha.ui.component.FilterButton
+import com.susumunoda.kansha.ui.component.LogoutButton
 
 private const val TAG = "ListViewScreen"
 
@@ -65,9 +64,7 @@ fun ListViewScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { authController.logout() }) {
-                        Icon(Icons.Rounded.ExitToApp, stringResource(R.string.sign_out_description))
-                    }
+                    LogoutButton { authController.logout() }
                 },
                 title = {
                     Text(stringResource(R.string.list_view_top_bar_text))
@@ -94,13 +91,7 @@ fun ListViewScreen(
 fun FilterAction(listViewViewModel: ListViewViewModel, modifier: Modifier = Modifier) {
     val uiState by listViewViewModel.uiState.collectAsState()
     Box(modifier = modifier) {
-        IconButton(onClick = { listViewViewModel.setIsFilterExpanded(true) }) {
-            Icon(
-                painter = painterResource(R.drawable.filter_list),
-                contentDescription = stringResource(R.string.list_view_filter_description),
-                modifier = Modifier.size(dimensionResource(R.dimen.top_bar_icon_size))
-            )
-        }
+        FilterButton { listViewViewModel.setIsFilterExpanded(true) }
         DropdownMenu(
             expanded = uiState.isFilterExpanded,
             onDismissRequest = { listViewViewModel.setIsFilterExpanded(false) }

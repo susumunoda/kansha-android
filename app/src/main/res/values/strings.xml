@@ -3,7 +3,6 @@
     <!-- List view screen -->
     <string name="list_view_top_bar_text">Kansha</string>
     <string name="list_view_new_message_button_text">🙏</string>
-    <string name="list_view_filter_description">Filter list</string>
     <string name="list_view_filter_choice_description">Filtered by %s</string>
     <!-- New message screen -->
     <string name="new_message_top_bar_text">Send Thank You</string>
@@ -13,9 +12,12 @@
     <string name="search_recipients_place_holder_text">Search recipients</string>
     <string name="search_recipients_description">Search recipients</string>
     <string name="message_validation_length_exceeded">Message cannot be greater than %d characters</string>
-    <string name="send_message_description">Send message</string>
-    <!-- Icon buttons -->
-    <string name="back_button_description">Back button</string>
+    <!-- ally: icon buttons -->
+    <string name="back_button_description">Go back</string>
+    <string name="filter_button_description">Show/hide filter</string>
+    <string name="logout_button_description">Log out</string>
+    <string name="send_button_description">Send</string>
+    <string name="remove_button_description">Remove</string>
     <!-- Auth: login -->
     <string name="login_top_bar_text">Log In</string>
     <string name="login_button_text">Log in</string>
@@ -31,6 +33,4 @@
     <string name="email_format_validation">Email must be of format email@example.com</string>
     <string name="password_label_text">Password</string>
     <string name="password_length_validation">Password must be %d or more characters</string>
-    <!-- Auth: logout -->
-    <string name="sign_out_description">Sign out</string>
 </resources>

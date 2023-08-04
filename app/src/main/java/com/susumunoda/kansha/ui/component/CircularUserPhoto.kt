@@ -1,4 +1,4 @@
-package com.susumunoda.kansha.ui
+package com.susumunoda.kansha.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size

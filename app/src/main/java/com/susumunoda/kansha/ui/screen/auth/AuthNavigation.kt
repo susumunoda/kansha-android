@@ -15,13 +15,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -51,6 +47,7 @@ import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.Session
+import com.susumunoda.kansha.ui.component.BackButton
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -154,11 +151,7 @@ fun SignupScreen(navController: NavHostController, authController: AuthControlle
                 }
             }
         },
-        navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(Icons.Rounded.ArrowBack, stringResource(R.string.back_button_description))
-            }
-        }
+        navigationIcon = { BackButton { navController.popBackStack() } }
     )
 }
 
