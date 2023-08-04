@@ -37,7 +37,7 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.Screen
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.data.Message
-import com.susumunoda.kansha.ui.component.CircularUserPhoto
+import com.susumunoda.kansha.ui.component.UserPhoto
 import com.susumunoda.kansha.ui.component.FilterButton
 import com.susumunoda.kansha.ui.component.LogoutButton
 
@@ -159,7 +159,7 @@ fun MessageCard(message: Message, modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(dimensionResource(R.dimen.padding_small))
         ) {
-            CircularUserPhoto(
+            UserPhoto(
                 user = message.sender,
                 size = dimensionResource(R.dimen.profile_photo_size_medium)
             )

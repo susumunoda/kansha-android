@@ -43,7 +43,7 @@ import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.User
 import com.susumunoda.kansha.ui.component.BackButton
-import com.susumunoda.kansha.ui.component.CircularUserPhoto
+import com.susumunoda.kansha.ui.component.UserPhoto
 import com.susumunoda.kansha.ui.component.RemoveButton
 import com.susumunoda.kansha.ui.component.SendButton
 
@@ -113,7 +113,7 @@ fun NewMessageScreen(
                             ListItem(
                                 headlineContent = { Text(searchResult.name) },
                                 leadingContent = {
-                                    CircularUserPhoto(
+                                    UserPhoto(
                                         user = searchResult,
                                         size = dimensionResource(R.dimen.profile_photo_size_small)
                                     )
@@ -137,7 +137,7 @@ fun NewMessageScreen(
                         // required param, but no behavior other than the remove icon
                         onClick = {},
                         avatar = {
-                            CircularUserPhoto(
+                            UserPhoto(
                                 user = uiState.recipient,
                                 size = dimensionResource(R.dimen.profile_photo_size_small)
                             )

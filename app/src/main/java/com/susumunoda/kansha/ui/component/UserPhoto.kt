@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.Dp
 import com.susumunoda.kansha.data.User
 
 @Composable
-fun CircularUserPhoto(user: User, size: Dp) {
+fun UserPhoto(user: User, size: Dp) {
     Image(
         painterResource(user.profilePhotoId),
         contentDescription = null,
