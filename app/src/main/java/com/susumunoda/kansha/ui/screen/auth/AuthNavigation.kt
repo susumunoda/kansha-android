@@ -115,7 +115,7 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
             }
         }
     ) {
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG && BuildConfig.SHOW_TEST_LOGIN.toBoolean()) {
             val testEmail = BuildConfig.TEST_EMAIL
             val testPassword = BuildConfig.TEST_PASSWORD
             Button(
