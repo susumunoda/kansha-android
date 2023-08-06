@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -44,6 +46,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.Session
@@ -113,6 +116,20 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
             }
         }
     ) {
+        if (BuildConfig.DEBUG) {
+            val testEmail = BuildConfig.TEST_EMAIL
+            val testPassword = BuildConfig.TEST_PASSWORD
+            Button(
+                onClick = { authController.login(testEmail, testPassword, {}) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.secondary
+                )
+            ) {
+                Text("Log in as $testEmail")
+            }
+        }
+
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(stringResource(R.string.no_account_question_text))
             Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
