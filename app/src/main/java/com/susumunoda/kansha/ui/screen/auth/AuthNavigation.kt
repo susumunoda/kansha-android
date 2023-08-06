@@ -49,9 +49,8 @@ import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.auth.Session
+import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.ui.component.BackButton
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 enum class AuthPath { LOGIN, SIGNUP }
@@ -278,26 +277,5 @@ fun validatePassword(password: String, context: Context) =
 @Preview
 @Composable
 fun AuthNavigationPreview() {
-    AuthNavigation(
-        authController = object : AuthController {
-            override val sessionFlow: StateFlow<Session?>
-                get() = TODO("Not yet implemented")
-
-            override fun createUser(
-                email: String,
-                password: String,
-                onResult: (Throwable?) -> Unit
-            ) {
-                TODO("Not yet implemented")
-            }
-
-            override fun login(email: String, password: String, onResult: (Throwable?) -> Unit) {
-                TODO("Not yet implemented")
-            }
-
-            override fun logout() {
-                TODO("Not yet implemented")
-            }
-        }
-    )
+    AuthNavigation(authController = NoOpAuthController)
 }
