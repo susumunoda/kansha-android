@@ -1,10 +1,7 @@
-package com.susumunoda.kansha.auth.firebase
+package com.susumunoda.kansha.auth
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.auth.Session
-import com.susumunoda.kansha.auth.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
