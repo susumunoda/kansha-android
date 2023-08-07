@@ -277,5 +277,5 @@ fun validatePassword(password: String, context: Context) =
 @Preview
 @Composable
 fun AuthNavigationPreview() {
-    AuthNavigation(authController = NoOpAuthController)
+    AuthNavigation(authController = NoOpAuthController())
 }

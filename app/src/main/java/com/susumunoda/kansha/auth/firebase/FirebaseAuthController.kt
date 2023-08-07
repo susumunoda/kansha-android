@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.update
 
 object FirebaseAuthController : AuthController {
     private val auth = Firebase.auth
-    private var _sessionFlow = MutableStateFlow(null as Session?)
+    private var _sessionFlow = MutableStateFlow(Session.LOGGED_OUT)
     override val sessionFlow = _sessionFlow.asStateFlow()
 
     init {
@@ -20,8 +20,8 @@ object FirebaseAuthController : AuthController {
                 val currentSession = sessionFlow.value
                 val updatedUser = updatedAuth.currentUser
                 if (updatedUser == null) {
-                    _sessionFlow.update { null }
-                } else if (updatedUser.uid != currentSession?.getCurrentUser()?.id) {
+                    _sessionFlow.update { Session.LOGGED_OUT }
+                } else if (updatedUser.uid != currentSession.getCurrentUser().id) {
                     val user = User(updatedUser.uid, updatedUser.displayName ?: "")
                     _sessionFlow.update { Session(user) }
                 }
@@ -30,13 +30,13 @@ object FirebaseAuthController : AuthController {
     }
 
     override fun createUser(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        assert(_sessionFlow.value == null) { "Cannot create user while already logged in" }
+        assert(_sessionFlow.value == Session.LOGGED_OUT) { "Cannot create user while already logged in" }
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task -> onResult(task.exception) }
     }
 
     override fun login(email: String, password: String, onResult: (Throwable?) -> Unit) {
-        assert(_sessionFlow.value == null) { "Cannot login user while already logged in" }
+        assert(_sessionFlow.value == Session.LOGGED_OUT) { "Cannot login user while already logged in" }
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task -> onResult(task.exception) }
     }
