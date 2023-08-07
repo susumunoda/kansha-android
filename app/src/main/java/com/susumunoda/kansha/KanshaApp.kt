@@ -1,23 +1,20 @@
 package com.susumunoda.kansha
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.ui.screen.auth.AuthNavigation
+import com.susumunoda.kansha.auth.Session
+import com.susumunoda.kansha.ui.navigation.AuthenticatedNavigation
+import com.susumunoda.kansha.ui.navigation.UnauthenticatedNavigation
 
-enum class Screen { AUTH }
 
 @Composable
-fun KanshaApp(
-    navController: NavHostController = rememberNavController(),
-    authController: AuthController
-) {
-    NavHost(navController = navController, startDestination = Screen.AUTH.name) {
-        composable(Screen.AUTH.name) {
-            AuthNavigation(authController = authController)
-        }
+fun KanshaApp(authController: AuthController) {
+    val session by authController.sessionFlow.collectAsState()
+    if (session == Session.LOGGED_OUT) {
+        UnauthenticatedNavigation(authController = authController)
+    } else {
+        AuthenticatedNavigation(authController = authController, session = session)
     }
 }

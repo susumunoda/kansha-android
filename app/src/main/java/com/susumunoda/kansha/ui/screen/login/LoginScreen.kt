@@ -1,11 +1,8 @@
-package com.susumunoda.kansha.ui.screen.auth
+package com.susumunoda.kansha.ui.screen.login
 
 import android.content.Context
 import android.util.Log
 import android.util.Patterns
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -41,58 +38,13 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.ui.component.BackButton
+import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 import kotlinx.coroutines.launch
-
-enum class AuthPath { LOGIN, SIGNUP }
-
-private const val TAG = "AuthNavigation"
-
-private const val SCREEN_TRANSITION_DURATION = 350
-
-@Composable
-fun AuthNavigation(
-    navController: NavHostController = rememberNavController(),
-    authController: AuthController
-) {
-    NavHost(navController = navController, startDestination = AuthPath.LOGIN.name) {
-        composable(AuthPath.LOGIN.name) {
-            LoginScreen(navController, authController)
-        }
-        composable(
-            route = AuthPath.SIGNUP.name,
-            enterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(
-                        durationMillis = SCREEN_TRANSITION_DURATION,
-                        easing = FastOutSlowInEasing
-                    )
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                    animationSpec = tween(
-                        durationMillis = SCREEN_TRANSITION_DURATION,
-                        easing = FastOutSlowInEasing
-                    )
-                )
-            }
-        ) {
-            SignupScreen(navController, authController)
-        }
-    }
-}
 
 @Composable
 fun LoginScreen(navController: NavHostController, authController: AuthController) {
@@ -107,7 +59,7 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
         onSubmit = { email, password ->
             authController.login(email, password) { exception ->
                 if (exception != null) {
-                    Log.e(TAG, "Login failed with exception: ${exception.message}")
+                    Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
                     scope.launch {
                         snackbarHostState.showSnackbar(context.getString(R.string.login_failed_message))
                     }
@@ -134,7 +86,7 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
             Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { navController.navigate(AuthPath.SIGNUP.name) }
+                onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
             ) {
                 Text(stringResource(R.string.create_account_button_text))
             }
@@ -155,7 +107,10 @@ fun SignupScreen(navController: NavHostController, authController: AuthControlle
         onSubmit = { email, password ->
             authController.createUser(email, password) { exception ->
                 if (exception != null) {
-                    Log.e(TAG, "User creation failed with exception: ${exception.message}")
+                    Log.e(
+                        "SignupScreen",
+                        "User creation failed with exception: ${exception.message}"
+                    )
                     scope.launch {
                         snackbarHostState.showSnackbar(
                             context.getString(
@@ -173,7 +128,7 @@ fun SignupScreen(navController: NavHostController, authController: AuthControlle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UserCredentialsForm(
+private fun UserCredentialsForm(
     title: String,
     submitButtonLabel: String,
     onSubmit: (String, String) -> Unit,
@@ -263,19 +218,13 @@ fun UserCredentialsForm(
     }
 }
 
-fun validateEmail(email: String, context: Context) =
+private fun validateEmail(email: String, context: Context) =
     if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
         context.getString(R.string.email_format_validation)
     } else null
 
 private const val MIN_PASSWORD_LENGTH = 6
-fun validatePassword(password: String, context: Context) =
+private fun validatePassword(password: String, context: Context) =
     if (password.length < MIN_PASSWORD_LENGTH) {
         context.getString(R.string.password_length_validation, MIN_PASSWORD_LENGTH)
     } else null
-
-@Preview
-@Composable
-fun AuthNavigationPreview() {
-    AuthNavigation(authController = NoOpAuthController())
-}
