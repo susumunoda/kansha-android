@@ -1,17 +1,5 @@
 <resources>
     <string name="app_name">Kansha</string>
-    <!-- List view screen -->
-    <string name="list_view_top_bar_text">Kansha</string>
-    <string name="list_view_new_message_button_text">🙏</string>
-    <string name="list_view_filter_choice_description">Filtered by %s</string>
-    <!-- New message screen -->
-    <string name="new_message_top_bar_text">Send Thank You</string>
-    <string name="new_message_field_label_text">Message</string>
-    <string name="remove_recipient_description">Remove recipient</string>
-    <string name="clear_recipient_search_description">Clear recipient search</string>
-    <string name="search_recipients_place_holder_text">Search recipients</string>
-    <string name="search_recipients_description">Search recipients</string>
-    <string name="message_validation_length_exceeded">Message cannot be greater than %d characters</string>
     <!-- ally: icon buttons -->
     <string name="back_button_description">Go back</string>
     <string name="filter_button_description">Show/hide filter</string>
