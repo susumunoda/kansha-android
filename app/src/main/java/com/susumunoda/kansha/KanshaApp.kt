@@ -16,6 +16,8 @@ import com.susumunoda.kansha.ui.navigation.AuthenticatedNavigation
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedNavigation
 import kotlinx.coroutines.delay
 
+// Even though the UI might be ready sooner, it seems anything less than about 500ms makes the
+// loading spinner disappear too quickly, which is jarring and not smooth.
 private const val LOADING_SCREEN_MILLIS = 500L
 
 @Composable
