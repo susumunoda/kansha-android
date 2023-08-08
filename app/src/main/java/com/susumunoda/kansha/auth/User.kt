@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.auth
 
-class User(val id: String, val displayName: String) {
+class User(val id: String) {
     companion object {
-        val UNAUTHENTICATED = User("", "")
+        val UNAUTHENTICATED = User("")
     }
 }

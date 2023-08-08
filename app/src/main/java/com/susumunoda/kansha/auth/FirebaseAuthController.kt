@@ -19,8 +19,7 @@ object FirebaseAuthController : AuthController {
                 if (updatedUser == null) {
                     _sessionFlow.update { Session.LOGGED_OUT }
                 } else if (updatedUser.uid != currentSession.getCurrentUser().id) {
-                    val user = User(updatedUser.uid, updatedUser.displayName ?: "")
-                    _sessionFlow.update { Session(user) }
+                    _sessionFlow.update { Session(User(updatedUser.uid)) }
                 }
             }
         }

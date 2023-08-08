@@ -30,7 +30,7 @@ fun AuthenticatedNavigation(
 @Preview
 @Composable
 fun AuthenticatedNavigationPreview() {
-    val session = Session(User("1", "John Doe"))
+    val session = Session(User("1"))
     AuthenticatedNavigation(
         authController = NoOpAuthController(session),
         session = session
