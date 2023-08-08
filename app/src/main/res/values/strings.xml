@@ -21,4 +21,10 @@
     <string name="email_format_validation">Email must be of format email@example.com</string>
     <string name="password_label_text">Password</string>
     <string name="password_length_validation">Password must be %d or more characters</string>
+    <!-- Account setup -->
+    <string name="account_setup_top_bar_text">Account setup</string>
+    <string name="account_setup_name_prompt">What name do you like to go by?</string>
+    <string name="account_setup_name_placeholder">e.g. Snoopie</string>
+    <string name="account_setup_back_button">Back</string>
+    <string name="account_setup_next_button">Next</string>
 </resources>
