@@ -20,15 +20,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,25 +41,19 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(navController: NavHostController, authController: AuthController) {
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     UserCredentialsForm(
         title = stringResource(R.string.login_top_bar_text),
         submitButtonLabel = stringResource(R.string.login_button_text),
-        snackbarHostState = snackbarHostState,
-        onSubmit = { email, password ->
+        onSubmit = { email, password, onError ->
             authController.login(email, password) { exception ->
                 if (exception != null) {
                     Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
-                    scope.launch {
-                        snackbarHostState.showSnackbar(context.getString(R.string.login_failed_message))
-                    }
+                    onError(context.getString(R.string.login_failed_message))
                 }
             }
         }
@@ -96,29 +87,24 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
 
 @Composable
 fun SignupScreen(navController: NavHostController, authController: AuthController) {
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
-    val snackbarHostState = remember { SnackbarHostState() }
 
     UserCredentialsForm(
         title = stringResource(R.string.create_account_top_bar_text),
         submitButtonLabel = stringResource(R.string.signup_button_text),
-        snackbarHostState = snackbarHostState,
-        onSubmit = { email, password ->
+        onSubmit = { email, password, onError ->
             authController.createUser(email, password) { exception ->
                 if (exception != null) {
                     Log.e(
                         "SignupScreen",
                         "User creation failed with exception: ${exception.message}"
                     )
-                    scope.launch {
-                        snackbarHostState.showSnackbar(
-                            context.getString(
-                                R.string.user_creation_failed_message,
-                                exception.message
-                            )
+                    onError(
+                        context.getString(
+                            R.string.user_creation_failed_message,
+                            exception.message
                         )
-                    }
+                    )
                 }
             }
         },
@@ -131,8 +117,7 @@ fun SignupScreen(navController: NavHostController, authController: AuthControlle
 private fun UserCredentialsForm(
     title: String,
     submitButtonLabel: String,
-    onSubmit: (String, String) -> Unit,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onSubmit: (String, String, (String) -> Unit) -> Unit,
     navigationIcon: @Composable () -> Unit = {},
     additionalSteps: @Composable ColumnScope.() -> Unit = {}
 ) {
@@ -141,6 +126,7 @@ private fun UserCredentialsForm(
 
     var emailValidation: String? by remember { mutableStateOf(null) }
     var passwordValidation: String? by remember { mutableStateOf(null) }
+    var errorMessage: String? by remember { mutableStateOf(null) }
 
     val loginEnabled = email.isNotEmpty() && password.isNotEmpty()
 
@@ -148,7 +134,6 @@ private fun UserCredentialsForm(
     val context = LocalContext.current
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(title) },
@@ -171,6 +156,7 @@ private fun UserCredentialsForm(
                         onValueChange = {
                             email = it
                             emailValidation = null
+                            errorMessage = null
                         },
                         modifier = Modifier.fillMaxWidth(),
                         isError = emailValidation != null,
@@ -186,6 +172,7 @@ private fun UserCredentialsForm(
                         onValueChange = {
                             password = it
                             passwordValidation = null
+                            errorMessage = null
                         },
                         modifier = Modifier.fillMaxWidth(),
                         isError = passwordValidation != null,
@@ -204,11 +191,14 @@ private fun UserCredentialsForm(
                             if (emailValidation == null && passwordValidation == null) {
                                 // Remove focus from text fields so that snackbar is visible at bottom of screen
                                 focusManager.clearFocus()
-                                onSubmit(email, password)
+                                onSubmit(email, password) { errorMessage = it }
                             }
                         }, modifier = Modifier.fillMaxWidth()
                     ) {
                         Text(submitButtonLabel)
+                    }
+                    if (errorMessage != null) {
+                        Text(errorMessage!!, color = MaterialTheme.colorScheme.error)
                     }
                 }
 
