@@ -49,37 +49,37 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
     UserCredentialsForm(
         title = stringResource(R.string.login_top_bar_text),
         submitButtonLabel = stringResource(R.string.login_button_text),
-        onSubmit = { email, password, onError ->
-            authController.login(email, password) { exception ->
-                if (exception != null) {
-                    Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
-                    onError(context.getString(R.string.login_failed_message))
+        additionalSteps = {
+            if (BuildConfig.DEBUG && BuildConfig.SHOW_TEST_LOGIN.toBoolean()) {
+                val testEmail = BuildConfig.TEST_EMAIL
+                val testPassword = BuildConfig.TEST_PASSWORD
+                Button(
+                    onClick = { authController.login(testEmail, testPassword, {}) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    )
+                ) {
+                    Text("Log in as $testEmail")
+                }
+            }
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(stringResource(R.string.no_account_question_text))
+                Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
+                ) {
+                    Text(stringResource(R.string.create_account_button_text))
                 }
             }
         }
-    ) {
-        if (BuildConfig.DEBUG && BuildConfig.SHOW_TEST_LOGIN.toBoolean()) {
-            val testEmail = BuildConfig.TEST_EMAIL
-            val testPassword = BuildConfig.TEST_PASSWORD
-            Button(
-                onClick = { authController.login(testEmail, testPassword, {}) },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondary
-                )
-            ) {
-                Text("Log in as $testEmail")
-            }
-        }
-
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(stringResource(R.string.no_account_question_text))
-            Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
-            OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
-            ) {
-                Text(stringResource(R.string.create_account_button_text))
+    ) { email, password, onError ->
+        authController.login(email, password) { exception ->
+            if (exception != null) {
+                Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
+                onError(context.getString(R.string.login_failed_message))
             }
         }
     }
@@ -92,24 +92,23 @@ fun SignupScreen(navController: NavHostController, authController: AuthControlle
     UserCredentialsForm(
         title = stringResource(R.string.create_account_top_bar_text),
         submitButtonLabel = stringResource(R.string.signup_button_text),
-        onSubmit = { email, password, onError ->
-            authController.createUser(email, password) { exception ->
-                if (exception != null) {
-                    Log.e(
-                        "SignupScreen",
-                        "User creation failed with exception: ${exception.message}"
-                    )
-                    onError(
-                        context.getString(
-                            R.string.user_creation_failed_message,
-                            exception.message
-                        )
-                    )
-                }
-            }
-        },
         navigationIcon = { BackButton { navController.popBackStack() } }
-    )
+    ) { email, password, onError ->
+        authController.createUser(email, password) { exception ->
+            if (exception != null) {
+                Log.e(
+                    "SignupScreen",
+                    "User creation failed with exception: ${exception.message}"
+                )
+                onError(
+                    context.getString(
+                        R.string.user_creation_failed_message,
+                        exception.message
+                    )
+                )
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -117,9 +116,9 @@ fun SignupScreen(navController: NavHostController, authController: AuthControlle
 private fun UserCredentialsForm(
     title: String,
     submitButtonLabel: String,
-    onSubmit: (String, String, (String) -> Unit) -> Unit,
     navigationIcon: @Composable () -> Unit = {},
-    additionalSteps: @Composable ColumnScope.() -> Unit = {}
+    additionalSteps: @Composable ColumnScope.() -> Unit = {},
+    onSubmit: (String, String, (String) -> Unit) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
