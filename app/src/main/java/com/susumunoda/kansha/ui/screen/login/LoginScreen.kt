@@ -12,10 +12,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -51,20 +54,6 @@ fun LoginScreen(navController: NavHostController, authController: AuthController
         title = stringResource(R.string.login_top_bar_text),
         submitButtonLabel = stringResource(R.string.login_button_text),
         additionalSteps = {
-            if (BuildConfig.DEBUG && BuildConfig.SHOW_TEST_LOGIN.toBoolean()) {
-                val testEmail = BuildConfig.TEST_EMAIL
-                val testPassword = BuildConfig.TEST_PASSWORD
-                Button(
-                    onClick = { authController.login(testEmail, testPassword, {}) },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
-                    )
-                ) {
-                    Text("Log in as $testEmail")
-                }
-            }
-
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(stringResource(R.string.no_account_question_text))
                 Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
@@ -138,7 +127,24 @@ private fun UserCredentialsForm(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(title) },
-                navigationIcon = navigationIcon
+                navigationIcon = navigationIcon,
+                actions = {
+                    // Only for development - convenience for faster login
+                    if (BuildConfig.DEBUG && BuildConfig.SHOW_TEST_LOGIN.toBoolean()) {
+                        IconButton(
+                            onClick = {
+                                email = BuildConfig.TEST_EMAIL
+                                password = BuildConfig.TEST_PASSWORD
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Star,
+                                contentDescription = null,
+                                modifier = Modifier.size(dimensionResource(R.dimen.icon_button))
+                            )
+                        }
+                    }
+                }
             )
         }
     ) { paddingValues ->
