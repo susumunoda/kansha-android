@@ -10,6 +10,8 @@ import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.auth.User
+import com.susumunoda.kansha.data.user.NoOpUserRepository
+import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.screen.profile.ProfileScreen
 
 enum class AuthenticatedScreen { PROFILE }
@@ -18,11 +20,16 @@ enum class AuthenticatedScreen { PROFILE }
 fun AuthenticatedNavigation(
     navController: NavHostController = rememberNavController(),
     authController: AuthController,
+    userRepository: UserRepository,
     session: Session
 ) {
     NavHost(navController = navController, startDestination = AuthenticatedScreen.PROFILE.name) {
         composable(AuthenticatedScreen.PROFILE.name) {
-            ProfileScreen(authController = authController, session = session)
+            ProfileScreen(
+                authController = authController,
+                userRepository = userRepository,
+                session = session
+            )
         }
     }
 }
@@ -33,6 +40,7 @@ fun AuthenticatedNavigationPreview() {
     val session = Session(User("1"))
     AuthenticatedNavigation(
         authController = NoOpAuthController(session),
+        userRepository = NoOpUserRepository(),
         session = session
     )
 }

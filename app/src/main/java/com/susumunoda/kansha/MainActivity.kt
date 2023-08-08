@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.susumunoda.kansha.auth.FirebaseAuthController
+import com.susumunoda.kansha.data.user.FirebaseUserRepository
 import com.susumunoda.kansha.ui.theme.KanshaTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +22,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    KanshaApp(authController = FirebaseAuthController)
+                    KanshaApp(
+                        authController = FirebaseAuthController,
+                        userRepository = FirebaseUserRepository
+                    )
                 }
             }
         }

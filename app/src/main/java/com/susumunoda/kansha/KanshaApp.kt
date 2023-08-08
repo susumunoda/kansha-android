@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.Session
+import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.navigation.AuthenticatedNavigation
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedNavigation
 import kotlinx.coroutines.delay
@@ -21,7 +22,7 @@ import kotlinx.coroutines.delay
 private const val LOADING_SCREEN_MILLIS = 500L
 
 @Composable
-fun KanshaApp(authController: AuthController) {
+fun KanshaApp(authController: AuthController, userRepository: UserRepository) {
     var loading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
@@ -38,7 +39,11 @@ fun KanshaApp(authController: AuthController) {
         if (session == Session.LOGGED_OUT) {
             UnauthenticatedNavigation(authController = authController)
         } else {
-            AuthenticatedNavigation(authController = authController, session = session)
+            AuthenticatedNavigation(
+                authController = authController,
+                userRepository = userRepository,
+                session = session
+            )
         }
     }
 }
