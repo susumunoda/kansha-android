@@ -40,6 +40,7 @@ import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.ui.component.BackButton
+import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 
 @Composable
@@ -127,6 +128,7 @@ private fun UserCredentialsForm(
     var passwordValidation: String? by remember { mutableStateOf(null) }
     var errorMessage: String? by remember { mutableStateOf(null) }
 
+    var requestInFlight by remember { mutableStateOf(false) }
     val loginEnabled = email.isNotEmpty() && password.isNotEmpty()
 
     val focusManager = LocalFocusManager.current
@@ -188,9 +190,14 @@ private fun UserCredentialsForm(
                             passwordValidation = validatePassword(password, context)
 
                             if (emailValidation == null && passwordValidation == null) {
-                                // Remove focus from text fields so that snackbar is visible at bottom of screen
+                                // Remove focus from text fields to close software keyboard
                                 focusManager.clearFocus()
-                                onSubmit(email, password) { errorMessage = it }
+                                onSubmit(email, password) {
+                                    // error callback
+                                    errorMessage = it
+                                    requestInFlight = false
+                                }
+                                requestInFlight = true
                             }
                         }, modifier = Modifier.fillMaxWidth()
                     ) {
@@ -205,6 +212,7 @@ private fun UserCredentialsForm(
             }
         }
     }
+    LoadingIndicatorOverlay(showLoadingIndicator = requestInFlight)
 }
 
 private fun validateEmail(email: String, context: Context) =
