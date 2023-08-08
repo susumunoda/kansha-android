@@ -27,4 +27,5 @@
     <string name="account_setup_name_placeholder">e.g. Snoopie</string>
     <string name="account_setup_back_button">Back</string>
     <string name="account_setup_next_button">Next</string>
+    <string name="account_setup_sign_out_button">Sign out</string>
 </resources>

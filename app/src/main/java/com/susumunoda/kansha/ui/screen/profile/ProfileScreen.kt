@@ -90,7 +90,7 @@ fun ProfileScreen(
         ) { page ->
             when (SetupSteps.values()[page]) {
                 SetupSteps.NAME -> {
-                    NameStep(pagerState)
+                    NameStep(pagerState, authController)
                 }
 
                 SetupSteps.PROFILE_PHOTO -> {
@@ -105,7 +105,7 @@ fun ProfileScreen(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun NameStep(pagerState: PagerState) {
+private fun NameStep(pagerState: PagerState, authController: AuthController) {
     val scope = rememberCoroutineScope()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -133,6 +133,12 @@ private fun NameStep(pagerState: PagerState) {
                 value = "",
                 onValueChange = {}
             )
+        }
+        OutlinedButton(
+            onClick = { authController.logout() },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.account_setup_sign_out_button))
         }
         Button(
             onClick = {
@@ -168,27 +174,25 @@ fun ProfilePhotoStep(pagerState: PagerState) {
             Spacer(Modifier.size(dimensionResource(R.dimen.padding_medium)))
             Text("TODO")
         }
-        Column {
-            OutlinedButton(
-                onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.account_setup_back_button))
-            }
-            Button(
-                onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(stringResource(R.string.account_setup_next_button))
-            }
+        OutlinedButton(
+            onClick = {
+                scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.account_setup_back_button))
+        }
+        Button(
+            onClick = {
+                scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(R.string.account_setup_next_button))
         }
     }
 }
