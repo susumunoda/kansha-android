@@ -3,6 +3,7 @@ package com.susumunoda.kansha.ui.screen.profile
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -107,11 +108,15 @@ fun ProfileScreen(
 @Composable
 private fun NameStep(pagerState: PagerState, authController: AuthController) {
     val scope = rememberCoroutineScope()
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(dimensionResource(R.dimen.padding_large))
+    SetupStep(
+        primaryAction = {
+            scope.launch {
+                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            }
+        },
+        primaryActionLabel = stringResource(R.string.account_setup_next_button),
+        secondaryAction = { authController.logout() },
+        secondaryActionLabel = stringResource(R.string.account_setup_sign_out_button)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,22 +139,6 @@ private fun NameStep(pagerState: PagerState, authController: AuthController) {
                 onValueChange = {}
             )
         }
-        OutlinedButton(
-            onClick = { authController.logout() },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.account_setup_sign_out_button))
-        }
-        Button(
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.account_setup_next_button))
-        }
     }
 }
 
@@ -157,11 +146,19 @@ private fun NameStep(pagerState: PagerState, authController: AuthController) {
 @Composable
 fun ProfilePhotoStep(pagerState: PagerState) {
     val scope = rememberCoroutineScope()
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(dimensionResource(R.dimen.padding_large))
+    SetupStep(
+        primaryAction = {
+            scope.launch {
+                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            }
+        },
+        primaryActionLabel = stringResource(R.string.account_setup_next_button),
+        secondaryAction = {
+            scope.launch {
+                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+            }
+        },
+        secondaryActionLabel = stringResource(R.string.account_setup_back_button)
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -174,25 +171,38 @@ fun ProfilePhotoStep(pagerState: PagerState) {
             Spacer(Modifier.size(dimensionResource(R.dimen.padding_medium)))
             Text("TODO")
         }
-        OutlinedButton(
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.account_setup_back_button))
+    }
+}
+
+@Composable
+private fun SetupStep(
+    primaryAction: () -> Unit,
+    primaryActionLabel: String,
+    secondaryAction: (() -> Unit)? = null,
+    secondaryActionLabel: String? = null,
+    stepContent: @Composable ColumnScope.() -> Unit
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(dimensionResource(R.dimen.padding_large))
+    ) {
+        stepContent()
+        if (secondaryAction != null && secondaryActionLabel != null) {
+            OutlinedButton(
+                onClick = secondaryAction,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(secondaryActionLabel)
+            }
+            Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
         }
         Button(
-            onClick = {
-                scope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                }
-            },
+            onClick = primaryAction,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(stringResource(R.string.account_setup_next_button))
+            Text(primaryActionLabel)
         }
     }
 }
