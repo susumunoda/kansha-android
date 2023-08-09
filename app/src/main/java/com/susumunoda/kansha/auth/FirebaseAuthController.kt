@@ -5,8 +5,9 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-object FirebaseAuthController : AuthController {
+class FirebaseAuthController @Inject constructor() : AuthController {
     private val auth = Firebase.auth
     private var _sessionFlow = MutableStateFlow(Session.LOGGED_OUT)
     override val sessionFlow = _sessionFlow.asStateFlow()
