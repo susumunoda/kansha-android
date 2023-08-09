@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.susumunoda.kansha.ui.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,9 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerScope
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,11 +29,36 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.susumunoda.kansha.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
+class PagerController(val pagerState: PagerState, private val scope: CoroutineScope) {
+    fun goToPrevious() {
+        if (pagerState.currentPage > 0) {
+            scope.launch {
+                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+            }
+        }
+    }
+
+    fun goToNext() {
+        if (pagerState.currentPage < pagerState.pageCount - 1) {
+            scope.launch {
+                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+            }
+        }
+    }
+}
+
+@Composable
+fun rememberPagerController(pageCount: Int): PagerController {
+    val pagerState = rememberPagerState { pageCount }
+    val scope = rememberCoroutineScope()
+    return remember { PagerController(pagerState, scope) }
+}
+
 @Composable
 fun HorizontalPagerWithIndicator(
-    totalPages: Int,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
     userScrollEnabled: Boolean = true,
@@ -46,7 +76,7 @@ fun HorizontalPagerWithIndicator(
         )
         if (showPageIndicator) {
             HorizontalPageIndicator(
-                totalPages = totalPages,
+                totalPages = pagerState.pageCount,
                 currentPage = pagerState.currentPage,
                 modifier = Modifier.padding(pageIndicatorPadding)
             )

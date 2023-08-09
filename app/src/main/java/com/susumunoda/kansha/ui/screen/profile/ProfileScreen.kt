@@ -9,8 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +37,8 @@ import com.susumunoda.kansha.auth.User
 import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.component.HorizontalPagerWithIndicator
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
-import kotlinx.coroutines.launch
+import com.susumunoda.kansha.ui.component.PagerController
+import com.susumunoda.kansha.ui.component.rememberPagerController
 
 const val TAG = "ProfileScreen"
 
@@ -68,8 +66,7 @@ fun ProfileScreen(
         )
     }
 
-    val totalPages = SetupSteps.values().size
-    val pagerState = rememberPagerState { totalPages }
+    val pagerController = rememberPagerController(SetupSteps.values().size)
 
     Scaffold(
         topBar = {
@@ -84,18 +81,17 @@ fun ProfileScreen(
         }
     ) { contentPadding ->
         HorizontalPagerWithIndicator(
-            totalPages = totalPages,
-            pagerState = pagerState,
+            pagerState = pagerController.pagerState,
             userScrollEnabled = false,
             modifier = Modifier.padding(contentPadding)
         ) { page ->
             when (SetupSteps.values()[page]) {
                 SetupSteps.NAME -> {
-                    NameStep(pagerState, authController)
+                    NameStep(pagerController, authController)
                 }
 
                 SetupSteps.PROFILE_PHOTO -> {
-                    ProfilePhotoStep(pagerState)
+                    ProfilePhotoStep(pagerController)
                 }
             }
         }
@@ -104,16 +100,10 @@ fun ProfileScreen(
     LoadingIndicatorOverlay(showLoadingIndicator = basicUserInfo == null)
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun NameStep(pagerState: PagerState, authController: AuthController) {
-    val scope = rememberCoroutineScope()
+private fun NameStep(pagerController: PagerController, authController: AuthController) {
     SetupStep(
-        primaryAction = {
-            scope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-            }
-        },
+        primaryAction = { pagerController.goToNext() },
         primaryActionLabel = stringResource(R.string.account_setup_next_button),
         secondaryAction = { authController.logout() },
         secondaryActionLabel = stringResource(R.string.account_setup_sign_out_button)
@@ -142,22 +132,12 @@ private fun NameStep(pagerState: PagerState, authController: AuthController) {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProfilePhotoStep(pagerState: PagerState) {
-    val scope = rememberCoroutineScope()
+private fun ProfilePhotoStep(pagerController: PagerController) {
     SetupStep(
-        primaryAction = {
-            scope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-            }
-        },
+        primaryAction = { pagerController.goToNext() },
         primaryActionLabel = stringResource(R.string.account_setup_next_button),
-        secondaryAction = {
-            scope.launch {
-                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-            }
-        },
+        secondaryAction = { pagerController.goToPrevious() },
         secondaryActionLabel = stringResource(R.string.account_setup_back_button)
     ) {
         Column(
