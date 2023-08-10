@@ -95,7 +95,7 @@ fun LoginScreen(
                         label = stringResource(R.string.login_button_text),
                         enabled = loginEnabled,
                         errorMessage = stringResource(R.string.login_failed_message),
-                        onSubmit = viewModel::validateAndSubmitForm
+                        onSubmit = viewModel::validateAndLogInUser
                     )
                     if (uiState.errorMessage != null) {
                         Text(uiState.errorMessage!!, color = MaterialTheme.colorScheme.error)

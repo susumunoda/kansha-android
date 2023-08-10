@@ -1,6 +1,5 @@
 package com.susumunoda.kansha.ui.screen.login
 
-import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
@@ -37,22 +36,30 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 
-    fun validateAndSubmitForm(strings: ResultStrings) {
+    fun validateAndLogInUser(strings: ResultStrings) {
+        validate(strings.emailValidation, strings.passwordValidation)
+        execute(strings.errorMessage) { errorHandler ->
+            authController.login(_uiState.value.email, _uiState.value.password, errorHandler)
+        }
+    }
+
+    private fun validate(emailValidation: String, passwordValidation: String) {
         _uiState.update {
             it.copy(
-                emailValidation = if (isValidEmail(it.email)) null else strings.emailValidation,
-                passwordValidation = if (isValidPassword(it.password)) null else strings.passwordValidation
+                emailValidation = if (isValidEmail(it.email)) null else emailValidation,
+                passwordValidation = if (isValidPassword(it.password)) null else passwordValidation
             )
         }
+    }
 
+    private fun execute(errorMessage: String, errorHandler: ((Throwable?) -> Unit) -> Unit) {
         if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
             _uiState.update { it.copy(requestInFlight = true) }
-            authController.login(_uiState.value.email, _uiState.value.password) { exception ->
-                if (exception != null) {
-                    Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
+            errorHandler { throwable ->
+                if (throwable != null) {
                     _uiState.update {
                         it.copy(
-                            errorMessage = strings.errorMessage,
+                            errorMessage = errorMessage,
                             requestInFlight = false
                         )
                     }
