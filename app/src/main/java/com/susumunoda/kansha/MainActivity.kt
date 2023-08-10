@@ -9,7 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.data.user.FirebaseUserRepository
+import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.theme.KanshaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -18,6 +18,9 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var authController: AuthController
+
+    @Inject
+    lateinit var userRepository: UserRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     KanshaApp(
                         authController = authController,
-                        userRepository = FirebaseUserRepository() // TODO inject with Hilt
+                        userRepository = userRepository
                     )
                 }
             }

@@ -3,8 +3,9 @@ package com.susumunoda.kansha.data.user
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import javax.inject.Inject
 
-class FirebaseUserRepository : UserRepository {
+class FirebaseUserRepository @Inject constructor() : UserRepository {
     private val db = Firebase.firestore
 
     companion object {
