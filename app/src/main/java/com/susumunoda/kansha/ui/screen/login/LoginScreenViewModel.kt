@@ -21,7 +21,7 @@ class LoginScreenViewModel @Inject constructor(
             it.copy(
                 email = email,
                 emailValidation = null,
-                errorMessage = null
+                errorResponse = null
             )
         }
     }
@@ -31,14 +31,14 @@ class LoginScreenViewModel @Inject constructor(
             it.copy(
                 password = password,
                 passwordValidation = null,
-                errorMessage = null
+                errorResponse = null
             )
         }
     }
 
-    fun validateAndLogInUser(strings: ResultStrings) {
-        validate(strings.emailValidation, strings.passwordValidation)
-        execute(strings.errorMessage) { errorHandler ->
+    fun validateAndLogInUser(emailValidation: String, passwordValidation: String) {
+        validate(emailValidation, passwordValidation)
+        execute { errorHandler ->
             authController.login(_uiState.value.email, _uiState.value.password, errorHandler)
         }
     }
@@ -52,14 +52,14 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 
-    private fun execute(errorMessage: String, errorHandler: ((Throwable?) -> Unit) -> Unit) {
+    private fun execute(errorHandler: ((Throwable?) -> Unit) -> Unit) {
         if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
             _uiState.update { it.copy(requestInFlight = true) }
             errorHandler { throwable ->
                 if (throwable != null) {
                     _uiState.update {
                         it.copy(
-                            errorMessage = errorMessage,
+                            errorResponse = throwable.message,
                             requestInFlight = false
                         )
                     }
@@ -68,12 +68,6 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 }
-
-data class ResultStrings(
-    val emailValidation: String,
-    val passwordValidation: String,
-    val errorMessage: String
-)
 
 const val MIN_PASSWORD_LENGTH = 6
 private fun isValidEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches()

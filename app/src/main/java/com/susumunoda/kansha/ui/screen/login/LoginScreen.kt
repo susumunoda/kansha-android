@@ -94,11 +94,13 @@ fun LoginScreen(
                     SubmitButton(
                         label = stringResource(R.string.login_button_text),
                         enabled = loginEnabled,
-                        errorMessage = stringResource(R.string.login_failed_message),
                         onSubmit = viewModel::validateAndLogInUser
                     )
-                    if (uiState.errorMessage != null) {
-                        Text(uiState.errorMessage!!, color = MaterialTheme.colorScheme.error)
+                    if (uiState.errorResponse != null) {
+                        Text(
+                            stringResource(R.string.login_failed_message),
+                            color = MaterialTheme.colorScheme.error
+                        )
                     }
                 }
 
@@ -151,8 +153,7 @@ private fun PasswordField(viewModel: LoginScreenViewModel, uiState: AuthScreenSt
 private fun SubmitButton(
     label: String,
     enabled: Boolean,
-    errorMessage: String,
-    onSubmit: (ResultStrings) -> Unit
+    onSubmit: (emailValidation: String, passwordValidation: String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val emailValidation = stringResource(R.string.email_format_validation)
@@ -163,13 +164,7 @@ private fun SubmitButton(
         onClick = {
             // Remove focus from text fields to close software keyboard
             focusManager.clearFocus()
-            onSubmit(
-                ResultStrings(
-                    emailValidation = emailValidation,
-                    passwordValidation = passwordValidation,
-                    errorMessage = errorMessage
-                )
-            )
+            onSubmit(emailValidation, passwordValidation)
         },
         modifier = Modifier.fillMaxWidth()
     ) {
