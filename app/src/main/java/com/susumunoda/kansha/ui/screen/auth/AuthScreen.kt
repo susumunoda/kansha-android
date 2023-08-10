@@ -43,7 +43,7 @@ import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 @Composable
 fun LoginScreen(
     navController: NavHostController,
-    viewModel: LoginScreenViewModel = hiltViewModel()
+    viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -115,7 +115,7 @@ fun LoginScreen(
 @Composable
 fun SignupScreen(
     navController: NavHostController,
-    viewModel: LoginScreenViewModel = hiltViewModel()
+    viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -160,7 +160,7 @@ fun SignupScreen(
 }
 
 @Composable
-private fun EmailField(viewModel: LoginScreenViewModel, uiState: AuthScreenState) {
+private fun EmailField(viewModel: AuthScreenViewModel, uiState: AuthScreenState) {
     OutlinedTextField(
         label = { Text(stringResource(R.string.email_label_text)) },
         singleLine = true,
@@ -174,7 +174,7 @@ private fun EmailField(viewModel: LoginScreenViewModel, uiState: AuthScreenState
 }
 
 @Composable
-private fun PasswordField(viewModel: LoginScreenViewModel, uiState: AuthScreenState) {
+private fun PasswordField(viewModel: AuthScreenViewModel, uiState: AuthScreenState) {
     OutlinedTextField(
         label = { Text(stringResource(R.string.password_label_text)) },
         singleLine = true,
