@@ -1,4 +1,4 @@
-package com.susumunoda.kansha.ui.screen.login
+package com.susumunoda.kansha.ui.screen.auth
 
 data class AuthScreenState(
     val email: String = "",

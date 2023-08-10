@@ -9,8 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.susumunoda.kansha.ui.screen.login.LoginScreen
-import com.susumunoda.kansha.ui.screen.login.SignupScreen
+import com.susumunoda.kansha.ui.screen.auth.LoginScreen
+import com.susumunoda.kansha.ui.screen.auth.SignupScreen
 
 enum class UnauthenticatedScreen { LOGIN, SIGNUP }
 
