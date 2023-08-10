@@ -57,9 +57,6 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val loginEnabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty()
 
-    val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -92,45 +89,14 @@ fun LoginScreen(
                     .padding(dimensionResource(R.dimen.padding_large))
             ) {
                 Column {
-                    OutlinedTextField(
-                        label = { Text(stringResource(R.string.email_label_text)) },
-                        singleLine = true,
-                        value = uiState.email,
-                        onValueChange = { viewModel.setEmail(it) },
-                        modifier = Modifier.fillMaxWidth(),
-                        isError = uiState.emailValidation != null,
-                        supportingText = { if (uiState.emailValidation != null) Text(uiState.emailValidation!!) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-                    )
-                    OutlinedTextField(
-                        label = { Text(stringResource(R.string.password_label_text)) },
-                        singleLine = true,
-                        value = uiState.password,
-                        onValueChange = { viewModel.setPassword(it) },
-                        modifier = Modifier.fillMaxWidth(),
-                        isError = uiState.passwordValidation != null,
-                        supportingText = { if (uiState.passwordValidation != null) Text(uiState.passwordValidation!!) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        visualTransformation = PasswordVisualTransformation()
-                    )
-                    Button(
+                    EmailField(viewModel, uiState)
+                    PasswordField(viewModel, uiState)
+                    SubmitButton(
+                        label = stringResource(R.string.login_button_text),
                         enabled = loginEnabled,
-                        onClick = {
-                            // Remove focus from text fields to close software keyboard
-                            focusManager.clearFocus()
-                            viewModel.validateAndSubmitForm(
-                                emailValidation = context.getString(R.string.email_format_validation),
-                                passwordValidation = context.getString(
-                                    R.string.password_length_validation,
-                                    MIN_PASSWORD_LENGTH
-                                ),
-                                errorMessage = context.getString(R.string.login_failed_message)
-                            )
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(R.string.login_button_text))
-                    }
+                        errorMessage = stringResource(R.string.login_failed_message),
+                        onSubmit = viewModel::validateAndSubmitForm
+                    )
                     if (uiState.errorMessage != null) {
                         Text(uiState.errorMessage!!, color = MaterialTheme.colorScheme.error)
                     }
@@ -150,6 +116,65 @@ fun LoginScreen(
         }
     }
     LoadingIndicatorOverlay(showLoadingIndicator = uiState.requestInFlight)
+}
+
+@Composable
+private fun EmailField(viewModel: LoginScreenViewModel, uiState: AuthScreenState) {
+    OutlinedTextField(
+        label = { Text(stringResource(R.string.email_label_text)) },
+        singleLine = true,
+        value = uiState.email,
+        onValueChange = { viewModel.setEmail(it) },
+        modifier = Modifier.fillMaxWidth(),
+        isError = uiState.emailValidation != null,
+        supportingText = { if (uiState.emailValidation != null) Text(uiState.emailValidation) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+    )
+}
+
+@Composable
+private fun PasswordField(viewModel: LoginScreenViewModel, uiState: AuthScreenState) {
+    OutlinedTextField(
+        label = { Text(stringResource(R.string.password_label_text)) },
+        singleLine = true,
+        value = uiState.password,
+        onValueChange = { viewModel.setPassword(it) },
+        modifier = Modifier.fillMaxWidth(),
+        isError = uiState.passwordValidation != null,
+        supportingText = { if (uiState.passwordValidation != null) Text(uiState.passwordValidation) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        visualTransformation = PasswordVisualTransformation()
+    )
+}
+
+@Composable
+private fun SubmitButton(
+    label: String,
+    enabled: Boolean,
+    errorMessage: String,
+    onSubmit: (ResultStrings) -> Unit
+) {
+    val focusManager = LocalFocusManager.current
+    val emailValidation = stringResource(R.string.email_format_validation)
+    val passwordValidation =
+        stringResource(R.string.password_length_validation, MIN_PASSWORD_LENGTH)
+    Button(
+        enabled = enabled,
+        onClick = {
+            // Remove focus from text fields to close software keyboard
+            focusManager.clearFocus()
+            onSubmit(
+                ResultStrings(
+                    emailValidation = emailValidation,
+                    passwordValidation = passwordValidation,
+                    errorMessage = errorMessage
+                )
+            )
+        },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(label)
+    }
 }
 
 @Composable

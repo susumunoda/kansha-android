@@ -37,15 +37,11 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 
-    fun validateAndSubmitForm(
-        emailValidation: String,
-        passwordValidation: String,
-        errorMessage: String
-    ) {
+    fun validateAndSubmitForm(strings: ResultStrings) {
         _uiState.update {
             it.copy(
-                emailValidation = if (isValidEmail(it.email)) null else emailValidation,
-                passwordValidation = if (isValidPassword(it.password)) null else passwordValidation
+                emailValidation = if (isValidEmail(it.email)) null else strings.emailValidation,
+                passwordValidation = if (isValidPassword(it.password)) null else strings.passwordValidation
             )
         }
 
@@ -56,7 +52,7 @@ class LoginScreenViewModel @Inject constructor(
                     Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
                     _uiState.update {
                         it.copy(
-                            errorMessage = errorMessage,
+                            errorMessage = strings.errorMessage,
                             requestInFlight = false
                         )
                     }
@@ -65,6 +61,12 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 }
+
+data class ResultStrings(
+    val emailValidation: String,
+    val passwordValidation: String,
+    val errorMessage: String
+)
 
 const val MIN_PASSWORD_LENGTH = 6
 private fun isValidEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches()
