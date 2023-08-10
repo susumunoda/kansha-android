@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     KanshaApp(
                         authController = authController,
-                        userRepository = FirebaseUserRepository
+                        userRepository = FirebaseUserRepository() // TODO inject with Hilt
                     )
                 }
             }

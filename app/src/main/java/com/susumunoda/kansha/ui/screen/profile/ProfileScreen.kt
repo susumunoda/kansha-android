@@ -34,6 +34,7 @@ import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.auth.User
+import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.component.HorizontalPagerWithIndicator
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
@@ -56,13 +57,13 @@ fun ProfileScreen(
     session: Session
 ) {
     val currentUser = session.currentUser
-    var basicUserInfo: Map<String, String>? by remember { mutableStateOf(null) }
+    var userData: UserData? by remember { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
-        userRepository.getBasicUserInformation(
-            user = currentUser,
-            onSuccess = { basicUserInfo = it },
-            onError = { Log.e(TAG, "Failed to retrieve user info: ${it?.message}") }
+        userRepository.getUser(
+            id = currentUser.id,
+            onSuccess = { userData = it },
+            onError = { Log.e(TAG, it?.message ?: "") }
         )
     }
 
@@ -97,7 +98,7 @@ fun ProfileScreen(
         }
     }
 
-    LoadingIndicatorOverlay(showLoadingIndicator = basicUserInfo == null)
+    LoadingIndicatorOverlay(showLoadingIndicator = userData == null)
 }
 
 @Composable
@@ -195,15 +196,15 @@ private fun ProfileScreenPreview() {
     ProfileScreen(
         authController = NoOpAuthController(),
         userRepository = object : UserRepository {
-            override fun getBasicUserInformation(
-                user: User,
-                onSuccess: (Map<String, String>) -> Unit,
+            override fun getUser(
+                id: String,
+                onSuccess: (UserData) -> Unit,
                 onError: (Exception?) -> Unit
             ) {
                 onSuccess(
-                    mapOf(
-                        "nickname" to "Snoopie",
-                        "profile_photo_url" to "https://www.example.com/snoopie.jpg"
+                    UserData(
+                        displayName = "Snoopie",
+                        profilePhotoUrl = "https://www.example.com/snoopie.jpg"
                     )
                 )
             }

@@ -1,11 +1,10 @@
 package com.susumunoda.kansha.data.user
 
-import com.susumunoda.kansha.auth.User
 
 interface UserRepository {
-    fun getBasicUserInformation(
-        user: User,
-        onSuccess: (Map<String, String>) -> Unit,
+    fun getUser(
+        id: String,
+        onSuccess: (UserData) -> Unit,
         onError: (Exception?) -> Unit
     )
 }
