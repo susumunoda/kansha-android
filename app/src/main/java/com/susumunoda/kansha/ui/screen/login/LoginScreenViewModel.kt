@@ -40,9 +40,7 @@ class LoginScreenViewModel @Inject constructor(
     fun validateAndSubmitForm(
         emailValidation: String,
         passwordValidation: String,
-        errorMessage: String,
-        onSubmit: () -> Unit,
-        onError: () -> Unit
+        errorMessage: String
     ) {
         _uiState.update {
             it.copy(
@@ -52,12 +50,16 @@ class LoginScreenViewModel @Inject constructor(
         }
 
         if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
-            onSubmit()
+            _uiState.update { it.copy(requestInFlight = true) }
             authController.login(_uiState.value.email, _uiState.value.password) { exception ->
                 if (exception != null) {
                     Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
-                    onError()
-                    _uiState.update { it.copy(errorMessage = errorMessage) }
+                    _uiState.update {
+                        it.copy(
+                            errorMessage = errorMessage,
+                            requestInFlight = false
+                        )
+                    }
                 }
             }
         }

@@ -55,7 +55,6 @@ fun LoginScreen(
     viewModel: LoginScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var requestInFlight by remember { mutableStateOf(false) }
     val loginEnabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty()
 
     val focusManager = LocalFocusManager.current
@@ -125,9 +124,7 @@ fun LoginScreen(
                                     R.string.password_length_validation,
                                     MIN_PASSWORD_LENGTH
                                 ),
-                                errorMessage = context.getString(R.string.login_failed_message),
-                                onSubmit = { requestInFlight = true },
-                                onError = { requestInFlight = false }
+                                errorMessage = context.getString(R.string.login_failed_message)
                             )
                         },
                         modifier = Modifier.fillMaxWidth()
@@ -152,7 +149,7 @@ fun LoginScreen(
             }
         }
     }
-    LoadingIndicatorOverlay(showLoadingIndicator = requestInFlight)
+    LoadingIndicatorOverlay(showLoadingIndicator = uiState.requestInFlight)
 }
 
 @Composable

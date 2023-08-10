@@ -5,5 +5,6 @@ data class AuthScreenState(
     val password: String = "",
     val emailValidation: String? = null,
     val passwordValidation: String? = null,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val requestInFlight: Boolean = false
 )
