@@ -73,10 +73,7 @@ fun ProfileScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(
-                        stringResource(R.string.account_setup_top_bar_text),
-                        style = MaterialTheme.typography.headlineLarge
-                    )
+                    Text(stringResource(R.string.account_setup_top_bar_text))
                 }
             )
         }
@@ -113,10 +110,7 @@ private fun NameStep(pagerController: PagerController, authController: AuthContr
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
         ) {
-            Text(
-                stringResource(R.string.account_setup_name_prompt),
-                style = MaterialTheme.typography.titleLarge
-            )
+            Text(stringResource(R.string.account_setup_name_prompt))
             Spacer(Modifier.size(dimensionResource(R.dimen.padding_medium)))
             OutlinedTextField(
                 placeholder = {
@@ -145,10 +139,7 @@ private fun ProfilePhotoStep(pagerController: PagerController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.weight(1f)
         ) {
-            Text(
-                "Pick a profile photo or enter a URL",
-                style = MaterialTheme.typography.titleLarge
-            )
+            Text("Pick a profile photo or enter a URL")
             Spacer(Modifier.size(dimensionResource(R.dimen.padding_medium)))
             Text("TODO")
         }
