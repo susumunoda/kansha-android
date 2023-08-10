@@ -25,7 +25,7 @@ fun UnauthenticatedNavigation(
 ) {
     NavHost(navController = navController, startDestination = UnauthenticatedScreen.LOGIN.name) {
         composable(UnauthenticatedScreen.LOGIN.name) {
-            LoginScreen(navController, authController)
+            LoginScreen(navController)
         }
         composable(
             route = UnauthenticatedScreen.SIGNUP.name,

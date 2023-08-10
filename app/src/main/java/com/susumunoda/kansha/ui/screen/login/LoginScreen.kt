@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
@@ -46,33 +48,111 @@ import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavHostController, authController: AuthController) {
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: LoginScreenViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    var requestInFlight by remember { mutableStateOf(false) }
+    val loginEnabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty()
+
+    val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
-    UserCredentialsForm(
-        title = stringResource(R.string.login_top_bar_text),
-        submitButtonLabel = stringResource(R.string.login_button_text),
-        additionalSteps = {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(stringResource(R.string.no_account_question_text))
-                Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
-                ) {
-                    Text(stringResource(R.string.create_account_button_text))
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(stringResource(R.string.login_top_bar_text)) },
+                actions = {
+                    // Only for development - convenience for faster login
+                    if (BuildConfig.DEBUG && BuildConfig.SHOW_TEST_LOGIN.toBoolean()) {
+                        IconButton(
+                            onClick = {
+                                viewModel.setEmail(BuildConfig.TEST_EMAIL)
+                                viewModel.setPassword(BuildConfig.TEST_PASSWORD)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Star,
+                                contentDescription = null,
+                                modifier = Modifier.size(dimensionResource(R.dimen.icon_button))
+                            )
+                        }
+                    }
+                }
+            )
+        }
+    ) { paddingValues ->
+        Surface(modifier = Modifier.padding(paddingValues)) {
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(dimensionResource(R.dimen.padding_large))
+            ) {
+                Column {
+                    OutlinedTextField(
+                        label = { Text(stringResource(R.string.email_label_text)) },
+                        singleLine = true,
+                        value = uiState.email,
+                        onValueChange = { viewModel.setEmail(it) },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = uiState.emailValidation != null,
+                        supportingText = { if (uiState.emailValidation != null) Text(uiState.emailValidation!!) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+                    )
+                    OutlinedTextField(
+                        label = { Text(stringResource(R.string.password_label_text)) },
+                        singleLine = true,
+                        value = uiState.password,
+                        onValueChange = { viewModel.setPassword(it) },
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = uiState.passwordValidation != null,
+                        supportingText = { if (uiState.passwordValidation != null) Text(uiState.passwordValidation!!) },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        visualTransformation = PasswordVisualTransformation()
+                    )
+                    Button(
+                        enabled = loginEnabled,
+                        onClick = {
+                            // Remove focus from text fields to close software keyboard
+                            focusManager.clearFocus()
+                            viewModel.validateAndSubmitForm(
+                                emailValidation = context.getString(R.string.email_format_validation),
+                                passwordValidation = context.getString(
+                                    R.string.password_length_validation,
+                                    MIN_PASSWORD_LENGTH
+                                ),
+                                errorMessage = context.getString(R.string.login_failed_message),
+                                onSubmit = { requestInFlight = true },
+                                onError = { requestInFlight = false }
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.login_button_text))
+                    }
+                    if (uiState.errorMessage != null) {
+                        Text(uiState.errorMessage!!, color = MaterialTheme.colorScheme.error)
+                    }
+                }
+
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(stringResource(R.string.no_account_question_text))
+                    Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
+                    ) {
+                        Text(stringResource(R.string.create_account_button_text))
+                    }
                 }
             }
         }
-    ) { email, password, onError ->
-        authController.login(email, password) { exception ->
-            if (exception != null) {
-                Log.e("LoginScreen", "Login failed with exception: ${exception.message}")
-                onError(context.getString(R.string.login_failed_message))
-            }
-        }
     }
+    LoadingIndicatorOverlay(showLoadingIndicator = requestInFlight)
 }
 
 @Composable
@@ -226,7 +306,6 @@ private fun validateEmail(email: String, context: Context) =
         context.getString(R.string.email_format_validation)
     } else null
 
-private const val MIN_PASSWORD_LENGTH = 6
 private fun validatePassword(password: String, context: Context) =
     if (password.length < MIN_PASSWORD_LENGTH) {
         context.getString(R.string.password_length_validation, MIN_PASSWORD_LENGTH)
