@@ -59,10 +59,10 @@ class AuthScreenViewModel @Inject constructor(
         }
     }
 
-    private fun execute(errorHandler: ((Throwable?) -> Unit) -> Unit) {
+    private fun execute(executeWithErrorHandler: ((Throwable?) -> Unit) -> Unit) {
         if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
             _uiState.update { it.copy(requestInFlight = true) }
-            errorHandler { throwable ->
+            executeWithErrorHandler { throwable ->
                 if (throwable != null) {
                     _uiState.update {
                         it.copy(
