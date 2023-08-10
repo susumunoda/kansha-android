@@ -48,7 +48,7 @@ fun UnauthenticatedNavigation(
                 )
             }
         ) {
-            SignupScreen(navController, authController)
+            SignupScreen(navController)
         }
     }
 }

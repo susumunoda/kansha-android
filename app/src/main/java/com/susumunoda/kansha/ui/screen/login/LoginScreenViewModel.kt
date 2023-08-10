@@ -43,6 +43,13 @@ class LoginScreenViewModel @Inject constructor(
         }
     }
 
+    fun validateAndCreateUser(emailValidation: String, passwordValidation: String) {
+        validate(emailValidation, passwordValidation)
+        execute { errorHandler ->
+            authController.createUser(_uiState.value.email, _uiState.value.password, errorHandler)
+        }
+    }
+
     private fun validate(emailValidation: String, passwordValidation: String) {
         _uiState.update {
             it.copy(
