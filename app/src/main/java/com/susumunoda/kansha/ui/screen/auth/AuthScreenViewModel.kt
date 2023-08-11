@@ -119,7 +119,7 @@ class AuthScreenViewModel @Inject constructor(
     }
 }
 
-abstract class FieldValidator() {
+abstract class FieldValidator {
     fun validate(value: String) = if (isValid(value)) null else validationMessage()
     abstract fun isValid(value: String): Boolean
     abstract fun validationMessage(): String

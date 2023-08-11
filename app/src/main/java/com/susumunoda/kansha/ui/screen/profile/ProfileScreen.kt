@@ -1,7 +1,6 @@
 package com.susumunoda.kansha.ui.screen.profile
 
 import android.util.Log
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -31,13 +30,7 @@ import com.susumunoda.kansha.ui.component.LogoutButton
 
 const val TAG = "ProfileScreen"
 
-private enum class SetupSteps {
-    // Order is significant: steps will be displayed in the order defined here
-    NAME,
-    PROFILE_PHOTO
-}
-
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     authController: AuthController,
