@@ -39,14 +39,24 @@ class AuthScreenViewModel @Inject constructor(
     fun validateAndLogInUser(emailValidation: String, passwordValidation: String) {
         validate(emailValidation, passwordValidation)
         execute { errorHandler ->
-            authController.login(_uiState.value.email, _uiState.value.password, errorHandler)
+            authController.login(
+                _uiState.value.email,
+                _uiState.value.password,
+                { _ -> },
+                errorHandler
+            )
         }
     }
 
     fun validateAndCreateUser(emailValidation: String, passwordValidation: String) {
         validate(emailValidation, passwordValidation)
         execute { errorHandler ->
-            authController.createUser(_uiState.value.email, _uiState.value.password, errorHandler)
+            authController.createUser(
+                _uiState.value.email,
+                _uiState.value.password,
+                { _ -> },
+                errorHandler
+            )
         }
     }
 
@@ -59,17 +69,15 @@ class AuthScreenViewModel @Inject constructor(
         }
     }
 
-    private fun execute(executeWithErrorHandler: ((Throwable?) -> Unit) -> Unit) {
+    private fun execute(executeWithErrorHandler: ((Exception) -> Unit) -> Unit) {
         if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
             _uiState.update { it.copy(requestInFlight = true) }
-            executeWithErrorHandler { throwable ->
-                if (throwable != null) {
-                    _uiState.update {
-                        it.copy(
-                            errorResponse = throwable.message,
-                            requestInFlight = false
-                        )
-                    }
+            executeWithErrorHandler { exception ->
+                _uiState.update {
+                    it.copy(
+                        errorResponse = exception.message,
+                        requestInFlight = false
+                    )
                 }
             }
         }

@@ -26,16 +26,28 @@ class FirebaseAuthController @Inject constructor() : AuthController {
         }
     }
 
-    override fun createUser(email: String, password: String, onResult: (Throwable?) -> Unit) {
+    override fun createUser(
+        email: String,
+        password: String,
+        onSuccess: (User) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         assert(_sessionFlow.value == Session.LOGGED_OUT) { "Cannot create user while already logged in" }
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> onResult(task.exception) }
+            .addOnSuccessListener { onSuccess(User(it.user!!.uid)) }
+            .addOnFailureListener(onFailure)
     }
 
-    override fun login(email: String, password: String, onResult: (Throwable?) -> Unit) {
+    override fun login(
+        email: String,
+        password: String,
+        onSuccess: (User) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         assert(_sessionFlow.value == Session.LOGGED_OUT) { "Cannot login user while already logged in" }
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task -> onResult(task.exception) }
+            .addOnSuccessListener { onSuccess(User(it.user!!.uid)) }
+            .addOnFailureListener(onFailure)
     }
 
     override fun logout() {
