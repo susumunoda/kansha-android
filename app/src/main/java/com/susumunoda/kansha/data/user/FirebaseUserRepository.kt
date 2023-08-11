@@ -12,7 +12,7 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
         const val COLLECTION = "users"
     }
 
-    override fun getUser(
+    override fun getUserData(
         id: String,
         onSuccess: (UserData) -> Unit,
         onError: (Exception?) -> Unit
@@ -28,5 +28,21 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
                     onError(IllegalArgumentException("Could not find user with id $id"))
                 }
             }.addOnFailureListener(onError)
+    }
+
+    override fun saveUserData(
+        userData: UserData,
+        onSuccess: () -> Unit,
+        onError: (Exception?) -> Unit
+    ) {
+        if (userData.id == null) {
+            onError(IllegalArgumentException("UserData cannot have a null id"))
+        } else {
+            db.collection(COLLECTION)
+                .document(userData.id)
+                .set(userData)
+                .addOnSuccessListener { onSuccess() }
+                .addOnFailureListener(onError)
+        }
     }
 }

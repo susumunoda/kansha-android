@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -60,7 +59,7 @@ fun ProfileScreen(
     var userData: UserData? by remember { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
-        userRepository.getUser(
+        userRepository.getUserData(
             id = currentUser.id,
             onSuccess = { userData = it },
             onError = { Log.e(TAG, it?.message ?: "") }
@@ -187,17 +186,24 @@ private fun ProfileScreenPreview() {
     ProfileScreen(
         authController = NoOpAuthController(),
         userRepository = object : UserRepository {
-            override fun getUser(
+            override fun getUserData(
                 id: String,
                 onSuccess: (UserData) -> Unit,
                 onError: (Exception?) -> Unit
             ) {
                 onSuccess(
                     UserData(
-                        displayName = "Snoopie",
-                        profilePhotoUrl = "https://www.example.com/snoopie.jpg"
+                        id = "1",
+                        displayName = "Snoopie"
                     )
                 )
+            }
+
+            override fun saveUserData(
+                userData: UserData,
+                onSuccess: () -> Unit,
+                onError: (Exception?) -> Unit
+            ) {
             }
         },
         session = session

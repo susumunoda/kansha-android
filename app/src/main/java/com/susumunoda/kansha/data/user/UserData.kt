@@ -1,3 +1,5 @@
 package com.susumunoda.kansha.data.user
 
-data class UserData(val displayName: String? = null, val profilePhotoUrl: String? = null)
+import com.google.firebase.firestore.Exclude
+
+data class UserData(@get:Exclude val id: String? = null, val displayName: String? = null)
