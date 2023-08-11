@@ -1,5 +1,7 @@
 package com.susumunoda.kansha.ui.screen.auth
 
+import android.content.Context
+import android.util.Patterns
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -45,6 +48,7 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -84,7 +88,13 @@ fun LoginScreen(
                     SubmitButton(
                         label = stringResource(R.string.login_button_text),
                         enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
-                        onSubmit = viewModel::validateAndLogInUser
+                        validateForm = {
+                            viewModel.validateEmail(EmailValidator(context))
+                            viewModel.validatePassword(PasswordValidator(context))
+                        },
+                        submitForm = {
+                            viewModel.logInUser()
+                        }
                     )
                     if (uiState.errorResponse != null) {
                         Text(
@@ -117,6 +127,7 @@ fun SignupScreen(
     navController: NavHostController,
     viewModel: AuthScreenViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
@@ -135,12 +146,20 @@ fun SignupScreen(
                     .padding(dimensionResource(R.dimen.padding_large))
             ) {
                 Column {
+                    DisplayNameField(viewModel, uiState)
                     EmailField(viewModel, uiState)
                     PasswordField(viewModel, uiState)
                     SubmitButton(
                         label = stringResource(R.string.signup_button_text),
                         enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
-                        onSubmit = viewModel::validateAndCreateUser
+                        validateForm = {
+                            viewModel.validateDisplayName(DisplayNameValidator(context))
+                            viewModel.validateEmail(EmailValidator(context))
+                            viewModel.validatePassword(PasswordValidator(context))
+                        },
+                        submitForm = {
+                            viewModel.createUser()
+                        }
                     )
                     if (uiState.errorResponse != null) {
                         Text(
@@ -160,9 +179,24 @@ fun SignupScreen(
 }
 
 @Composable
+private fun DisplayNameField(viewModel: AuthScreenViewModel, uiState: AuthScreenState) {
+    OutlinedTextField(
+        label = { Text(stringResource(R.string.display_name_label)) },
+        placeholder = { Text(stringResource(R.string.display_name_placeholder)) },
+        singleLine = true,
+        value = uiState.displayName,
+        onValueChange = { viewModel.setDisplayName(it) },
+        modifier = Modifier.fillMaxWidth(),
+        isError = uiState.displayNameValidation != null,
+        supportingText = { if (uiState.displayNameValidation != null) Text(uiState.displayNameValidation) }
+    )
+}
+
+@Composable
 private fun EmailField(viewModel: AuthScreenViewModel, uiState: AuthScreenState) {
     OutlinedTextField(
-        label = { Text(stringResource(R.string.email_label_text)) },
+        label = { Text(stringResource(R.string.email_label)) },
+        placeholder = { Text(stringResource(R.string.email_placeholder)) },
         singleLine = true,
         value = uiState.email,
         onValueChange = { viewModel.setEmail(it) },
@@ -176,7 +210,7 @@ private fun EmailField(viewModel: AuthScreenViewModel, uiState: AuthScreenState)
 @Composable
 private fun PasswordField(viewModel: AuthScreenViewModel, uiState: AuthScreenState) {
     OutlinedTextField(
-        label = { Text(stringResource(R.string.password_label_text)) },
+        label = { Text(stringResource(R.string.password_label)) },
         singleLine = true,
         value = uiState.password,
         onValueChange = { viewModel.setPassword(it) },
@@ -192,21 +226,40 @@ private fun PasswordField(viewModel: AuthScreenViewModel, uiState: AuthScreenSta
 private fun SubmitButton(
     label: String,
     enabled: Boolean,
-    onSubmit: (emailValidation: String, passwordValidation: String) -> Unit
+    validateForm: () -> Unit,
+    submitForm: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val emailValidation = stringResource(R.string.email_format_validation)
-    val passwordValidation =
-        stringResource(R.string.password_length_validation, MIN_PASSWORD_LENGTH)
     Button(
         enabled = enabled,
         onClick = {
             // Remove focus from text fields to close software keyboard
             focusManager.clearFocus()
-            onSubmit(emailValidation, passwordValidation)
+            validateForm()
+            submitForm()
         },
         modifier = Modifier.fillMaxWidth()
     ) {
         Text(label)
     }
+}
+
+private class DisplayNameValidator(private val context: Context) : FieldValidator() {
+    override fun isValid(value: String) = value.isNotEmpty()
+    override fun validationMessage() = context.getString(R.string.display_name_validation)
+}
+
+private class EmailValidator(private val context: Context) : FieldValidator() {
+    override fun isValid(value: String) = Patterns.EMAIL_ADDRESS.matcher(value).matches()
+    override fun validationMessage() = context.getString(R.string.email_format_validation)
+}
+
+private class PasswordValidator(private val context: Context) : FieldValidator() {
+    companion object {
+        const val MIN_LENGTH = 6
+    }
+
+    override fun isValid(value: String) = value.length >= MIN_LENGTH
+    override fun validationMessage() =
+        context.getString(R.string.password_length_validation, MIN_LENGTH)
 }

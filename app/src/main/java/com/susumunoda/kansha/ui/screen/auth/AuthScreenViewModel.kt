@@ -1,8 +1,11 @@
 package com.susumunoda.kansha.ui.screen.auth
 
-import android.util.Patterns
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.kansha.auth.User
+import com.susumunoda.kansha.data.user.UserData
+import com.susumunoda.kansha.data.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,10 +14,25 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthScreenViewModel @Inject constructor(
-    private val authController: AuthController
+    private val authController: AuthController,
+    private val userRepository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(AuthScreenState())
     val uiState = _uiState.asStateFlow()
+
+    companion object {
+        private const val TAG = "AuthScreenViewModel"
+    }
+
+    fun setDisplayName(displayName: String) {
+        _uiState.update {
+            it.copy(
+                displayName = displayName,
+                displayNameValidation = null,
+                errorResponse = null
+            )
+        }
+    }
 
     fun setEmail(email: String) {
         _uiState.update {
@@ -36,35 +54,43 @@ class AuthScreenViewModel @Inject constructor(
         }
     }
 
-    fun validateAndLogInUser(emailValidation: String, passwordValidation: String) {
-        validate(emailValidation, passwordValidation)
+    fun validateDisplayName(validator: FieldValidator) {
+        _uiState.update { it.copy(displayNameValidation = validator.validate(it.displayName)) }
+    }
+
+    fun validateEmail(validator: FieldValidator) {
+        _uiState.update { it.copy(emailValidation = validator.validate(it.email)) }
+    }
+
+    fun validatePassword(validator: FieldValidator) {
+        _uiState.update { it.copy(passwordValidation = validator.validate(it.password)) }
+    }
+
+    fun logInUser() {
         execute { errorHandler ->
             authController.login(
-                _uiState.value.email,
-                _uiState.value.password,
-                { _ -> },
-                errorHandler
+                email = _uiState.value.email,
+                password = _uiState.value.password,
+                onSuccess = {},
+                onFailure = errorHandler
             )
         }
     }
 
-    fun validateAndCreateUser(emailValidation: String, passwordValidation: String) {
-        validate(emailValidation, passwordValidation)
+    fun createUser() {
         execute { errorHandler ->
+            val createUserData = { user: User ->
+                userRepository.saveUserData(
+                    userData = UserData(user.id, _uiState.value.displayName),
+                    onSuccess = { Log.d(TAG, "User data creation succeeded") },
+                    onError = { Log.e(TAG, "User data creation failed") }
+                )
+            }
             authController.createUser(
-                _uiState.value.email,
-                _uiState.value.password,
-                { _ -> },
-                errorHandler
-            )
-        }
-    }
-
-    private fun validate(emailValidation: String, passwordValidation: String) {
-        _uiState.update {
-            it.copy(
-                emailValidation = if (isValidEmail(it.email)) null else emailValidation,
-                passwordValidation = if (isValidPassword(it.password)) null else passwordValidation
+                email = _uiState.value.email,
+                password = _uiState.value.password,
+                onSuccess = createUserData,
+                onFailure = errorHandler
             )
         }
     }
@@ -84,6 +110,8 @@ class AuthScreenViewModel @Inject constructor(
     }
 }
 
-const val MIN_PASSWORD_LENGTH = 6
-private fun isValidEmail(email: String) = Patterns.EMAIL_ADDRESS.matcher(email).matches()
-private fun isValidPassword(password: String) = password.length >= MIN_PASSWORD_LENGTH
+abstract class FieldValidator() {
+    fun validate(value: String) = if (isValid(value)) null else validationMessage()
+    abstract fun isValid(value: String): Boolean
+    abstract fun validationMessage(): String
+}

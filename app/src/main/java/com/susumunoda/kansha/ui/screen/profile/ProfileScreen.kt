@@ -114,7 +114,7 @@ private fun NameStep(pagerController: PagerController, authController: AuthContr
             OutlinedTextField(
                 placeholder = {
                     Text(
-                        stringResource(R.string.account_setup_name_placeholder),
+                        stringResource(R.string.display_name_placeholder),
                         fontStyle = FontStyle.Italic
                     )
                 },
