@@ -10,7 +10,8 @@ import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.auth.User
-import com.susumunoda.kansha.data.user.NoOpUserRepository
+import com.susumunoda.kansha.data.user.MockSuccessUserRepository
+import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.screen.profile.ProfileScreen
 
@@ -40,7 +41,7 @@ fun AuthenticatedNavigationPreview() {
     val session = Session(User("1"))
     AuthenticatedNavigation(
         authController = NoOpAuthController(session),
-        userRepository = NoOpUserRepository(),
+        userRepository = MockSuccessUserRepository(UserData("Pikachu")),
         session = session
     )
 }

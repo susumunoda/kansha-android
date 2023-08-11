@@ -2,11 +2,12 @@ package com.susumunoda.kansha.data.user
 
 
 interface UserRepository {
-    fun getUserData(
-        id: String,
-        onSuccess: (UserData) -> Unit,
-        onError: (Exception?) -> Unit
-    )
+    sealed class GetUserDataResult {
+        class Success(val userData: UserData) : GetUserDataResult()
+        class Failure(val exception: Exception) : GetUserDataResult()
+    }
+
+    suspend fun getUserData(id: String): GetUserDataResult
 
     fun saveUserData(
         id: String,
