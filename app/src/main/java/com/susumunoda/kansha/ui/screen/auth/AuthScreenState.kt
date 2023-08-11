@@ -9,4 +9,8 @@ data class AuthScreenState(
     val passwordValidation: String? = null,
     val errorResponse: String? = null,
     val requestInFlight: Boolean = false
-)
+) {
+    // Cannot be defined in primary constructor, as then the same initial value ("") will get
+    // copied on all state updates, as we never directly modify this value in the ViewModel.
+    val trimmedDisplayName = displayName.trim()
+}

@@ -151,7 +151,7 @@ fun SignupScreen(
                     PasswordField(viewModel, uiState)
                     SubmitButton(
                         label = stringResource(R.string.signup_button_text),
-                        enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
+                        enabled = uiState.displayName.isNotEmpty() && uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
                         validateForm = {
                             viewModel.validateDisplayName(DisplayNameValidator(context))
                             viewModel.validateEmail(EmailValidator(context))

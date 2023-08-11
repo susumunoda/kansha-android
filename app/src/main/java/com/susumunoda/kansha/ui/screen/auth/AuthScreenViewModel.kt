@@ -55,7 +55,8 @@ class AuthScreenViewModel @Inject constructor(
     }
 
     fun validateDisplayName(validator: FieldValidator) {
-        _uiState.update { it.copy(displayNameValidation = validator.validate(it.displayName)) }
+        // Ensure trimmed display name is still valid
+        _uiState.update { it.copy(displayNameValidation = validator.validate(it.trimmedDisplayName)) }
     }
 
     fun validateEmail(validator: FieldValidator) {
@@ -67,45 +68,52 @@ class AuthScreenViewModel @Inject constructor(
     }
 
     fun logInUser() {
-        execute { errorHandler ->
+        if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
+            _uiState.update { it.copy(requestInFlight = true) }
+
             authController.login(
                 email = _uiState.value.email,
                 password = _uiState.value.password,
                 onSuccess = {},
-                onFailure = errorHandler
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            errorResponse = exception.message,
+                            requestInFlight = false
+                        )
+                    }
+                }
             )
         }
     }
 
     fun createUser() {
-        execute { errorHandler ->
-            val createUserData = { user: User ->
-                userRepository.saveUserData(
-                    userData = UserData(user.id, _uiState.value.displayName),
-                    onSuccess = { Log.d(TAG, "User data creation succeeded") },
-                    onError = { Log.e(TAG, "User data creation failed") }
-                )
-            }
+        if (_uiState.value.displayNameValidation == null &&
+            _uiState.value.emailValidation == null &&
+            _uiState.value.passwordValidation == null
+        ) {
+            _uiState.update { it.copy(requestInFlight = true) }
+
             authController.createUser(
                 email = _uiState.value.email,
                 password = _uiState.value.password,
-                onSuccess = createUserData,
-                onFailure = errorHandler
-            )
-        }
-    }
-
-    private fun execute(executeWithErrorHandler: ((Exception) -> Unit) -> Unit) {
-        if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
-            _uiState.update { it.copy(requestInFlight = true) }
-            executeWithErrorHandler { exception ->
-                _uiState.update {
-                    it.copy(
-                        errorResponse = exception.message,
-                        requestInFlight = false
+                onSuccess = { user: User ->
+                    userRepository.saveUserData(
+                        // Important to use trimmed display name as that is what we validated against
+                        userData = UserData(user.id, _uiState.value.trimmedDisplayName),
+                        onSuccess = { Log.d(TAG, "User data creation succeeded") },
+                        onError = { Log.e(TAG, "User data creation failed") }
                     )
+                },
+                onFailure = { exception ->
+                    _uiState.update {
+                        it.copy(
+                            errorResponse = exception.message,
+                            requestInFlight = false
+                        )
+                    }
                 }
-            }
+            )
         }
     }
 }
