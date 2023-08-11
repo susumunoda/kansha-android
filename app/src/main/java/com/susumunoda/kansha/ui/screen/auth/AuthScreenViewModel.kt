@@ -99,8 +99,9 @@ class AuthScreenViewModel @Inject constructor(
                 password = _uiState.value.password,
                 onSuccess = { user: User ->
                     userRepository.saveUserData(
+                        id = user.id,
                         // Important to use trimmed display name as that is what we validated against
-                        userData = UserData(user.id, _uiState.value.trimmedDisplayName),
+                        userData = UserData(_uiState.value.trimmedDisplayName),
                         onSuccess = { Log.d(TAG, "User data creation succeeded") },
                         onError = { Log.e(TAG, "User data creation failed") }
                     )

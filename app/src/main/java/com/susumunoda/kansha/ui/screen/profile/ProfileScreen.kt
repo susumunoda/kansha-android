@@ -192,14 +192,12 @@ private fun ProfileScreenPreview() {
                 onError: (Exception?) -> Unit
             ) {
                 onSuccess(
-                    UserData(
-                        id = "1",
-                        displayName = "Snoopie"
-                    )
+                    UserData(displayName = "Snoopie")
                 )
             }
 
             override fun saveUserData(
+                id: String,
                 userData: UserData,
                 onSuccess: () -> Unit,
                 onError: (Exception?) -> Unit

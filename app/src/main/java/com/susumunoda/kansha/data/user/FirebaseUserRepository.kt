@@ -31,18 +31,15 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
     }
 
     override fun saveUserData(
+        id: String,
         userData: UserData,
         onSuccess: () -> Unit,
         onError: (Exception?) -> Unit
     ) {
-        if (userData.id == null) {
-            onError(IllegalArgumentException("UserData cannot have a null id"))
-        } else {
-            db.collection(COLLECTION)
-                .document(userData.id)
-                .set(userData)
-                .addOnSuccessListener { onSuccess() }
-                .addOnFailureListener(onError)
-        }
+        db.collection(COLLECTION)
+            .document(id)
+            .set(userData)
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener(onError)
     }
 }
