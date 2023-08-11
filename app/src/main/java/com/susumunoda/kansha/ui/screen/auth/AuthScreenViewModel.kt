@@ -103,7 +103,7 @@ class AuthScreenViewModel @Inject constructor(
                         // Important to use trimmed display name as that is what we validated against
                         userData = UserData(_uiState.value.trimmedDisplayName),
                         onSuccess = { Log.d(TAG, "User data creation succeeded") },
-                        onError = { Log.e(TAG, "User data creation failed") }
+                        onError = { Log.e(TAG, "User data creation failed: ${it?.message}") }
                     )
                 },
                 onFailure = { exception ->
