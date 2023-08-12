@@ -92,13 +92,16 @@ class AuthScreenViewModel @Inject constructor(
 
             try {
                 val user = authController.createUser(_uiState.value.email, _uiState.value.password)
-                userRepository.saveUserData(
-                    id = user.id,
-                    // Important to use trimmed display name as that is what we validated against
-                    userData = UserData(_uiState.value.trimmedDisplayName),
-                    onSuccess = { Log.d(TAG, "User data creation succeeded") },
-                    onError = { Log.e(TAG, "User data creation failed: ${it?.message}") }
-                )
+                try {
+                    userRepository.saveUserData(
+                        user.id,
+                        // Important to use trimmed display name as that is what we validated against
+                        UserData(_uiState.value.trimmedDisplayName)
+                    )
+                    Log.d(TAG, "User data creation succeeded")
+                } catch (e: Exception) {
+                    Log.e(TAG, "User data creation failed: ${e.message}")
+                }
             } catch (e: Exception) {
                 _uiState.update {
                     it.copy(

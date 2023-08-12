@@ -32,16 +32,11 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
             .addOnFailureListener { cont.resumeWithException(it) }
     }
 
-    override fun saveUserData(
-        id: String,
-        userData: UserData,
-        onSuccess: () -> Unit,
-        onError: (Exception?) -> Unit
-    ) {
+    override suspend fun saveUserData(id: String, userData: UserData) = suspendCoroutine { cont ->
         db.collection(COLLECTION)
             .document(id)
             .set(userData)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener(onError)
+            .addOnSuccessListener { cont.resume(Unit) }
+            .addOnFailureListener { cont.resumeWithException(it) }
     }
 }
