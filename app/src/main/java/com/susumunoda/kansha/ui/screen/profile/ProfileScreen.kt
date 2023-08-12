@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +22,7 @@ import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.auth.User
+import com.susumunoda.kansha.data.user.MockSuccessUserRepository
 import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
@@ -68,21 +70,12 @@ fun ProfileScreen(
 @Preview
 @Composable
 private fun ProfileScreenPreview() {
-    val user = User("1")
-    val userData = UserData("Snoopie")
-    val session = Session(user)
+    val authController = NoOpAuthController(User("1"))
+    val userRepository = MockSuccessUserRepository(UserData("Snoopie"))
+    val session by authController.sessionFlow.collectAsState()
     ProfileScreen(
-        authController = NoOpAuthController(),
-        userRepository = object : UserRepository {
-            override suspend fun getUserData(id: String) = userData
-            override fun saveUserData(
-                id: String,
-                userData: UserData,
-                onSuccess: () -> Unit,
-                onError: (Exception?) -> Unit
-            ) {
-            }
-        },
+        authController = authController,
+        userRepository = userRepository,
         session = session
     )
 }

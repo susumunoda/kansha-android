@@ -1,6 +1,8 @@
 package com.susumunoda.kansha.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -38,10 +40,12 @@ fun AuthenticatedNavigation(
 @Preview
 @Composable
 fun AuthenticatedNavigationPreview() {
-    val session = Session(User("1"))
+    val authController = NoOpAuthController(User("1"))
+    val userRepository = MockSuccessUserRepository(UserData("Pikachu"))
+    val session by authController.sessionFlow.collectAsState()
     AuthenticatedNavigation(
-        authController = NoOpAuthController(session),
-        userRepository = MockSuccessUserRepository(UserData("Pikachu")),
+        authController = authController,
+        userRepository = userRepository,
         session = session
     )
 }

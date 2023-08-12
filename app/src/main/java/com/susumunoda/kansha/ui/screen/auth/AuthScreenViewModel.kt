@@ -3,7 +3,6 @@ package com.susumunoda.kansha.ui.screen.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.auth.User
 import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.data.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,54 +66,47 @@ class AuthScreenViewModel @Inject constructor(
         _uiState.update { it.copy(passwordValidation = validator.validate(it.password)) }
     }
 
-    fun logInUser() {
+    suspend fun logInUser() {
         if (_uiState.value.emailValidation == null && _uiState.value.passwordValidation == null) {
             _uiState.update { it.copy(requestInFlight = true) }
 
-            authController.login(
-                email = _uiState.value.email,
-                password = _uiState.value.password,
-                onSuccess = {},
-                onFailure = { exception ->
-                    _uiState.update {
-                        it.copy(
-                            errorResponse = exception.message,
-                            requestInFlight = false
-                        )
-                    }
+            try {
+                authController.login(_uiState.value.email, _uiState.value.password)
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        errorResponse = e.message,
+                        requestInFlight = false
+                    )
                 }
-            )
+            }
         }
     }
 
-    fun createUser() {
+    suspend fun createUser() {
         if (_uiState.value.displayNameValidation == null &&
             _uiState.value.emailValidation == null &&
             _uiState.value.passwordValidation == null
         ) {
             _uiState.update { it.copy(requestInFlight = true) }
 
-            authController.createUser(
-                email = _uiState.value.email,
-                password = _uiState.value.password,
-                onSuccess = { user: User ->
-                    userRepository.saveUserData(
-                        id = user.id,
-                        // Important to use trimmed display name as that is what we validated against
-                        userData = UserData(_uiState.value.trimmedDisplayName),
-                        onSuccess = { Log.d(TAG, "User data creation succeeded") },
-                        onError = { Log.e(TAG, "User data creation failed: ${it?.message}") }
+            try {
+                val user = authController.createUser(_uiState.value.email, _uiState.value.password)
+                userRepository.saveUserData(
+                    id = user.id,
+                    // Important to use trimmed display name as that is what we validated against
+                    userData = UserData(_uiState.value.trimmedDisplayName),
+                    onSuccess = { Log.d(TAG, "User data creation succeeded") },
+                    onError = { Log.e(TAG, "User data creation failed: ${it?.message}") }
+                )
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        errorResponse = e.message,
+                        requestInFlight = false
                     )
-                },
-                onFailure = { exception ->
-                    _uiState.update {
-                        it.copy(
-                            errorResponse = exception.message,
-                            requestInFlight = false
-                        )
-                    }
                 }
-            )
+            }
         }
     }
 }

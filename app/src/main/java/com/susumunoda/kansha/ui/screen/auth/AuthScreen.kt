@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +42,7 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +52,7 @@ fun LoginScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -93,7 +96,7 @@ fun LoginScreen(
                             viewModel.validatePassword(PasswordValidator(context))
                         },
                         submitForm = {
-                            viewModel.logInUser()
+                            scope.launch { viewModel.logInUser() }
                         }
                     )
                     if (uiState.errorResponse != null) {
@@ -129,6 +132,7 @@ fun SignupScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -158,7 +162,7 @@ fun SignupScreen(
                             viewModel.validatePassword(PasswordValidator(context))
                         },
                         submitForm = {
-                            viewModel.createUser()
+                            scope.launch { viewModel.createUser() }
                         }
                     )
                     if (uiState.errorResponse != null) {
