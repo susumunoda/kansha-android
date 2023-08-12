@@ -23,8 +23,6 @@ import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.auth.User
 import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.data.user.UserRepository
-import com.susumunoda.kansha.data.user.UserRepository.GetUserDataResult.Failure
-import com.susumunoda.kansha.data.user.UserRepository.GetUserDataResult.Success
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.component.LogoutButton
 
@@ -41,14 +39,10 @@ fun ProfileScreen(
     var userData: UserData? by remember { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
-        when (val result = userRepository.getUserData(currentUser.id)) {
-            is Success -> {
-                userData = result.userData
-            }
-
-            is Failure -> {
-                Log.e(TAG, "User data fetch failed: ${result.exception.message}")
-            }
+        try {
+            userData = userRepository.getUserData(currentUser.id)
+        } catch (e: Exception) {
+            Log.e(TAG, "User data fetch failed: ${e.message}")
         }
     }
 
@@ -75,14 +69,12 @@ fun ProfileScreen(
 @Composable
 private fun ProfileScreenPreview() {
     val user = User("1")
+    val userData = UserData("Snoopie")
     val session = Session(user)
     ProfileScreen(
         authController = NoOpAuthController(),
         userRepository = object : UserRepository {
-            override suspend fun getUserData(id: String): UserRepository.GetUserDataResult {
-                return Success(UserData("Snoopie"))
-            }
-
+            override suspend fun getUserData(id: String) = userData
             override fun saveUserData(
                 id: String,
                 userData: UserData,

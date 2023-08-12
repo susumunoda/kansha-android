@@ -3,11 +3,10 @@ package com.susumunoda.kansha.data.user
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.susumunoda.kansha.data.user.UserRepository.GetUserDataResult.Failure
-import com.susumunoda.kansha.data.user.UserRepository.GetUserDataResult.Success
-import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class FirebaseUserRepository @Inject constructor() : UserRepository {
     private val db = Firebase.firestore
@@ -18,19 +17,19 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
 
     // No need for withContext(Dispatchers.IO) because the Firebase API uses callbacks (i.e. the
     // code block provided here does not block the main thread).
-    override suspend fun getUserData(id: String) = suspendCancellableCoroutine { cont ->
+    override suspend fun getUserData(id: String) = suspendCoroutine { cont ->
         db.collection(COLLECTION)
             .document(id)
             .get()
             .addOnSuccessListener { document ->
                 val userData = document.toObject<UserData>()
                 if (userData != null) {
-                    cont.resume(Success(userData))
+                    cont.resume(userData)
                 } else {
-                    cont.resume(Failure(IllegalArgumentException("Could not find user with id $id")))
+                    cont.resumeWithException(IllegalArgumentException("Could not find user with id $id"))
                 }
             }
-            .addOnFailureListener { cont.resume(Failure(it)) }
+            .addOnFailureListener { cont.resumeWithException(it) }
     }
 
     override fun saveUserData(
