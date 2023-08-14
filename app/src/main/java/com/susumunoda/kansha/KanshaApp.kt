@@ -39,11 +39,7 @@ fun KanshaApp(authController: AuthController, userRepository: UserRepository) {
         if (session == Session.LOGGED_OUT) {
             UnauthenticatedNavigation()
         } else {
-            AuthenticatedNavigation(
-                authController = authController,
-                userRepository = userRepository,
-                session = session
-            )
+            AuthenticatedNavigation()
         }
     }
 }
