@@ -21,12 +21,13 @@ fun LoadingIndicatorOverlay(
     alpha: Float = DEFAULT_ALPHA
 ) {
     if (showLoadingIndicator) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(background.copy(alpha = alpha))
-        ) {
-            Popup(alignment = Alignment.Center) {
+        Popup {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(background.copy(alpha = alpha))
+            ) {
                 CircularProgressIndicator()
             }
         }
