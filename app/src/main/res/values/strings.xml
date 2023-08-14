@@ -6,9 +6,10 @@
     <string name="logout_button_description">Log out</string>
     <string name="send_button_description">Send</string>
     <string name="remove_button_description">Remove</string>
+    <string name="expand_menu_description">Expand menu</string>
     <!-- Auth: login -->
-    <string name="login_top_bar_text">Log In</string>
-    <string name="login_button_text">Log in</string>
+    <string name="login_top_bar_text">Sign In</string>
+    <string name="login_button_text">Sign in</string>
     <string name="login_failed_message">Login failed: Please confirm your email and password and try again.</string>
     <!-- Auth: signup -->
     <string name="display_name_label">Display name</string>
@@ -25,10 +26,5 @@
     <string name="email_format_validation">Email must be of format email@example.com</string>
     <string name="password_label">Password</string>
     <string name="password_length_validation">Password must be %d or more characters</string>
-    <!-- Account setup -->
-    <string name="account_setup_top_bar_text">Account setup</string>
-    <string name="account_setup_name_prompt">What name do you like to go by?</string>
-    <string name="account_setup_back_button">Back</string>
-    <string name="account_setup_next_button">Next</string>
-    <string name="account_setup_sign_out_button">Sign out</string>
+    <string name="sign_out_menu_item">Sign out</string>
 </resources>
