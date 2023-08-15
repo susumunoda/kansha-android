@@ -29,8 +29,14 @@ class ProfileScreenViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val userData = userRepository.getUserData(currentUser.id)
+                Log.d(TAG, "User data fetch succeeded: $userData")
                 _uiState.update {
-                    it.copy(isLoading = false, displayName = userData.displayName!!)
+                    it.copy(
+                        isLoading = false,
+                        displayName = userData.displayName,
+                        profilePhotoUrl = userData.profilePhotoUrl,
+                        backgroundPhotoUrl = userData.backgroundPhotoUrl
+                    )
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "User data fetch failed: ${e.message}")

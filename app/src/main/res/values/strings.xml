@@ -27,4 +27,9 @@
     <string name="password_label">Password</string>
     <string name="password_length_validation">Password must be %d or more characters</string>
     <string name="sign_out_menu_item">Sign out</string>
+    <!-- Profile -->
+    <string name="profile_photo_description">Profile photo</string>
+    <string name="profile_background_photo_description">Profile background photo</string>
+    <string name="default_profile_photo_description">Default profile photo</string>
+    <string name="open_menu_drawer">Open menu drawer</string>
 </resources>

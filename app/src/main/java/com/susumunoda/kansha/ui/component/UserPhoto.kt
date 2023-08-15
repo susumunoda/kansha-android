@@ -9,14 +9,28 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 
 @Composable
 fun DefaultUserPhoto(size: Dp = dimensionResource(R.dimen.profile_photo_size_medium)) {
     Image(
         painterResource(R.drawable.blank_profile_picture),
-        contentDescription = null,
+        contentDescription = stringResource(R.string.default_profile_photo_description),
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .clip(CircleShape)
+            .size(size)
+    )
+}
+
+@Composable
+fun UserPhoto(url: String, size: Dp = dimensionResource(R.dimen.profile_photo_size_medium)) {
+    AsyncImage(
+        model = url,
+        contentDescription = stringResource(R.string.profile_photo_description),
         contentScale = ContentScale.Crop,
         modifier = Modifier
             .clip(CircleShape)
