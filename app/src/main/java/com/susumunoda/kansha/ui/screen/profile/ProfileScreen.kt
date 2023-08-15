@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.material.icons.rounded.Menu
@@ -40,6 +43,8 @@ import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.User
+import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
+import com.susumunoda.kansha.data.note.NoteData
 import com.susumunoda.kansha.data.user.MockSuccessUserRepository
 import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
@@ -53,7 +58,7 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
     val scope = rememberCoroutineScope()
 
     AnimatedVisibility(
-        visible = !uiState.isLoading,
+        visible = !uiState.userDataFetchInProgress && !uiState.notesDataFetchInProgress,
         enter = slideInVertically(initialOffsetY = { fullHeight -> fullHeight / 4 })
     ) {
         ModalNavigationDrawer(
@@ -88,38 +93,59 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
                         Icon(Icons.Rounded.Menu, stringResource(R.string.open_menu_drawer))
                     }
 
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        AsyncImage(
-                            model = uiState.backgroundPhotoUrl,
-                            contentDescription = stringResource(R.string.profile_background_photo_description),
-                            modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
-                            contentScale = ContentScale.FillWidth,
-                            // Only for displaying in an @Preview
-                            placeholder = if (LocalInspectionMode.current) {
-                                painterResource(R.drawable.preview_background_photo)
-                            } else null
-                        )
-                        if (uiState.profilePhotoUrl.isBlank()) {
-                            DefaultUserPhoto(
-                                size = dimensionResource(R.dimen.profile_photo_size_large)
-                            )
-                        } else {
-                            UserPhoto(
-                                url = uiState.profilePhotoUrl,
-                                size = dimensionResource(R.dimen.profile_photo_size_large),
-                                // Only for displaying in an @Preview
-                                placeholder = if (LocalInspectionMode.current) {
-                                    painterResource(R.drawable.preview_profile_photo)
-                                } else null
-                            )
-                        }
-                    }
+                    PhotosSection(
+                        backgroundPhotoUrl = uiState.userData.backgroundPhotoUrl,
+                        profilePhotoUrl = uiState.userData.profilePhotoUrl
+                    )
 
-                    Text(uiState.displayName, style = MaterialTheme.typography.titleLarge)
+                    Text(uiState.userData.displayName, style = MaterialTheme.typography.titleLarge)
+
+                    NotesSection(uiState.notesData)
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PhotosSection(backgroundPhotoUrl: String, profilePhotoUrl: String) {
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        AsyncImage(
+            model = backgroundPhotoUrl,
+            contentDescription = stringResource(R.string.profile_background_photo_description),
+            modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
+            contentScale = ContentScale.FillWidth,
+            // Only for displaying in an @Preview
+            placeholder = if (LocalInspectionMode.current) {
+                painterResource(R.drawable.preview_background_photo)
+            } else null
+        )
+        if (profilePhotoUrl.isBlank()) {
+            DefaultUserPhoto(
+                size = dimensionResource(R.dimen.profile_photo_size_large)
+            )
+        } else {
+            UserPhoto(
+                url = profilePhotoUrl,
+                size = dimensionResource(R.dimen.profile_photo_size_large),
+                // Only for displaying in an @Preview
+                placeholder = if (LocalInspectionMode.current) {
+                    painterResource(R.drawable.preview_profile_photo)
+                } else null
+            )
+        }
+    }
+}
+
+@Composable
+private fun NotesSection(notesData: List<NoteData>) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+        items(notesData) { noteData ->
+            Box(Modifier.height(dimensionResource(R.dimen.notes_grid_cell_height))) {
+                Text(noteData.message)
             }
         }
     }
@@ -130,8 +156,14 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
 private fun ProfileScreenPreview() {
     val user = User("1")
     val userData = UserData("John Smith", "photo.jpg")
+    val notesData = mutableListOf<NoteData>()
+    notesData.add(NoteData("Grateful to be alive", listOf("Mindfulness")))
+    notesData.add(NoteData("Thank you", listOf("Friends", "Family")))
+
     val authController = NoOpAuthController(user)
     val userRepository = MockSuccessUserRepository(userData)
-    val viewModel = ProfileScreenViewModel(authController, userRepository)
+    val noteRepository = MockSuccessNoteRepository(notesData)
+
+    val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)
     ProfileScreen(viewModel)
 }
