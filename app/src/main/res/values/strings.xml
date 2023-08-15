@@ -32,4 +32,6 @@
     <string name="profile_background_photo_description">Profile background photo</string>
     <string name="default_profile_photo_description">Default profile photo</string>
     <string name="open_menu_drawer">Open menu drawer</string>
+    <string name="profile_screen_top_bar">Your gratitude notes</string>
+    <string name="create_note_description">Create note</string>
 </resources>
