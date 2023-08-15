@@ -2,8 +2,11 @@ package com.susumunoda.kansha.ui.screen.profile
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -34,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
@@ -108,13 +112,7 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
                         .padding(top = contentPadding.calculateTopPadding()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    PhotosSection(
-                        backgroundPhotoUrl = uiState.userData.backgroundPhotoUrl,
-                        profilePhotoUrl = uiState.userData.profilePhotoUrl
-                    )
-
-                    Text(uiState.userData.displayName, style = MaterialTheme.typography.titleLarge)
-
+                    ProfileSection(uiState.userData)
                     NotesSection(uiState.notesData)
                 }
             }
@@ -123,33 +121,49 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun PhotosSection(backgroundPhotoUrl: String, profilePhotoUrl: String) {
+private fun ProfileSection(userData: UserData) {
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
-            model = backgroundPhotoUrl,
+            model = userData.backgroundPhotoUrl,
             contentDescription = stringResource(R.string.profile_background_photo_description),
             modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
-            contentScale = ContentScale.FillWidth,
+            contentScale = ContentScale.Crop,
             // Only for displaying in an @Preview
             placeholder = if (LocalInspectionMode.current) {
                 painterResource(R.drawable.preview_background_photo)
             } else null
         )
-        if (profilePhotoUrl.isBlank()) {
+        if (userData.profilePhotoUrl.isBlank()) {
             DefaultUserPhoto(
                 size = dimensionResource(R.dimen.profile_photo_size_large)
             )
         } else {
             UserPhoto(
-                url = profilePhotoUrl,
+                url = userData.profilePhotoUrl,
                 size = dimensionResource(R.dimen.profile_photo_size_large),
                 // Only for displaying in an @Preview
                 placeholder = if (LocalInspectionMode.current) {
                     painterResource(R.drawable.preview_profile_photo)
                 } else null
+            )
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .background(Color.Black.copy(alpha = 0.2f))
+                .height(dimensionResource(R.dimen.profile_name_background_height))
+                .fillMaxWidth()
+        ) {
+            Text(
+                userData.displayName,
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.White
             )
         }
     }
