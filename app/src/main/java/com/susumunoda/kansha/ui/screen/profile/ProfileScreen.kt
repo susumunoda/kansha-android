@@ -30,7 +30,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -94,7 +96,11 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
                             model = uiState.backgroundPhotoUrl,
                             contentDescription = stringResource(R.string.profile_background_photo_description),
                             modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
-                            contentScale = ContentScale.FillWidth
+                            contentScale = ContentScale.FillWidth,
+                            // Only for displaying in an @Preview
+                            placeholder = if (LocalInspectionMode.current) {
+                                painterResource(R.drawable.preview_background_photo)
+                            } else null
                         )
                         if (uiState.profilePhotoUrl.isBlank()) {
                             DefaultUserPhoto(
@@ -103,7 +109,11 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
                         } else {
                             UserPhoto(
                                 url = uiState.profilePhotoUrl,
-                                size = dimensionResource(R.dimen.profile_photo_size_large)
+                                size = dimensionResource(R.dimen.profile_photo_size_large),
+                                // Only for displaying in an @Preview
+                                placeholder = if (LocalInspectionMode.current) {
+                                    painterResource(R.drawable.preview_profile_photo)
+                                } else null
                             )
                         }
                     }
@@ -118,8 +128,10 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
 @Preview
 @Composable
 private fun ProfileScreenPreview() {
-    val authController = NoOpAuthController(User("1"))
-    val userRepository = MockSuccessUserRepository(UserData("Pikachu"))
+    val user = User("1")
+    val userData = UserData("John Smith", "photo.jpg")
+    val authController = NoOpAuthController(user)
+    val userRepository = MockSuccessUserRepository(userData)
     val viewModel = ProfileScreenViewModel(authController, userRepository)
     ProfileScreen(viewModel)
 }

@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -27,11 +28,16 @@ fun DefaultUserPhoto(size: Dp = dimensionResource(R.dimen.profile_photo_size_med
 }
 
 @Composable
-fun UserPhoto(url: String, size: Dp = dimensionResource(R.dimen.profile_photo_size_medium)) {
+fun UserPhoto(
+    url: String,
+    size: Dp = dimensionResource(R.dimen.profile_photo_size_medium),
+    placeholder: Painter? = null
+) {
     AsyncImage(
         model = url,
         contentDescription = stringResource(R.string.profile_photo_description),
         contentScale = ContentScale.Crop,
+        placeholder = placeholder,
         modifier = Modifier
             .clip(CircleShape)
             .size(size)
