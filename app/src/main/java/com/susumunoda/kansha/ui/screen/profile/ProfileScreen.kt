@@ -181,8 +181,12 @@ private fun ProfileSection(userData: UserData) {
 private fun NotesSection(notesData: List<NoteData>) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
         items(notesData) { noteData ->
-            Box(Modifier.height(dimensionResource(R.dimen.notes_grid_cell_height))) {
-                Text(noteData.message)
+            Box(
+                modifier = Modifier
+                    .height(dimensionResource(R.dimen.notes_grid_cell_height))
+                    .background(MaterialTheme.colorScheme.tertiaryContainer)
+            ) {
+                Text(noteData.message, color = MaterialTheme.colorScheme.onTertiaryContainer)
             }
         }
     }
