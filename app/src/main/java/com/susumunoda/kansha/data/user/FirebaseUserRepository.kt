@@ -17,14 +17,14 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
 
     // No need for withContext(Dispatchers.IO) because the Firebase API uses callbacks (i.e. the
     // code block provided here does not block the main thread).
-    override suspend fun getUserData(id: String) = suspendCoroutine { cont ->
+    override suspend fun getUser(id: String) = suspendCoroutine { cont ->
         db.collection(COLLECTION)
             .document(id)
             .get()
             .addOnSuccessListener { document ->
-                val userData = document.toObject<UserData>()
-                if (userData != null) {
-                    cont.resume(userData)
+                val user = document.toObject<User>()
+                if (user != null) {
+                    cont.resume(user)
                 } else {
                     cont.resumeWithException(IllegalArgumentException("Could not find user with id $id"))
                 }
@@ -32,10 +32,10 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
             .addOnFailureListener { cont.resumeWithException(it) }
     }
 
-    override suspend fun saveUserData(id: String, userData: UserData) = suspendCoroutine { cont ->
+    override suspend fun setUser(id: String, user: User) = suspendCoroutine { cont ->
         db.collection(COLLECTION)
             .document(id)
-            .set(userData)
+            .set(user)
             .addOnSuccessListener { cont.resume(Unit) }
             .addOnFailureListener { cont.resumeWithException(it) }
     }

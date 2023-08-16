@@ -30,25 +30,25 @@ class ProfileScreenViewModel @Inject constructor(
         val currentUser = authController.sessionFlow.value.user
 
         viewModelScope.launch {
-            Log.d(TAG, "Launched coroutine for getUserData")
+            Log.d(TAG, "Launched coroutine for getUser")
             try {
-                val userData = userRepository.getUserData(currentUser.id)
+                val user = userRepository.getUser(currentUser.id)
 
-                Log.d(TAG, "User data fetch succeeded: $userData")
+                Log.d(TAG, "User fetch succeeded: $user")
 
                 _uiState.update {
                     it.copy(
-                        userData = userData,
-                        userDataFetchInProgress = false
+                        user = user,
+                        userFetchInProgress = false
                     )
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "User data fetch failed: ${e.message}")
+                Log.e(TAG, "User fetch failed: ${e.message}")
 
                 _uiState.update {
                     it.copy(
-                        userDataFetchFailed = true,
-                        userDataFetchInProgress = false
+                        userFetchFailed = true,
+                        userFetchInProgress = false
                     )
                 }
             }

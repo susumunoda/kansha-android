@@ -2,6 +2,6 @@ package com.susumunoda.kansha.data.user
 
 
 interface UserRepository {
-    suspend fun getUserData(id: String): UserData
-    suspend fun saveUserData(id: String, userData: UserData)
+    suspend fun getUser(id: String): User
+    suspend fun setUser(id: String, user: User)
 }

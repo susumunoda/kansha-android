@@ -55,7 +55,7 @@ import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
 import com.susumunoda.kansha.data.note.NoteData
 import com.susumunoda.kansha.data.user.MockSuccessUserRepository
-import com.susumunoda.kansha.data.user.UserData
+import com.susumunoda.kansha.data.user.User
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
 import com.susumunoda.kansha.ui.component.UserPhoto
 import com.susumunoda.kansha.ui.navigation.AuthenticatedScreen
@@ -71,7 +71,7 @@ fun ProfileScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val fetchInProgress = uiState.userDataFetchInProgress || uiState.notesDataFetchInProgress
+    val fetchInProgress = uiState.userFetchInProgress || uiState.notesDataFetchInProgress
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -125,7 +125,7 @@ fun ProfileScreen(
                         modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        ProfileSection(uiState.userData)
+                        ProfileSection(uiState.user)
                         NotesSection(uiState.notesData)
                     }
                 }
@@ -135,13 +135,13 @@ fun ProfileScreen(
 }
 
 @Composable
-private fun ProfileSection(userData: UserData) {
+private fun ProfileSection(user: User) {
     Box(
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
         AsyncImage(
-            model = userData.backgroundPhotoUrl,
+            model = user.backgroundPhotoUrl,
             contentDescription = stringResource(R.string.profile_background_photo_description),
             modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
             contentScale = ContentScale.Crop,
@@ -150,13 +150,13 @@ private fun ProfileSection(userData: UserData) {
                 painterResource(R.drawable.preview_background_photo)
             } else null
         )
-        if (userData.profilePhotoUrl.isBlank()) {
+        if (user.profilePhotoUrl.isBlank()) {
             DefaultUserPhoto(
                 size = dimensionResource(R.dimen.profile_photo_size_large)
             )
         } else {
             UserPhoto(
-                url = userData.profilePhotoUrl,
+                url = user.profilePhotoUrl,
                 size = dimensionResource(R.dimen.profile_photo_size_large),
                 // Only for displaying in an @Preview
                 placeholder = if (LocalInspectionMode.current) {
@@ -175,7 +175,7 @@ private fun ProfileSection(userData: UserData) {
                 .fillMaxWidth()
         ) {
             Text(
-                userData.displayName,
+                user.displayName,
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White
             )
@@ -201,14 +201,14 @@ private fun NotesSection(notesData: List<NoteData>) {
 @Preview
 @Composable
 private fun ProfileScreenPreview() {
-    val user = Session.User("1")
-    val userData = UserData("John Smith", "photo.jpg")
+    val sessionUser = Session.User("1")
+    val user = User("John Smith", "photo.jpg")
     val notesData = mutableListOf<NoteData>()
     notesData.add(NoteData("Grateful to be alive", listOf("Mindfulness")))
     notesData.add(NoteData("Thank you", listOf("Friends", "Family")))
 
-    val authController = NoOpAuthController(user)
-    val userRepository = MockSuccessUserRepository(userData)
+    val authController = NoOpAuthController(sessionUser)
+    val userRepository = MockSuccessUserRepository(user)
     val noteRepository = MockSuccessNoteRepository(notesData)
 
     val navHostController = rememberNavController()

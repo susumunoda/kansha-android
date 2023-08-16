@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.data.user
 
 
-internal class MockSuccessUserRepository(private val userData: UserData) : UserRepository {
-    override suspend fun getUserData(id: String) = userData
-    override suspend fun saveUserData(id: String, userData: UserData) {}
+internal class MockSuccessUserRepository(private val user: User) : UserRepository {
+    override suspend fun getUser(id: String) = user
+    override suspend fun setUser(id: String, user: User) {}
 }

@@ -3,7 +3,7 @@ package com.susumunoda.kansha.ui.screen.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.data.user.UserData
+import com.susumunoda.kansha.data.user.User
 import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.screen.Validator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -94,10 +94,10 @@ class AuthScreenViewModel @Inject constructor(
             try {
                 val user = authController.createUser(_uiState.value.email, _uiState.value.password)
                 try {
-                    userRepository.saveUserData(
+                    userRepository.setUser(
                         user.id,
                         // Important to use trimmed display name as that is what we validated against
-                        UserData(_uiState.value.trimmedDisplayName)
+                        User(_uiState.value.trimmedDisplayName)
                     )
                     Log.d(TAG, "User data creation succeeded")
                 } catch (e: Exception) {
