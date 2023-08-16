@@ -202,7 +202,7 @@ private fun NotesSection(notes: List<Note>) {
 @Composable
 private fun ProfileScreenPreview() {
     val sessionUser = Session.User("1")
-    val user = User("John Smith", "photo.jpg")
+    val user = User(displayName = "John Smith", profilePhotoUrl = "photo.jpg")
     val notes = mutableListOf<Note>()
     notes.add(Note("Grateful to be alive", listOf("Mindfulness")))
     notes.add(Note("Thank you", listOf("Friends", "Family")))

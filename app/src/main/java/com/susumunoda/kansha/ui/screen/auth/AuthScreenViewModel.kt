@@ -97,7 +97,7 @@ class AuthScreenViewModel @Inject constructor(
                     userRepository.setUser(
                         user.id,
                         // Important to use trimmed display name as that is what we validated against
-                        User(_uiState.value.trimmedDisplayName)
+                        User(displayName = _uiState.value.trimmedDisplayName)
                     )
                     Log.d(TAG, "User data creation succeeded")
                 } catch (e: Exception) {
