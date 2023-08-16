@@ -1,3 +1,9 @@
 package com.susumunoda.kansha.data.note
 
-data class Note(val message: String = "", val labels: List<String> = emptyList())
+import java.util.Date
+
+interface Note {
+    val createdAt: Date
+    val message: String
+    val labels: List<String>
+}

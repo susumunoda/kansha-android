@@ -16,9 +16,9 @@ class FirebaseNoteRepository @Inject constructor() : NoteRepository {
         db.collection("notes/$userId/self")
             .get()
             .addOnSuccessListener { result ->
-                val notes = mutableListOf<Note>()
+                val notes = mutableListOf<FirebaseNote>()
                 for (document in result) {
-                    notes.add(document.toObject<Note>())
+                    notes.add(document.toObject<FirebaseNote>())
                 }
                 cont.resume(notes)
             }
