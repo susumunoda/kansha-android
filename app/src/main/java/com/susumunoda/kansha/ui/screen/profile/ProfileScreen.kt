@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -70,58 +71,63 @@ fun ProfileScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    AnimatedVisibility(
-        visible = !uiState.userDataFetchInProgress && !uiState.notesDataFetchInProgress,
-        enter = slideInVertically(initialOffsetY = { fullHeight -> fullHeight / 4 })
+    val fetchInProgress = uiState.userDataFetchInProgress || uiState.notesDataFetchInProgress
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                NavigationDrawerItem(
+                    label = { Text(stringResource(R.string.sign_out_menu_item)) },
+                    icon = {
+                        Icon(
+                            Icons.Rounded.ExitToApp,
+                            stringResource(R.string.sign_out_menu_item)
+                        )
+                    },
+                    selected = false,
+                    onClick = { viewModel.logout() }
+                )
+            }
+        }
     ) {
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet {
-                    NavigationDrawerItem(
-                        label = { Text(stringResource(R.string.sign_out_menu_item)) },
-                        icon = {
-                            Icon(
-                                Icons.Rounded.ExitToApp,
-                                stringResource(R.string.sign_out_menu_item)
-                            )
-                        },
-                        selected = false,
-                        onClick = { viewModel.logout() }
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = { Text(stringResource(R.string.profile_screen_top_bar_text)) },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(Icons.Rounded.Menu, stringResource(R.string.open_menu_drawer))
+                        }
+                    }
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { navController.navigate(AuthenticatedScreen.ADD_NOTE.name) }
+                ) {
+                    Icon(
+                        Icons.Rounded.Create,
+                        stringResource(R.string.add_note_fab_description)
                     )
                 }
             }
-        ) {
-            Scaffold(
-                topBar = {
-                    CenterAlignedTopAppBar(
-                        title = { Text(stringResource(R.string.profile_screen_top_bar_text)) },
-                        navigationIcon = {
-                            IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                                Icon(Icons.Rounded.Menu, stringResource(R.string.open_menu_drawer))
-                            }
-                        }
-                    )
-                },
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { navController.navigate(AuthenticatedScreen.ADD_NOTE.name) }
-                    ) {
-                        Icon(
-                            Icons.Rounded.Create,
-                            stringResource(R.string.add_note_fab_description)
-                        )
-                    }
+        ) { contentPadding ->
+            Column(Modifier.padding(top = contentPadding.calculateTopPadding())) {
+                if (fetchInProgress) {
+                    LinearProgressIndicator(Modifier.fillMaxWidth())
                 }
-            ) { contentPadding ->
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = contentPadding.calculateTopPadding()),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                AnimatedVisibility(
+                    visible = !fetchInProgress,
+                    enter = slideInVertically(initialOffsetY = { fullHeight -> fullHeight / 4 })
                 ) {
-                    ProfileSection(uiState.userData)
-                    NotesSection(uiState.notesData)
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        ProfileSection(uiState.userData)
+                        NotesSection(uiState.notesData)
+                    }
                 }
             }
         }
