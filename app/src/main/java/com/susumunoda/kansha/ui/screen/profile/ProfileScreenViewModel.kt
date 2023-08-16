@@ -27,7 +27,7 @@ class ProfileScreenViewModel @Inject constructor(
     }
 
     init {
-        val currentUser = authController.sessionFlow.value.currentUser
+        val currentUser = authController.sessionFlow.value.user
 
         viewModelScope.launch {
             Log.d(TAG, "Launched coroutine for getUserData")

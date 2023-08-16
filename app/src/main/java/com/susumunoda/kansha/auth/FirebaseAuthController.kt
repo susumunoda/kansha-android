@@ -52,7 +52,7 @@ class FirebaseAuthController @Inject constructor() : AuthController {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 updateSession(it.user!!)
-                cont.resume(_sessionFlow.value.currentUser)
+                cont.resume(_sessionFlow.value.user)
             }
             .addOnFailureListener { cont.resumeWithException(it) }
     }
@@ -66,7 +66,7 @@ class FirebaseAuthController @Inject constructor() : AuthController {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 updateSession(it.user!!)
-                cont.resume(_sessionFlow.value.currentUser)
+                cont.resume(_sessionFlow.value.user)
             }
             .addOnFailureListener { cont.resumeWithException(it) }
     }
@@ -81,5 +81,5 @@ class FirebaseAuthController @Inject constructor() : AuthController {
     }
 
     private fun updateSession(currentUser: FirebaseUser) =
-        _sessionFlow.update { Session(User(currentUser.uid)) }
+        _sessionFlow.update { Session(currentUser.uid) }
 }

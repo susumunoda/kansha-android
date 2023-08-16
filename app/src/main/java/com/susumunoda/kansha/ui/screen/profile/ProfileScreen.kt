@@ -51,7 +51,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.NoOpAuthController
-import com.susumunoda.kansha.auth.User
+import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
 import com.susumunoda.kansha.data.note.NoteData
 import com.susumunoda.kansha.data.user.MockSuccessUserRepository
@@ -201,7 +201,7 @@ private fun NotesSection(notesData: List<NoteData>) {
 @Preview
 @Composable
 private fun ProfileScreenPreview() {
-    val user = User("1")
+    val user = Session.User("1")
     val userData = UserData("John Smith", "photo.jpg")
     val notesData = mutableListOf<NoteData>()
     notesData.add(NoteData("Grateful to be alive", listOf("Mindfulness")))
