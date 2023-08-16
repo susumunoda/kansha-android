@@ -50,7 +50,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.auth.NoOpAuthController
+import com.susumunoda.kansha.auth.MockAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
 import com.susumunoda.kansha.data.note.Note
@@ -203,7 +203,7 @@ private fun NotesSection(notes: List<Note>) {
 @Composable
 private fun ProfileScreenPreview() {
     val userId = "1"
-    val authController = NoOpAuthController(Session.User(userId))
+    val authController = MockAuthController(Session(userId))
     val userRepository = MockUserRepository(
         mutableMapOf(
             userId to MockUser(
