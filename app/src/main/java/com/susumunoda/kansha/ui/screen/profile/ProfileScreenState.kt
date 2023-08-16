@@ -4,7 +4,7 @@ import com.susumunoda.kansha.data.note.Note
 import com.susumunoda.kansha.data.user.User
 
 data class ProfileScreenState(
-    val user: User = User(),
+    val user: User,
     val userFetchInProgress: Boolean = true,
     val userFetchFailed: Boolean = false,
 

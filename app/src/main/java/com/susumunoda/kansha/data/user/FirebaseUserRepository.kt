@@ -15,6 +15,9 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
         const val COLLECTION = "users"
     }
 
+    override fun newInstance(): User = FirebaseUser()
+    override fun newInstance(displayName: String): User = FirebaseUser(displayName = displayName)
+
     // No need for withContext(Dispatchers.IO) because the Firebase API uses callbacks (i.e. the
     // code block provided here does not block the main thread).
     override suspend fun getUser(id: String) = suspendCoroutine { cont ->
@@ -22,7 +25,7 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
             .document(id)
             .get()
             .addOnSuccessListener { document ->
-                val user = document.toObject<User>()
+                val user = document.toObject<FirebaseUser>()
                 if (user != null) {
                     cont.resume(user)
                 } else {
@@ -33,6 +36,8 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
     }
 
     override suspend fun setUser(id: String, user: User) = suspendCoroutine { cont ->
+        assert(user is FirebaseUser)
+
         db.collection(COLLECTION)
             .document(id)
             .set(user)

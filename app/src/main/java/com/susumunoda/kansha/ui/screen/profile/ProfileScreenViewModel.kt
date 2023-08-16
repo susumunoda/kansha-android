@@ -19,7 +19,7 @@ class ProfileScreenViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val noteRepository: NoteRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(ProfileScreenState())
+    private val _uiState = MutableStateFlow(ProfileScreenState(userRepository.newInstance()))
     val uiState = _uiState.asStateFlow()
 
     companion object {

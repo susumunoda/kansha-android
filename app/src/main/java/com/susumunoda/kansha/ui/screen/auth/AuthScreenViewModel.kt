@@ -3,7 +3,6 @@ package com.susumunoda.kansha.ui.screen.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.data.user.User
 import com.susumunoda.kansha.data.user.UserRepository
 import com.susumunoda.kansha.ui.screen.Validator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -92,13 +91,12 @@ class AuthScreenViewModel @Inject constructor(
             _uiState.update { it.copy(requestInFlight = true) }
 
             try {
-                val user = authController.createUser(_uiState.value.email, _uiState.value.password)
+                val sessionUser =
+                    authController.createUser(_uiState.value.email, _uiState.value.password)
                 try {
-                    userRepository.setUser(
-                        user.id,
-                        // Important to use trimmed display name as that is what we validated against
-                        User(displayName = _uiState.value.trimmedDisplayName)
-                    )
+                    // Important to use trimmed display name as that is what we validated against
+                    val user = userRepository.newInstance(_uiState.value.trimmedDisplayName)
+                    userRepository.setUser(sessionUser.id, user)
                     Log.d(TAG, "User data creation succeeded")
                 } catch (e: Exception) {
                     Log.e(TAG, "User data creation failed: ${e.message}")

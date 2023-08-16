@@ -54,7 +54,8 @@ import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
 import com.susumunoda.kansha.data.note.Note
-import com.susumunoda.kansha.data.user.MockSuccessUserRepository
+import com.susumunoda.kansha.data.user.MockUser
+import com.susumunoda.kansha.data.user.MockUserRepository
 import com.susumunoda.kansha.data.user.User
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
 import com.susumunoda.kansha.ui.component.UserPhoto
@@ -201,16 +202,22 @@ private fun NotesSection(notes: List<Note>) {
 @Preview
 @Composable
 private fun ProfileScreenPreview() {
-    val sessionUser = Session.User("1")
-    val user = User(displayName = "John Smith", profilePhotoUrl = "photo.jpg")
-    val notes = mutableListOf<Note>()
-    notes.add(Note("Grateful to be alive", listOf("Mindfulness")))
-    notes.add(Note("Thank you", listOf("Friends", "Family")))
-
-    val authController = NoOpAuthController(sessionUser)
-    val userRepository = MockSuccessUserRepository(user)
-    val noteRepository = MockSuccessNoteRepository(notes)
-
+    val userId = "1"
+    val authController = NoOpAuthController(Session.User(userId))
+    val userRepository = MockUserRepository(
+        mutableMapOf(
+            userId to MockUser(
+                displayName = "John Smith",
+                profilePhotoUrl = "photo.jpg"
+            )
+        )
+    )
+    val noteRepository = MockSuccessNoteRepository(
+        mutableListOf(
+            Note("Grateful to be alive", listOf("Mindfulness")),
+            Note("Thank you", listOf("Friends", "Family"))
+        )
+    )
     val navHostController = rememberNavController()
     val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)
     ProfileScreen(navHostController, viewModel)
