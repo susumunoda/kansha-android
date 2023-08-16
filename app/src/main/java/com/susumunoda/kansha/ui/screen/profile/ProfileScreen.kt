@@ -53,7 +53,7 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.NoOpAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
-import com.susumunoda.kansha.data.note.NoteData
+import com.susumunoda.kansha.data.note.Note
 import com.susumunoda.kansha.data.user.MockSuccessUserRepository
 import com.susumunoda.kansha.data.user.User
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
@@ -71,7 +71,7 @@ fun ProfileScreen(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    val fetchInProgress = uiState.userFetchInProgress || uiState.notesDataFetchInProgress
+    val fetchInProgress = uiState.userFetchInProgress || uiState.notesFetchInProgress
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -126,7 +126,7 @@ fun ProfileScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         ProfileSection(uiState.user)
-                        NotesSection(uiState.notesData)
+                        NotesSection(uiState.notes)
                     }
                 }
             }
@@ -184,15 +184,15 @@ private fun ProfileSection(user: User) {
 }
 
 @Composable
-private fun NotesSection(notesData: List<NoteData>) {
+private fun NotesSection(notes: List<Note>) {
     LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-        items(notesData) { noteData ->
+        items(notes) { note ->
             Box(
                 modifier = Modifier
                     .height(dimensionResource(R.dimen.notes_grid_cell_height))
                     .background(MaterialTheme.colorScheme.tertiaryContainer)
             ) {
-                Text(noteData.message, color = MaterialTheme.colorScheme.onTertiaryContainer)
+                Text(note.message, color = MaterialTheme.colorScheme.onTertiaryContainer)
             }
         }
     }
@@ -203,13 +203,13 @@ private fun NotesSection(notesData: List<NoteData>) {
 private fun ProfileScreenPreview() {
     val sessionUser = Session.User("1")
     val user = User("John Smith", "photo.jpg")
-    val notesData = mutableListOf<NoteData>()
-    notesData.add(NoteData("Grateful to be alive", listOf("Mindfulness")))
-    notesData.add(NoteData("Thank you", listOf("Friends", "Family")))
+    val notes = mutableListOf<Note>()
+    notes.add(Note("Grateful to be alive", listOf("Mindfulness")))
+    notes.add(Note("Thank you", listOf("Friends", "Family")))
 
     val authController = NoOpAuthController(sessionUser)
     val userRepository = MockSuccessUserRepository(user)
-    val noteRepository = MockSuccessNoteRepository(notesData)
+    val noteRepository = MockSuccessNoteRepository(notes)
 
     val navHostController = rememberNavController()
     val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)

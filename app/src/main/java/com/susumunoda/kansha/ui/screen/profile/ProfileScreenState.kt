@@ -1,6 +1,6 @@
 package com.susumunoda.kansha.ui.screen.profile
 
-import com.susumunoda.kansha.data.note.NoteData
+import com.susumunoda.kansha.data.note.Note
 import com.susumunoda.kansha.data.user.User
 
 data class ProfileScreenState(
@@ -8,7 +8,7 @@ data class ProfileScreenState(
     val userFetchInProgress: Boolean = true,
     val userFetchFailed: Boolean = false,
 
-    val notesData: List<NoteData> = emptyList(),
-    val notesDataFetchInProgress: Boolean = true,
-    val notesDataFetchFailed: Boolean = false
+    val notes: List<Note> = emptyList(),
+    val notesFetchInProgress: Boolean = true,
+    val notesFetchFailed: Boolean = false
 )

@@ -55,25 +55,25 @@ class ProfileScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            Log.d(TAG, "Launched coroutine for getNotesData")
+            Log.d(TAG, "Launched coroutine for getNotes")
             try {
-                val notesData = noteRepository.getNotesData(currentUser.id)
+                val notes = noteRepository.getNotes(currentUser.id)
 
-                Log.d(TAG, "Notes data fetch succeeded: $notesData")
+                Log.d(TAG, "Notes fetch succeeded: $notes")
 
                 _uiState.update {
                     it.copy(
-                        notesData = notesData,
-                        notesDataFetchInProgress = false
+                        notes = notes,
+                        notesFetchInProgress = false
                     )
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Notes data fetch failed: ${e.message}")
+                Log.e(TAG, "Notes fetch failed: ${e.message}")
 
                 _uiState.update {
                     it.copy(
-                        notesDataFetchFailed = true,
-                        notesDataFetchInProgress = false
+                        notesFetchFailed = true,
+                        notesFetchInProgress = false
                     )
                 }
             }

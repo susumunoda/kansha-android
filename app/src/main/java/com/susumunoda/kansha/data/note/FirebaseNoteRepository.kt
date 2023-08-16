@@ -12,15 +12,15 @@ import kotlin.coroutines.suspendCoroutine
 class FirebaseNoteRepository @Inject constructor() : NoteRepository {
     private val db = Firebase.firestore
 
-    override suspend fun getNotesData(userId: String): List<NoteData> = suspendCoroutine { cont ->
+    override suspend fun getNotes(userId: String): List<Note> = suspendCoroutine { cont ->
         db.collection("notes/$userId/self")
             .get()
             .addOnSuccessListener { result ->
-                val notesData = mutableListOf<NoteData>()
+                val notes = mutableListOf<Note>()
                 for (document in result) {
-                    notesData.add(document.toObject<NoteData>())
+                    notes.add(document.toObject<Note>())
                 }
-                cont.resume(notesData)
+                cont.resume(notes)
             }
             .addOnFailureListener { cont.resumeWithException(it) }
     }
