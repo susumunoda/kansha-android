@@ -45,6 +45,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.NoOpAuthController
@@ -55,11 +57,15 @@ import com.susumunoda.kansha.data.user.MockSuccessUserRepository
 import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
 import com.susumunoda.kansha.ui.component.UserPhoto
+import com.susumunoda.kansha.ui.navigation.AuthenticatedScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
+fun ProfileScreen(
+    navController: NavHostController,
+    viewModel: ProfileScreenViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -89,7 +95,7 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
             Scaffold(
                 topBar = {
                     CenterAlignedTopAppBar(
-                        title = { Text(stringResource(R.string.profile_screen_top_bar)) },
+                        title = { Text(stringResource(R.string.profile_screen_top_bar_text)) },
                         navigationIcon = {
                             IconButton(onClick = { scope.launch { drawerState.open() } }) {
                                 Icon(Icons.Rounded.Menu, stringResource(R.string.open_menu_drawer))
@@ -98,10 +104,12 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
                     )
                 },
                 floatingActionButton = {
-                    FloatingActionButton(onClick = { /*TODO*/ }) {
+                    FloatingActionButton(
+                        onClick = { navController.navigate(AuthenticatedScreen.ADD_NOTE.name) }
+                    ) {
                         Icon(
                             Icons.Rounded.Create,
-                            stringResource(R.string.create_note_description)
+                            stringResource(R.string.add_note_fab_description)
                         )
                     }
                 }
@@ -193,6 +201,7 @@ private fun ProfileScreenPreview() {
     val userRepository = MockSuccessUserRepository(userData)
     val noteRepository = MockSuccessNoteRepository(notesData)
 
+    val navHostController = rememberNavController()
     val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)
-    ProfileScreen(viewModel)
+    ProfileScreen(navHostController, viewModel)
 }

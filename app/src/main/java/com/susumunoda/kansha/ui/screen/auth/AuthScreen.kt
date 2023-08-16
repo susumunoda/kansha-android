@@ -42,6 +42,7 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
+import com.susumunoda.kansha.ui.screen.Validator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -248,17 +249,17 @@ private fun SubmitButton(
     }
 }
 
-private class DisplayNameValidator(private val context: Context) : FieldValidator() {
+private class DisplayNameValidator(private val context: Context) : Validator() {
     override fun isValid(value: String) = value.isNotEmpty()
     override fun validationMessage() = context.getString(R.string.display_name_validation)
 }
 
-private class EmailValidator(private val context: Context) : FieldValidator() {
+private class EmailValidator(private val context: Context) : Validator() {
     override fun isValid(value: String) = Patterns.EMAIL_ADDRESS.matcher(value).matches()
     override fun validationMessage() = context.getString(R.string.email_format_validation)
 }
 
-private class PasswordValidator(private val context: Context) : FieldValidator() {
+private class PasswordValidator(private val context: Context) : Validator() {
     companion object {
         const val MIN_LENGTH = 6
     }

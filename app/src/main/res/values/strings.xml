@@ -5,6 +5,7 @@
     <string name="filter_button_description">Show/hide filter</string>
     <string name="logout_button_description">Log out</string>
     <string name="send_button_description">Send</string>
+    <string name="submit_button_description">Submit</string>
     <string name="remove_button_description">Remove</string>
     <string name="expand_menu_description">Expand menu</string>
     <!-- Auth: login -->
@@ -32,6 +33,9 @@
     <string name="profile_background_photo_description">Profile background photo</string>
     <string name="default_profile_photo_description">Default profile photo</string>
     <string name="open_menu_drawer">Open menu drawer</string>
-    <string name="profile_screen_top_bar">Your gratitude notes</string>
-    <string name="create_note_description">Create note</string>
+    <string name="profile_screen_top_bar_text">Your gratitude notes</string>
+    <!-- Add note -->
+    <string name="add_note_fab_description">Add a note</string>
+    <string name="add_note_top_bar_text">Add a note</string>
+    <string name="add_note_length_validation">Note must be %d characters or less</string>
 </resources>

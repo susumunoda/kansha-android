@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.data.user.UserData
 import com.susumunoda.kansha.data.user.UserRepository
+import com.susumunoda.kansha.ui.screen.Validator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -53,16 +54,16 @@ class AuthScreenViewModel @Inject constructor(
         }
     }
 
-    fun validateDisplayName(validator: FieldValidator) {
+    fun validateDisplayName(validator: Validator) {
         // Ensure trimmed display name is still valid
         _uiState.update { it.copy(displayNameValidation = validator.validate(it.trimmedDisplayName)) }
     }
 
-    fun validateEmail(validator: FieldValidator) {
+    fun validateEmail(validator: Validator) {
         _uiState.update { it.copy(emailValidation = validator.validate(it.email)) }
     }
 
-    fun validatePassword(validator: FieldValidator) {
+    fun validatePassword(validator: Validator) {
         _uiState.update { it.copy(passwordValidation = validator.validate(it.password)) }
     }
 
@@ -112,10 +113,4 @@ class AuthScreenViewModel @Inject constructor(
             }
         }
     }
-}
-
-abstract class FieldValidator {
-    fun validate(value: String) = if (isValid(value)) null else validationMessage()
-    abstract fun isValid(value: String): Boolean
-    abstract fun validationMessage(): String
 }
