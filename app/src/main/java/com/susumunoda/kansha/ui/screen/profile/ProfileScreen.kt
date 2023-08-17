@@ -117,7 +117,11 @@ fun ProfileScreen(
         ) { contentPadding ->
             Column(Modifier.padding(top = contentPadding.calculateTopPadding())) {
                 if (fetchInProgress) {
-                    LinearProgressIndicator(Modifier.fillMaxWidth())
+                    LinearProgressIndicator(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(dimensionResource(R.dimen.linear_progress_indicator_height))
+                    )
                 }
                 AnimatedVisibility(
                     visible = !fetchInProgress,
