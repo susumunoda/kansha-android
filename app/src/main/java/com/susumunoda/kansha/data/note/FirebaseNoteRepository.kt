@@ -1,5 +1,6 @@
 package com.susumunoda.kansha.data.note
 
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -17,6 +18,7 @@ class FirebaseNoteRepository @Inject constructor() : NoteRepository {
 
     override suspend fun getNotes(userId: String): List<Note> = suspendCoroutine { cont ->
         db.collection("notes/$userId/self")
+            .orderBy("createdAt", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 val notes = mutableListOf<FirebaseNote>()
