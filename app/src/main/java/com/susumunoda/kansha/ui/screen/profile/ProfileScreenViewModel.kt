@@ -31,6 +31,7 @@ class ProfileScreenViewModel @Inject constructor(
 
         viewModelScope.launch {
             Log.d(TAG, "Launched coroutine for getUser")
+
             try {
                 val user = userRepository.getUser(currentUser.id)
 
@@ -55,24 +56,16 @@ class ProfileScreenViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            Log.d(TAG, "Launched coroutine for getNotes")
-            try {
-                val notes = noteRepository.getNotes(currentUser.id)
+            Log.d(TAG, "Launched coroutine for notesFlow")
 
-                Log.d(TAG, "Notes fetch succeeded: $notes")
-
+            // For now, this returns all notes whenever there is a change to the collection of this
+            // user's notes. In the future, it might be wise to only return the new notes or notes
+            // that changed, but the logic for reconciling existing notes and deltas seems complex
+            // and probably not worth the cost (not to mention being prone to bugs).
+            noteRepository.notesFlow(currentUser.id).collect { notes ->
                 _uiState.update {
                     it.copy(
                         notes = notes,
-                        notesFetchInProgress = false
-                    )
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Notes fetch failed: ${e.message}")
-
-                _uiState.update {
-                    it.copy(
-                        notesFetchFailed = true,
                         notesFetchInProgress = false
                     )
                 }
