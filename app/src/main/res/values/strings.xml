@@ -37,5 +37,7 @@
     <!-- Add note -->
     <string name="add_note_fab_description">Add a note</string>
     <string name="add_note_top_bar_text">Add a note</string>
+    <string name="add_note_save_button">Save note</string>
     <string name="add_note_length_validation">Note must be %d characters or less</string>
+    <string name="add_note_error_message">Note could not be saved: %s</string>
 </resources>

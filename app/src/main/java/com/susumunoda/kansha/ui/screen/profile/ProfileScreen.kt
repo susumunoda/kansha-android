@@ -53,7 +53,7 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.auth.MockAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.MockNote
-import com.susumunoda.kansha.data.note.MockSuccessNoteRepository
+import com.susumunoda.kansha.data.note.MockNoteRepository
 import com.susumunoda.kansha.data.note.Note
 import com.susumunoda.kansha.data.user.MockUser
 import com.susumunoda.kansha.data.user.MockUserRepository
@@ -213,10 +213,12 @@ private fun ProfileScreenPreview() {
             )
         )
     )
-    val noteRepository = MockSuccessNoteRepository(
-        mutableListOf(
-            MockNote(message = "Grateful to be alive", labels = listOf("Mindfulness")),
-            MockNote(message = "Thank you", labels = listOf("Friends", "Family"))
+    val noteRepository = MockNoteRepository(
+        mutableMapOf(
+            userId to mutableListOf(
+                MockNote(message = "Grateful to be alive", labels = listOf("Mindfulness")),
+                MockNote(message = "Thank you", labels = listOf("Friends", "Family"))
+            )
         )
     )
     val navHostController = rememberNavController()
