@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -191,7 +192,13 @@ private fun ProfileSection(user: User) {
 
 @Composable
 private fun NotesSection(notes: List<Note>) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2)) {
+    val cellPadding = dimensionResource(R.dimen.notes_grid_cell_padding)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(cellPadding),
+        horizontalArrangement = Arrangement.spacedBy(cellPadding),
+        verticalArrangement = Arrangement.spacedBy(cellPadding)
+    ) {
         items(notes) { note ->
             Box(
                 modifier = Modifier
