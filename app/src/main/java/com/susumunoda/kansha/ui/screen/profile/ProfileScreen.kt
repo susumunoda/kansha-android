@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -167,16 +168,20 @@ private fun ProfileSection(user: User, modifier: Modifier = Modifier) {
         modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
-        AsyncImage(
-            model = user.backgroundPhotoUrl,
-            contentDescription = stringResource(R.string.profile_background_photo_description),
-            modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
-            contentScale = ContentScale.Crop,
-            // Only for displaying in an @Preview
-            placeholder = if (LocalInspectionMode.current) {
-                painterResource(R.drawable.preview_background_photo)
-            } else null
-        )
+        if (user.backgroundPhotoUrl.isNotBlank()) {
+            AsyncImage(
+                model = user.backgroundPhotoUrl,
+                contentDescription = stringResource(R.string.profile_background_photo_description),
+                modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
+                contentScale = ContentScale.Crop,
+                // Only for displaying in an @Preview
+                placeholder = if (LocalInspectionMode.current) {
+                    painterResource(R.drawable.preview_background_photo)
+                } else null
+            )
+        } else {
+            Spacer(Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)))
+        }
         if (user.profilePhotoUrl.isBlank()) {
             DefaultUserPhoto(
                 size = dimensionResource(R.dimen.profile_photo_size_large)
@@ -323,7 +328,8 @@ private fun ProfileScreenPreview() {
         mutableMapOf(
             userId to MockUser(
                 displayName = "John Smith",
-                profilePhotoUrl = "photo.jpg"
+                profilePhotoUrl = "photo.jpg",
+                backgroundPhotoUrl = "photo.jpg"
             )
         )
     )
