@@ -7,5 +7,5 @@ import java.util.Date
 data class FirebaseNote(
     @ServerTimestamp override val createdAt: Date = Calendar.getInstance().time,
     override val message: String = "",
-    override val labels: List<String> = emptyList()
+    override val labels: List<Label> = emptyList()
 ) : Note

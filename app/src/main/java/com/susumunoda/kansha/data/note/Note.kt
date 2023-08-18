@@ -5,5 +5,5 @@ import java.util.Date
 interface Note {
     val createdAt: Date
     val message: String
-    val labels: List<String>
+    val labels: List<Label>
 }

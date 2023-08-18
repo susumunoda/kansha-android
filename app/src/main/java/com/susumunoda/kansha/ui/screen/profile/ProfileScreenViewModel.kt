@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.kansha.data.note.Label
 import com.susumunoda.kansha.data.note.NoteRepository
 import com.susumunoda.kansha.data.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,6 +71,47 @@ class ProfileScreenViewModel @Inject constructor(
                     )
                 }
             }
+        }
+
+        viewModelScope.launch {
+            Log.d(TAG, "Launched coroutine for labelsFlow")
+
+            noteRepository.labelsFlow(currentUser.id).collect { allLabels ->
+                _uiState.update {
+                    it.copy(
+                        allLabels = allLabels,
+                        allLabelsFetchInProgress = false
+                    )
+                }
+            }
+        }
+    }
+
+    fun addSelectedLabel(label: Label) {
+        if (!_uiState.value.selectedLabels.contains(label)) {
+            _uiState.update {
+                val selectedLabels = listOf(
+                    *it.selectedLabels.toTypedArray(),
+                    label
+                )
+                it.copy(selectedLabels = selectedLabels)
+            }
+        }
+    }
+
+    fun removedSelectedLabel(label: Label) {
+        if (_uiState.value.selectedLabels.contains(label)) {
+            _uiState.update {
+                val selectedLabels =
+                    it.selectedLabels.filter { selectedLabel -> selectedLabel != label }
+                it.copy(selectedLabels = selectedLabels)
+            }
+        }
+    }
+
+    fun clearSelectedLabels() {
+        if (_uiState.value.selectedLabels.isNotEmpty()) {
+            _uiState.update { it.copy(selectedLabels = emptyList()) }
         }
     }
 

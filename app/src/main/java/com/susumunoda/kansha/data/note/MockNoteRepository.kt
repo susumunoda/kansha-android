@@ -1,23 +1,33 @@
 package com.susumunoda.kansha.data.note
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class MockNoteRepository(private val database: MutableMap<String, MutableList<MockNote>> = mutableMapOf()) :
-    NoteRepository {
-    override fun newInstance(message: String, labels: List<String>) =
+class MockNoteRepository(
+    private val notes: MutableMap<String, MutableList<MockNote>> = mutableMapOf(),
+    private val labels: MutableMap<String, MutableList<Label>> = mutableMapOf()
+) : NoteRepository {
+    override fun newInstance(message: String, labels: List<Label>) =
         MockNote(message = message, labels = labels)
 
     override fun notesFlow(userId: String) = flow {
-        if (database[userId] == null) {
-            database[userId] = mutableListOf()
+        if (notes[userId] == null) {
+            notes[userId] = mutableListOf()
         }
-        emit(database[userId]!!)
+        emit(notes[userId]!!)
     }
 
     override suspend fun addNote(userId: String, note: Note) {
-        if (database[userId] == null) {
-            database[userId] = mutableListOf()
+        if (notes[userId] == null) {
+            notes[userId] = mutableListOf()
         }
-        database[userId]!!.add(note as MockNote)
+        notes[userId]!!.add(note as MockNote)
+    }
+
+    override fun labelsFlow(userId: String) = flow {
+        if (labels[userId] == null) {
+            labels[userId] = mutableListOf()
+        }
+        emit(labels[userId]!!)
     }
 }

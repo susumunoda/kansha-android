@@ -40,4 +40,7 @@
     <string name="add_note_save_button">Save note</string>
     <string name="add_note_length_validation">Note must be %d characters or less</string>
     <string name="add_note_error_message">Note could not be saved: %s</string>
+    <!-- View notes -->
+    <string name="notes_filter_clear_text">Clear</string>
+    <string name="note_multiple_labels_text">%s + %d more</string>
 </resources>
