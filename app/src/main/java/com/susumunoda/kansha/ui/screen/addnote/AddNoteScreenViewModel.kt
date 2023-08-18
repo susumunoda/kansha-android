@@ -50,10 +50,6 @@ class AddNoteScreenViewModel @Inject constructor(
         }
     }
 
-    fun validateNote(validator: Validator) {
-        _uiState.update { it.copy(validationMessage = validator.validate(it.trimmedMessage)) }
-    }
-
     fun addSelectedLabel(label: Label) {
         if (!_uiState.value.selectedLabels.contains(label)) {
             _uiState.update {
@@ -74,6 +70,10 @@ class AddNoteScreenViewModel @Inject constructor(
                 it.copy(selectedLabels = selectedLabels)
             }
         }
+    }
+
+    fun validateNote(validator: Validator) {
+        _uiState.update { it.copy(validationMessage = validator.validate(it.trimmedMessage)) }
     }
 
     suspend fun saveNote(onSuccess: () -> Unit) {
