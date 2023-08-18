@@ -64,6 +64,14 @@ import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.Label
 import com.susumunoda.kansha.data.note.MockNote
 import com.susumunoda.kansha.data.note.MockNoteRepository
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.DEFAULT_LABELS
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_ADVENTURES
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_FAMILY
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_FOOD
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_FRIENDS
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_MUSIC
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_PETS
+import com.susumunoda.kansha.data.note.MockNoteRepository.Companion.LABEL_TRAVEL
 import com.susumunoda.kansha.data.note.Note
 import com.susumunoda.kansha.data.user.MockUser
 import com.susumunoda.kansha.data.user.MockUserRepository
@@ -319,112 +327,26 @@ private fun ProfileScreenPreview() {
             )
         )
     )
-    val noteRepository = MockNoteRepository(
-        notes = mutableMapOf(
-            userId to mutableListOf(
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"), Label(text = "Friends"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(
-                        Label(text = "Pets"),
-                        Label(text = "Adventure"),
-                        Label(text = "Nature")
-                    )
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Music"), Label(text = "Arts"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-                MockNote(
-                    message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar rhoncus magna, sit amet mollis lorem consequat at. Proin eu fermentum odio. Maecenas vitae convallis ante, eu facilisis sapien. Nulla condimentum neque at ante elementum, vel efficitur ipsum rutrum. Praesent metus quam, ullamcorper at orci quis, dictum accumsan dui. Cras suscipit, eros in viverra pretium, massa nulla consectetur felis, at posuere ex ex id nisi. Nunc consequat lobortis venenatis. Quisque massa quam, tristique fringilla ligula ut, consequat viverra erat. Nulla quis feugiat libero. Phasellus velit lacus, ultrices non rutrum quis, malesuada non augue. Cras non ligula et ex dictum aliquet eu eu erat. Etiam metus purus, tempus et feugiat a, volutpat at nisl.",
-                    labels = listOf(Label(text = "Family"))
-                ),
-            )
-        ),
-        labels = mutableMapOf(
-            userId to mutableListOf(
-                Label(0, "Nature", "🌲"),
-                Label(1, "Music", "🎶"),
-                Label(2, "Friends", "😊"),
-                Label(3, "Family", "👨‍👩‍👧‍👦"),
-                Label(4, "Memories"),
-                Label(5, "Food", "🌮"),
-                Label(6, "Travel", "🛫"),
-                Label(7, "Adventure"),
-                Label(8, "Art", "🎨"),
-                Label(9, "Pets", "🐈"),
-                Label(10, "Health", "🏥"),
-                Label(11, "Laughter", "🤣")
-            )
+    val notes = mutableMapOf(
+        userId to mutableListOf(
+            MockNote.Builder().message("Thanks!").build(),
+            MockNote.Builder().shortMessage().labels(LABEL_FAMILY, LABEL_FRIENDS).build(),
+            MockNote.Builder().mediumMessage().labels(LABEL_FOOD).build(),
+            MockNote.Builder().longMessage().build(),
+            MockNote.Builder().shortMessage().labels(LABEL_PETS).build(),
+            MockNote.Builder().mediumMessage().labels(LABEL_TRAVEL).build(),
+            MockNote.Builder().longMessage().labels(LABEL_MUSIC, LABEL_ADVENTURES).build(),
+            MockNote.Builder().message("Thanks!").build(),
+            MockNote.Builder().shortMessage().labels(LABEL_FAMILY, LABEL_FRIENDS).build(),
+            MockNote.Builder().mediumMessage().labels(LABEL_FOOD).build(),
+            MockNote.Builder().longMessage().build(),
+            MockNote.Builder().shortMessage().labels(LABEL_PETS).build(),
+            MockNote.Builder().mediumMessage().labels(LABEL_TRAVEL).build(),
+            MockNote.Builder().longMessage().labels(LABEL_MUSIC, LABEL_ADVENTURES).build()
         )
     )
+    val labels = mutableMapOf(userId to DEFAULT_LABELS)
+    val noteRepository = MockNoteRepository(notes, labels)
     val navHostController = rememberNavController()
     val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)
     ProfileScreen(navHostController, viewModel)
