@@ -53,42 +53,26 @@ import com.susumunoda.kansha.data.note.MockNoteRepository
 import com.susumunoda.kansha.ui.screen.Validator
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNoteScreen(
     navController: NavHostController,
     viewModel: AddNoteScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val saveEnabled = uiState.message.isNotBlank() && !uiState.requestInFlight
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.add_note_top_bar_text)) },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            Icons.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.back_button_description)
-                        )
+            TopBar(
+                saveEnabled = uiState.message.isNotBlank() && !uiState.requestInFlight,
+                onSave = {
+                    viewModel.validateNote(NoteLengthValidator(context))
+                    scope.launch {
+                        viewModel.saveNote { navController.popBackStack() }
                     }
                 },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            viewModel.validateNote(NoteLengthValidator(context))
-                            scope.launch {
-                                viewModel.saveNote { navController.popBackStack() }
-                            }
-                        },
-                        enabled = saveEnabled
-                    ) {
-                        Icon(Icons.Rounded.Done, stringResource(R.string.add_note_save_button))
-                    }
-                }
+                onGoBack = { navController.popBackStack() }
             )
         }
     ) { contentPadding ->
@@ -121,6 +105,34 @@ fun AddNoteScreen(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TopBar(
+    saveEnabled: Boolean,
+    onSave: () -> Unit,
+    onGoBack: () -> Unit
+) {
+    CenterAlignedTopAppBar(
+        title = { Text(stringResource(R.string.add_note_top_bar_text)) },
+        navigationIcon = {
+            IconButton(onClick = onGoBack) {
+                Icon(
+                    Icons.Rounded.ArrowBack,
+                    contentDescription = stringResource(R.string.back_button_description)
+                )
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = onSave,
+                enabled = saveEnabled
+            ) {
+                Icon(Icons.Rounded.Done, stringResource(R.string.add_note_save_button))
+            }
+        }
+    )
 }
 
 @Composable
