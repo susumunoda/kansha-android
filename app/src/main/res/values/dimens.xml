@@ -9,7 +9,6 @@
     <dimen name="profile_photo_size_large">120dp</dimen>
     <dimen name="profile_background_photo_height">240dp</dimen>
     <dimen name="notes_grid_cell_height">120dp</dimen>
-    <dimen name="notes_grid_cell_padding">6dp</dimen>
     <dimen name="profile_name_background_height">48dp</dimen>
     <dimen name="linear_progress_indicator_height">4dp</dimen>
 </resources>

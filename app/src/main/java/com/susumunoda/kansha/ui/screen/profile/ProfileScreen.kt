@@ -226,7 +226,7 @@ private fun FiltersSection(
     modifier: Modifier = Modifier
 ) {
     // For consistency with the LazyVerticalGrid below
-    val padding = dimensionResource(R.dimen.notes_grid_cell_padding)
+    val padding = dimensionResource(R.dimen.padding_small)
 
     val lazyListState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -280,7 +280,7 @@ private fun FiltersSection(
 
 @Composable
 private fun NotesSection(notes: List<Note>, modifier: Modifier = Modifier) {
-    val cellPadding = dimensionResource(R.dimen.notes_grid_cell_padding)
+    val cellPadding = dimensionResource(R.dimen.padding_small)
     LazyVerticalGrid(
         modifier = modifier,
         columns = GridCells.Fixed(2),

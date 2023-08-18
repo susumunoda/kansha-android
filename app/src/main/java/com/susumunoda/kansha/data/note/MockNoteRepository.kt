@@ -1,10 +1,12 @@
 package com.susumunoda.kansha.data.note
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
 class MockNoteRepository(
     private val notes: MutableMap<String, MutableList<MockNote>> = mutableMapOf(),
-    private val labels: MutableMap<String, MutableList<Label>> = mutableMapOf()
+    private val labels: MutableMap<String, MutableList<Label>> = mutableMapOf(),
+    private val errorOnAddNote: Boolean = false
 ) : NoteRepository {
     companion object {
         val LABEL_NATURE = Label(0, "Nature", "🌲")
@@ -45,13 +47,22 @@ class MockNoteRepository(
         if (notes[userId] == null) {
             notes[userId] = mutableListOf()
         }
+
         emit(notes[userId]!!)
     }
 
     override suspend fun addNote(userId: String, note: Note) {
+        // Mock I/O latency
+        delay(1000)
+
+        if (errorOnAddNote) {
+            throw IllegalArgumentException("Could not add note $note for user $userId")
+        }
+
         if (notes[userId] == null) {
             notes[userId] = mutableListOf()
         }
+
         notes[userId]!!.add(note as MockNote)
     }
 
@@ -59,6 +70,7 @@ class MockNoteRepository(
         if (labels[userId] == null) {
             labels[userId] = mutableListOf()
         }
+
         emit(labels[userId]!!)
     }
 }
