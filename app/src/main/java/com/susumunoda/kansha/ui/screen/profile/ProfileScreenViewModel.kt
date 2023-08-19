@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.data.note.Label
+import com.susumunoda.kansha.data.note.Note
 import com.susumunoda.kansha.data.note.NoteRepository
 import com.susumunoda.kansha.data.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -63,11 +64,15 @@ class ProfileScreenViewModel @Inject constructor(
             // user's notes. In the future, it might be wise to only return the new notes or notes
             // that changed, but the logic for reconciling existing notes and deltas seems complex
             // and probably not worth the cost (not to mention being prone to bugs).
-            noteRepository.notesFlow(currentUser.id).collect { notes ->
+            noteRepository.notesFlow(currentUser.id).collect { allNotes ->
                 _uiState.update {
                     it.copy(
-                        notes = notes,
-                        notesFetchInProgress = false
+                        allNotes = allNotes,
+                        allNotesFetchInProgress = false,
+                        // If filters are already applied and a note is added that matches that
+                        // filter, then the new note should be immediately visible when the user
+                        // returns to the notes view.
+                        filteredNotes = filterNotesContainingLabels(allNotes, it.selectedLabels)
                     )
                 }
             }
@@ -94,7 +99,10 @@ class ProfileScreenViewModel @Inject constructor(
                     *it.selectedLabels.toTypedArray(),
                     label
                 )
-                it.copy(selectedLabels = selectedLabels)
+                it.copy(
+                    selectedLabels = selectedLabels,
+                    filteredNotes = filterNotesContainingLabels(it.allNotes, selectedLabels)
+                )
             }
         }
     }
@@ -104,16 +112,27 @@ class ProfileScreenViewModel @Inject constructor(
             _uiState.update {
                 val selectedLabels =
                     it.selectedLabels.filter { selectedLabel -> selectedLabel != label }
-                it.copy(selectedLabels = selectedLabels)
+                it.copy(
+                    selectedLabels = selectedLabels,
+                    filteredNotes = filterNotesContainingLabels(it.allNotes, selectedLabels)
+                )
             }
         }
     }
 
     fun clearSelectedLabels() {
         if (_uiState.value.selectedLabels.isNotEmpty()) {
-            _uiState.update { it.copy(selectedLabels = emptyList()) }
+            _uiState.update {
+                it.copy(
+                    selectedLabels = emptyList(),
+                    filteredNotes = it.allNotes
+                )
+            }
         }
     }
+
+    private fun filterNotesContainingLabels(notes: List<Note>, labels: List<Label>) =
+        notes.filter { it.labels.containsAll(labels) }
 
     fun logout() {
         authController.logout()

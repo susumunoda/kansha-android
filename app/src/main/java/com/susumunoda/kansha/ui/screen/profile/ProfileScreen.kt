@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Create
 import androidx.compose.material.icons.rounded.ExitToApp
@@ -93,7 +92,7 @@ fun ProfileScreen(
     val scope = rememberCoroutineScope()
 
     val fetchInProgress =
-        uiState.userFetchInProgress || uiState.notesFetchInProgress || uiState.allLabelsFetchInProgress
+        uiState.userFetchInProgress || uiState.allNotesFetchInProgress || uiState.allLabelsFetchInProgress
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -154,7 +153,7 @@ fun ProfileScreen(
                             allLabels = uiState.allLabels,
                             selectedLabels = uiState.selectedLabels
                         )
-                        NotesSection(uiState.notes)
+                        NotesSection(uiState.filteredNotes)
                     }
                 }
             }
@@ -225,12 +224,7 @@ private fun FiltersSection(
     selectedLabels: List<Label>,
     modifier: Modifier = Modifier
 ) {
-    // For consistency with the LazyVerticalGrid below
     val padding = dimensionResource(R.dimen.padding_small)
-
-    val lazyListState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
-
     Row(
         modifier = modifier.padding(PaddingValues(horizontal = padding)),
         verticalAlignment = Alignment.CenterVertically
@@ -238,7 +232,6 @@ private fun FiltersSection(
         LazyRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(padding),
-            state = lazyListState,
             modifier = Modifier.weight(1f)
         ) {
             items(allLabels) {
@@ -263,10 +256,7 @@ private fun FiltersSection(
         }
         VerticalDivider(Modifier.height(FILTER_DIVIDER_HEIGHT))
         Surface(
-            onClick = {
-                viewModel.clearSelectedLabels()
-                scope.launch { lazyListState.animateScrollToItem(0) }
-            }
+            onClick = { viewModel.clearSelectedLabels() }
         ) {
             Text(
                 stringResource(R.string.notes_filter_clear_text),

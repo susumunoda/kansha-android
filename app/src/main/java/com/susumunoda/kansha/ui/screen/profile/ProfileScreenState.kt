@@ -9,8 +9,9 @@ data class ProfileScreenState(
     val userFetchInProgress: Boolean = true,
     val userFetchFailed: Boolean = false,
 
-    val notes: List<Note> = emptyList(),
-    val notesFetchInProgress: Boolean = true,
+    val allNotes: List<Note> = emptyList(),
+    val allNotesFetchInProgress: Boolean = true,
+    val filteredNotes: List<Note> = emptyList(),
 
     val allLabels: List<Label> = emptyList(),
     val allLabelsFetchInProgress: Boolean = true,
