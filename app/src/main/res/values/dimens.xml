@@ -11,4 +11,6 @@
     <dimen name="notes_grid_cell_height">120dp</dimen>
     <dimen name="profile_name_background_height">48dp</dimen>
     <dimen name="linear_progress_indicator_height">4dp</dimen>
+    <dimen name="card_height">160dp</dimen>
+    <dimen name="card_image_height">120dp</dimen>
 </resources>
