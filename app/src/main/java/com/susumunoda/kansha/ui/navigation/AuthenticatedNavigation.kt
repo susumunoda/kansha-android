@@ -14,6 +14,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.screen.explore.ExploreScreen
@@ -44,7 +46,17 @@ enum class Destination(
 
 @Composable
 fun AuthenticatedNavigation(navController: NavHostController = rememberNavController()) {
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
     var selectedDestination by remember { mutableStateOf(Destination.EXPLORE) }
+
+    // The bottom navigation's state needs to remain in sync with the current destination,
+    // specifically when the user navigates via the device's back button/gesture.
+    LaunchedEffect(currentBackStackEntry) {
+        val route = currentBackStackEntry?.destination?.route
+        if (route != null) {
+            selectedDestination = Destination.valueOf(route)
+        }
+    }
 
     Column {
         Box(
