@@ -64,5 +64,6 @@
     <!-- Settings screen -->
     <string name="settings_destination">Settings</string>
     <string name="settings_title">Settings</string>
-    <string name="settings_sign_out">Sign out</string>
+    <string name="settings_item_profile">Your profile</string>
+    <string name="settings_item_sign_out">Sign out</string>
 </resources>

@@ -80,7 +80,7 @@ fun AuthenticatedNavigation(navController: NavHostController = rememberNavContro
                     RemindersScreen()
                 }
                 composable(Destination.SETTINGS.name) {
-                    SettingsScreen()
+                    SettingsNavigation()
                 }
             }
         }
