@@ -25,7 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -50,6 +49,7 @@ import com.susumunoda.kansha.auth.MockAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.Label
 import com.susumunoda.kansha.data.note.MockNoteRepository
+import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.screen.Validator
 import kotlinx.coroutines.launch
 
@@ -62,7 +62,7 @@ fun AddNoteScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    Scaffold(
+    ScaffoldWithStatusBarInsets(
         topBar = {
             TopBar(
                 saveEnabled = uiState.message.isNotBlank() && !uiState.requestInFlight,
@@ -75,8 +75,8 @@ fun AddNoteScreen(
                 onGoBack = { navController.popBackStack() }
             )
         }
-    ) { contentPadding ->
-        Column(Modifier.padding(contentPadding)) {
+    ) {
+        Column {
             ProgressIndicator(
                 requestInFlight = uiState.requestInFlight,
                 modifier = Modifier.fillMaxWidth()

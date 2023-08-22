@@ -20,8 +20,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -41,6 +39,7 @@ import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
+import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 import com.susumunoda.kansha.ui.screen.Validator
 import kotlinx.coroutines.launch
@@ -55,7 +54,7 @@ fun LoginScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
-    Scaffold(
+    ScaffoldWithStatusBarInsets(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.login_top_bar_text)) },
@@ -78,45 +77,43 @@ fun LoginScreen(
                 }
             )
         }
-    ) { paddingValues ->
-        Surface(modifier = Modifier.padding(paddingValues)) {
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(dimensionResource(R.dimen.padding_large))
-            ) {
-                Column {
-                    EmailField(viewModel, uiState)
-                    PasswordField(viewModel, uiState)
-                    SubmitButton(
-                        label = stringResource(R.string.login_button_text),
-                        enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
-                        validateForm = {
-                            viewModel.validateEmail(EmailValidator(context))
-                            viewModel.validatePassword(PasswordValidator(context))
-                        },
-                        submitForm = {
-                            scope.launch { viewModel.logInUser() }
-                        }
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(dimensionResource(R.dimen.padding_large))
+        ) {
+            Column {
+                EmailField(viewModel, uiState)
+                PasswordField(viewModel, uiState)
+                SubmitButton(
+                    label = stringResource(R.string.login_button_text),
+                    enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
+                    validateForm = {
+                        viewModel.validateEmail(EmailValidator(context))
+                        viewModel.validatePassword(PasswordValidator(context))
+                    },
+                    submitForm = {
+                        scope.launch { viewModel.logInUser() }
+                    }
+                )
+                if (uiState.errorResponse != null) {
+                    Text(
+                        stringResource(R.string.login_failed_message),
+                        color = MaterialTheme.colorScheme.error
                     )
-                    if (uiState.errorResponse != null) {
-                        Text(
-                            stringResource(R.string.login_failed_message),
-                            color = MaterialTheme.colorScheme.error
-                        )
-                    }
                 }
+            }
 
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(stringResource(R.string.no_account_question_text))
-                    Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
-                    OutlinedButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
-                    ) {
-                        Text(stringResource(R.string.create_account_button_text))
-                    }
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(stringResource(R.string.no_account_question_text))
+                Spacer(Modifier.size(dimensionResource(R.dimen.padding_small)))
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { navController.navigate(UnauthenticatedScreen.SIGNUP.name) }
+                ) {
+                    Text(stringResource(R.string.create_account_button_text))
                 }
             }
         }
@@ -135,46 +132,44 @@ fun SignupScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
 
-    Scaffold(
+    ScaffoldWithStatusBarInsets(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.create_account_top_bar_text)) },
                 navigationIcon = { BackButton { navController.popBackStack() } }
             )
         }
-    ) { paddingValues ->
-        Surface(modifier = Modifier.padding(paddingValues)) {
-            Column(
-                verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(dimensionResource(R.dimen.padding_large))
-            ) {
-                Column {
-                    DisplayNameField(viewModel, uiState)
-                    EmailField(viewModel, uiState)
-                    PasswordField(viewModel, uiState)
-                    SubmitButton(
-                        label = stringResource(R.string.signup_button_text),
-                        enabled = uiState.displayName.isNotEmpty() && uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
-                        validateForm = {
-                            viewModel.validateDisplayName(DisplayNameValidator(context))
-                            viewModel.validateEmail(EmailValidator(context))
-                            viewModel.validatePassword(PasswordValidator(context))
-                        },
-                        submitForm = {
-                            scope.launch { viewModel.createUser() }
-                        }
-                    )
-                    if (uiState.errorResponse != null) {
-                        Text(
-                            stringResource(
-                                R.string.user_creation_failed_message,
-                                uiState.errorResponse!!
-                            ),
-                            color = MaterialTheme.colorScheme.error
-                        )
+    ) {
+        Column(
+            verticalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(dimensionResource(R.dimen.padding_large))
+        ) {
+            Column {
+                DisplayNameField(viewModel, uiState)
+                EmailField(viewModel, uiState)
+                PasswordField(viewModel, uiState)
+                SubmitButton(
+                    label = stringResource(R.string.signup_button_text),
+                    enabled = uiState.displayName.isNotEmpty() && uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
+                    validateForm = {
+                        viewModel.validateDisplayName(DisplayNameValidator(context))
+                        viewModel.validateEmail(EmailValidator(context))
+                        viewModel.validatePassword(PasswordValidator(context))
+                    },
+                    submitForm = {
+                        scope.launch { viewModel.createUser() }
                     }
+                )
+                if (uiState.errorResponse != null) {
+                    Text(
+                        stringResource(
+                            R.string.user_creation_failed_message,
+                            uiState.errorResponse!!
+                        ),
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
             }
         }

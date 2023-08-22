@@ -3,8 +3,6 @@ package com.susumunoda.kansha.ui.screen.notes
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,13 +17,8 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -34,9 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
+import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.component.TabOption
-import com.susumunoda.kansha.ui.component.TabType
-import com.susumunoda.kansha.ui.component.Tabs
 
 data class Category(
     val name: String,
@@ -44,6 +36,7 @@ data class Category(
 )
 
 val categories = listOf(
+    Category("All", "https://images.pexels.com/photos/2882660/pexels-photo-2882660.jpeg"),
     Category("Family", "https://images.pexels.com/photos/4452209/pexels-photo-4452209.jpeg"),
     Category("Friends", "https://images.pexels.com/photos/4834142/pexels-photo-4834142.jpeg"),
     Category("Nature", "https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg"),
@@ -66,22 +59,8 @@ private val notesTabs = listOf(allTab, categoriesTab)
 
 @Composable
 fun NotesScreen() {
-    var selectedTab by remember { mutableStateOf(allTab) }
-    Scaffold { contentPadding ->
-        Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
-            Tabs(
-                type = TabType.PRIMARY,
-                tabOptions = notesTabs,
-                selectedTab = selectedTab,
-                onSelectTab = { selectedTab = it }
-            )
-            when (selectedTab) {
-                allTab -> {}
-                categoriesTab -> {
-                    CategoriesGrid(modifier = Modifier.weight(1f))
-                }
-            }
-        }
+    ScaffoldWithStatusBarInsets {
+        CategoriesGrid()
     }
 }
 
