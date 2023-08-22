@@ -24,7 +24,7 @@ import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 fun ExploreScreen() {
     ScaffoldWithStatusBarInsets(
         topBar = {
-            CenterAlignedTopAppBar(title = { Text("Explore") })
+            CenterAlignedTopAppBar(title = { Text(stringResource(R.string.explore_title)) })
         }
     ) {
         val gridPadding = dimensionResource(R.dimen.padding_medium)

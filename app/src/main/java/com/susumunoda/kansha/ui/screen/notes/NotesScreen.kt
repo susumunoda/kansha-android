@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -57,9 +58,18 @@ private val allTab = TabOption(R.string.notes_tab_all)
 private val categoriesTab = TabOption(R.string.notes_tab_categories)
 private val notesTabs = listOf(allTab, categoriesTab)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen() {
-    ScaffoldWithStatusBarInsets {
+    ScaffoldWithStatusBarInsets(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(stringResource(R.string.notes_title))
+                }
+            )
+        }
+    ) {
         CategoriesGrid()
     }
 }

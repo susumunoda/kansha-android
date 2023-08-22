@@ -46,12 +46,14 @@
 
     <!-- Explore screen -->
     <string name="explore_destination">Explore</string>
+    <string name="explore_title">Explore</string>
     <string name="explore_card_add_note">Add a note</string>
     <string name="explore_card_add_note_description">What are you grateful for today?</string>
     <string name="explore_card_set_reminder">Set a reminder</string>
     <string name="explore_card_set_reminder_description">Set a periodic reminder to take a moment to be grateful</string>
     <!-- Notes screen -->
     <string name="notes_destination">Notes</string>
+    <string name="notes_title">Your notes</string>
     <string name="notes_tab_all">All</string>
     <string name="notes_tab_categories">Categories</string>
     <string name="notes_new_category">New category</string>
