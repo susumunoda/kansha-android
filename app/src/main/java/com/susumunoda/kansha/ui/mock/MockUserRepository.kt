@@ -12,7 +12,6 @@ internal class MockUserRepository(
     private val errorOnGetUser: Boolean = false,
     private val errorOnSetUser: Boolean = false
 ) : UserRepository {
-    override fun newInstance() = MockUser()
     override fun newInstance(displayName: String) = MockUser(displayName = displayName)
     override suspend fun getUser(id: String): User {
         if (mockLatency) {

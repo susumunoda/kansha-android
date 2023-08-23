@@ -33,7 +33,7 @@ fun SettingsNavigation(navController: NavHostController = rememberNavController(
             enterTransition = { enterSlidingUp() },
             exitTransition = { exitSlidingDown() }
         ) {
-            ProfileScreen()
+            ProfileScreen(navController)
         }
     }
 }

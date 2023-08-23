@@ -15,7 +15,6 @@ class FirebaseUserRepository @Inject constructor() : UserRepository {
         const val COLLECTION = "users"
     }
 
-    override fun newInstance(): User = FirebaseUser()
     override fun newInstance(displayName: String): User = FirebaseUser(displayName = displayName)
 
     // No need for withContext(Dispatchers.IO) because the Firebase API uses callbacks (i.e. the

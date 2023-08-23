@@ -66,4 +66,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_item_profile">Your profile</string>
     <string name="settings_item_sign_out">Sign out</string>
+    <!-- Profile screen -->
+    <string name="profile_title">Your profile</string>
+    <string name="profile_fetch_error">Failed to load user data: %1$s</string>
 </resources>
