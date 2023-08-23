@@ -83,13 +83,13 @@ fun AddNoteScreen(
                 modifier = Modifier
                     // Only horizontal needed because the chips themselves provide a minimum height
                     // for accessibility purposes
-                    .padding(PaddingValues(horizontal = dimensionResource(R.dimen.padding_small)))
+                    .padding(PaddingValues(horizontal = dimensionResource(R.dimen.padding_medium)))
                     // Allow error section to appear below when present
                     .weight(1f)
             )
             ErrorSection(
                 errorMessage = uiState.errorMessage,
-                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             )
         }
     }
@@ -163,7 +163,7 @@ private fun CategorySection(
 ) {
     FlowRow(
         modifier = modifier.verticalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
     ) {
         allCategories.forEach { category ->
             val selected = selectedCategory == category
