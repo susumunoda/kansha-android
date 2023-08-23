@@ -14,5 +14,12 @@ class FirebaseCategoryRepository @Inject constructor() : CategoryRepository {
         db.collection("categories/$userId/all")
             .orderBy("order")
             .snapshots()
-            .map { snapshot -> snapshot.documents.mapNotNull { it.toObject<Category>() } }
+            .map { snapshot ->
+                snapshot.documents.mapNotNull {
+                    it.toObject<FirebaseCategory>()?.apply {
+                        // ID is not a persisted field, so add it here dynamically
+                        id = it.id
+                    }
+                }
+            }
 }

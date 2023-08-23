@@ -38,6 +38,10 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.category.Category
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.NotesScreen
+import com.susumunoda.kansha.ui.navigation.categoryDestination
+
+const val CATEGORY_ALL = "all"
+const val CATEGORY_NONE = "none"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,13 +68,17 @@ fun ViewCategoriesScreen(
             )
         }
     ) {
-        CategoriesGrid(uiState.categories)
+        CategoriesGrid(navController, uiState.categories)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
+fun CategoriesGrid(
+    navController: NavHostController,
+    categories: List<Category>,
+    modifier: Modifier = Modifier
+) {
     val gridPadding = dimensionResource(R.dimen.padding_medium)
 
     LazyVerticalGrid(
@@ -81,7 +89,17 @@ fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         item {
-            ElevatedCard(onClick = {}) {
+            val categoryAllText = stringResource(R.string.notes_category_all)
+            ElevatedCard(
+                onClick = {
+                    navController.navigate(
+                        categoryDestination(
+                            categoryId = CATEGORY_ALL,
+                            categoryName = categoryAllText
+                        )
+                    )
+                }
+            ) {
                 Box(
                     modifier = Modifier
                         .height(dimensionResource(R.dimen.card_height))
@@ -89,7 +107,7 @@ fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = stringResource(R.string.notes_category_all),
+                        text = categoryAllText,
                         modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
                     )
                 }
@@ -99,7 +117,14 @@ fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
             ElevatedCard(
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier.height(dimensionResource(R.dimen.card_height)),
-                onClick = {}
+                onClick = {
+                    navController.navigate(
+                        categoryDestination(
+                            categoryId = category.id,
+                            categoryName = category.name
+                        )
+                    )
+                }
             ) {
                 AsyncImage(
                     model = category.photoUrl,
@@ -116,7 +141,17 @@ fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
             }
         }
         item {
-            ElevatedCard(onClick = {}) {
+            val categoryNoneText = stringResource(R.string.notes_category_none)
+            ElevatedCard(
+                onClick = {
+                    navController.navigate(
+                        categoryDestination(
+                            categoryId = CATEGORY_NONE,
+                            categoryName = categoryNoneText
+                        )
+                    )
+                }
+            ) {
                 Box(
                     modifier = Modifier
                         .height(dimensionResource(R.dimen.card_height))
@@ -124,14 +159,14 @@ fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = stringResource(R.string.notes_category_none),
+                        text = categoryNoneText,
                         modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
                     )
                 }
             }
         }
         item {
-            ElevatedCard(onClick = {}) {
+            ElevatedCard(onClick = { navController.navigate(NotesScreen.ADD_CATEGORY.name) }) {
                 Box(
                     modifier = Modifier
                         .height(dimensionResource(R.dimen.card_height))

@@ -9,6 +9,7 @@ import com.susumunoda.kansha.ui.animation.enterSlidingUp
 import com.susumunoda.kansha.ui.animation.exitSlidingDown
 import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoriesScreen
+import com.susumunoda.kansha.ui.screen.notes.ViewCategoryScreen
 
 enum class NotesScreen {
     VIEW_CATEGORIES,
@@ -23,8 +24,15 @@ fun NotesNavigation(navController: NavHostController = rememberNavController()) 
         composable(NotesScreen.VIEW_CATEGORIES.name) {
             ViewCategoriesScreen(navController)
         }
-        composable(NotesScreen.VIEW_CATEGORY.name) {
-//            ViewCategoryScreen()
+        composable("${NotesScreen.VIEW_CATEGORY.name}/{categoryId}/{categoryName}") {
+            val arguments = it.arguments!!
+            val categoryId = arguments.getString("categoryId")!!
+            val categoryName = arguments.getString("categoryName")!!
+            ViewCategoryScreen(
+                navController = navController,
+                categoryId = categoryId,
+                categoryName = categoryName
+            )
         }
         composable(NotesScreen.ADD_CATEGORY.name) {
 //            AddCategoryScreen()
@@ -38,3 +46,6 @@ fun NotesNavigation(navController: NavHostController = rememberNavController()) 
         }
     }
 }
+
+fun categoryDestination(categoryId: String, categoryName: String) =
+    "${NotesScreen.VIEW_CATEGORY.name}/$categoryId/$categoryName"
