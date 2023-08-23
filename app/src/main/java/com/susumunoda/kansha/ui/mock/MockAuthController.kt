@@ -1,5 +1,7 @@
-package com.susumunoda.kansha.auth
+package com.susumunoda.kansha.ui.mock
 
+import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.kansha.auth.Session
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

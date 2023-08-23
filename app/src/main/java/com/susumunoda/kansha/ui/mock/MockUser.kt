@@ -1,9 +1,10 @@
-package com.susumunoda.kansha.data.user
+package com.susumunoda.kansha.ui.mock
 
+import com.susumunoda.kansha.data.user.User
 import java.util.Calendar
 import java.util.Date
 
-data class MockUser(
+internal data class MockUser(
     override val createdAt: Date = Calendar.getInstance().time,
     override val displayName: String = "",
     override val profilePhotoUrl: String = "",

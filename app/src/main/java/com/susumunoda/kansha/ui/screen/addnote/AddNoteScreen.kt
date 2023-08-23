@@ -45,10 +45,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.auth.MockAuthController
+import com.susumunoda.kansha.ui.mock.MockAuthController
 import com.susumunoda.kansha.auth.Session
 import com.susumunoda.kansha.data.note.Label
-import com.susumunoda.kansha.data.note.MockNoteRepository
+import com.susumunoda.kansha.ui.mock.MockNoteRepository
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.screen.Validator
 import kotlinx.coroutines.launch

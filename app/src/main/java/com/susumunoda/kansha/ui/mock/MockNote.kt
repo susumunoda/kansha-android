@@ -1,9 +1,11 @@
-package com.susumunoda.kansha.data.note
+package com.susumunoda.kansha.ui.mock
 
+import com.susumunoda.kansha.data.note.Label
+import com.susumunoda.kansha.data.note.Note
 import java.util.Calendar
 import java.util.Date
 
-data class MockNote(
+internal data class MockNote(
     override val createdAt: Date = Calendar.getInstance().time,
     override val message: String = "",
     override val labels: List<Label> = emptyList()

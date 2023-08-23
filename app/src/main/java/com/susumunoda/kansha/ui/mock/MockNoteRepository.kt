@@ -1,12 +1,19 @@
-package com.susumunoda.kansha.data.note
+package com.susumunoda.kansha.ui.mock
 
+import com.susumunoda.kansha.data.note.Label
+import com.susumunoda.kansha.data.note.Note
+import com.susumunoda.kansha.data.note.NoteRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-class MockNoteRepository(
+internal class MockNoteRepository(
     private val notes: MutableMap<String, MutableList<MockNote>> = mutableMapOf(),
     private val labels: MutableMap<String, MutableList<Label>> = mutableMapOf(),
-    private val errorOnAddNote: Boolean = false
+    private val mockLatency: Boolean = false,
+    private val mockLatencyMillis: Long = 1000,
+    private val errorOnAddNote: Boolean = false,
+    private val errorOnNotesFlow: Boolean = false,
+    private val errorOnLabelsFlow: Boolean = false
 ) : NoteRepository {
     companion object {
         val LABEL_NATURE = Label(0, "Nature", "🌲")
@@ -44,6 +51,14 @@ class MockNoteRepository(
         MockNote(message = message, labels = labels)
 
     override fun notesFlow(userId: String) = flow {
+        if (mockLatency) {
+            delay(mockLatencyMillis)
+        }
+
+        if (errorOnNotesFlow) {
+            throw IllegalArgumentException("Could not get notes for user $userId")
+        }
+
         if (notes[userId] == null) {
             notes[userId] = mutableListOf()
         }
@@ -52,8 +67,9 @@ class MockNoteRepository(
     }
 
     override suspend fun addNote(userId: String, note: Note) {
-        // Mock I/O latency
-        delay(1000)
+        if (mockLatency) {
+            delay(mockLatencyMillis)
+        }
 
         if (errorOnAddNote) {
             throw IllegalArgumentException("Could not add note $note for user $userId")
@@ -67,6 +83,14 @@ class MockNoteRepository(
     }
 
     override fun labelsFlow(userId: String) = flow {
+        if (mockLatency) {
+            delay(mockLatencyMillis)
+        }
+
+        if (errorOnLabelsFlow) {
+            throw IllegalArgumentException("Could not get labels for user $userId")
+        }
+
         if (labels[userId] == null) {
             labels[userId] = mutableListOf()
         }
