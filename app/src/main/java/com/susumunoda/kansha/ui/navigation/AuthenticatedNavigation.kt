@@ -2,8 +2,6 @@ package com.susumunoda.kansha.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,7 +12,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,9 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.screen.explore.ExploreScreen
@@ -34,27 +28,34 @@ import com.susumunoda.kansha.ui.screen.reminders.RemindersScreen
 
 enum class Destination(
     @StringRes val titleId: Int,
-    @DrawableRes val iconId: Int
+    @DrawableRes val iconId: Int,
+    private val provideNavController: Boolean
 ) {
-    EXPLORE(R.string.explore_destination, R.drawable.explore_icon),
-    NOTES(R.string.notes_destination, R.drawable.notes_icon),
-    REMINDERS(R.string.reminders_destination, R.drawable.calendar_icon),
-    SETTINGS(R.string.settings_destination, R.drawable.settings_icon)
+    EXPLORE(R.string.explore_destination, R.drawable.explore_icon, false),
+    NOTES(R.string.notes_destination, R.drawable.notes_icon, false),
+    REMINDERS(R.string.reminders_destination, R.drawable.calendar_icon, false),
+    SETTINGS(R.string.settings_destination, R.drawable.settings_icon, true);
+
+    // Destination NavHostController is managed at the top-level — e.g. so that the user is taken
+    // back to the previous screen they were looking at before navigating away, or to take the user
+    // back to the navigation root if the bottom navigation icon is tapped for a second time.
+    private lateinit var _navController: NavHostController
+    val navController: NavHostController?
+        @Composable
+        get() {
+            if (provideNavController) {
+                if (!this::_navController.isInitialized) {
+                    _navController = rememberNavController()
+                }
+                return _navController
+            }
+            return null
+        }
 }
 
 @Composable
-fun AuthenticatedNavigation(navController: NavHostController = rememberNavController()) {
-    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+fun AuthenticatedNavigation() {
     var selectedDestination by remember { mutableStateOf(Destination.EXPLORE) }
-
-    // The bottom navigation's state needs to remain in sync with the current destination,
-    // specifically when the user navigates via the device's back button/gesture.
-    LaunchedEffect(currentBackStackEntry) {
-        val route = currentBackStackEntry?.destination?.route
-        if (route != null) {
-            selectedDestination = Destination.valueOf(route)
-        }
-    }
 
     Column {
         Box(
@@ -62,33 +63,32 @@ fun AuthenticatedNavigation(navController: NavHostController = rememberNavContro
                 .fillMaxSize()
                 .weight(1f)
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = Destination.EXPLORE.name,
-                enterTransition = { EnterTransition.None },
-                exitTransition = { ExitTransition.None }
-            ) {
-                composable(Destination.EXPLORE.name) {
+            // Explicitly not using NavHost because we don't need any of the navigation behavior
+            // between top-level destinations (e.g. pushing onto or popping the back stack).
+            // The desired behavior is for all top-level destinations to be at the root of the app —
+            // that is, the back button/gesture does the same thing across destinations.
+            when (selectedDestination) {
+                Destination.EXPLORE -> {
                     ExploreScreen()
                 }
-                composable(Destination.NOTES.name) {
+
+                Destination.NOTES -> {
                     NotesNavigation()
                 }
-                composable(Destination.REMINDERS.name) {
+
+                Destination.REMINDERS -> {
                     RemindersScreen()
                 }
-                composable(Destination.SETTINGS.name) {
-                    SettingsNavigation()
+
+                Destination.SETTINGS -> {
+                    SettingsNavigation(Destination.SETTINGS.navController!!)
                 }
             }
         }
 
         BottomNavigation(
             selectedDestination = selectedDestination,
-            onSelectDestination = {
-                selectedDestination = it
-                navController.navigate(it.name)
-            }
+            onSelectDestination = { selectedDestination = it }
         )
     }
 }
@@ -105,6 +105,8 @@ fun BottomNavigation(
     ) {
         Destination.values().forEach() { destination ->
             val selected = destination == selectedDestination
+            val navController = destination.navController
+
             NavigationBarItem(
                 label = { Text(stringResource(destination.titleId)) },
                 icon = {
@@ -115,7 +117,19 @@ fun BottomNavigation(
                     )
                 },
                 selected = selected,
-                onClick = { if (!selected) onSelectDestination(destination) }
+                onClick = {
+                    if (!selected) {
+                        onSelectDestination(destination)
+                    } else if (navController?.previousBackStackEntry != null) {
+                        // If the user had previously visited a destination which itself had
+                        // navigation (e.g. settings page) and the last visited screen there was not
+                        // the root, then tapping the bottom nav for a second time should take the
+                        // user to the root of that top-level destination.
+                        while (navController.previousBackStackEntry != null) {
+                            navController.popBackStack()
+                        }
+                    }
+                }
             )
         }
     }
