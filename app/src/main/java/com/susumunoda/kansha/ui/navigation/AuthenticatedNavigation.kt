@@ -104,6 +104,7 @@ fun BottomNavigation(
         windowInsets = WindowInsets(left = 0.dp, top = 0.dp, right = 0.dp, bottom = 8.dp),
     ) {
         Destination.values().forEach() { destination ->
+            val selected = destination == selectedDestination
             NavigationBarItem(
                 label = { Text(stringResource(destination.titleId)) },
                 icon = {
@@ -113,8 +114,8 @@ fun BottomNavigation(
                         modifier = Modifier.size(24.dp)
                     )
                 },
-                selected = destination == selectedDestination,
-                onClick = { onSelectDestination(destination) },
+                selected = selected,
+                onClick = { if (!selected) onSelectDestination(destination) }
             )
         }
     }
