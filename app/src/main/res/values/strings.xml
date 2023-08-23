@@ -57,6 +57,7 @@
     <string name="notes_category_all">All</string>
     <string name="notes_category_none">Uncategorized</string>
     <string name="notes_category_new">New category</string>
+    <string name="notes_add_note">Add note</string>
     <!-- Reminders screen -->
     <string name="reminders_destination">Reminders</string>
     <string name="reminders_tab_upcoming">Upcoming</string>

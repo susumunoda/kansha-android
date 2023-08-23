@@ -13,10 +13,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,14 +31,20 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.category.Category
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
+import com.susumunoda.kansha.ui.navigation.NotesScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesScreen(viewModel: NotesScreenViewModel = hiltViewModel()) {
+fun ViewCategoriesScreen(
+    navController: NavHostController,
+    viewModel: ViewCategoriesScreenViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     ScaffoldWithStatusBarInsets(
@@ -44,6 +52,14 @@ fun NotesScreen(viewModel: NotesScreenViewModel = hiltViewModel()) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(stringResource(R.string.notes_title))
+                },
+                actions = {
+                    IconButton(onClick = { navController.navigate(NotesScreen.ADD_NOTE.name) }) {
+                        Icon(
+                            Icons.Filled.Create,
+                            contentDescription = stringResource(R.string.notes_add_note)
+                        )
+                    }
                 }
             )
         }
@@ -136,5 +152,5 @@ fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun NotesScreenPreview() {
-    NotesScreen()
+    ViewCategoriesScreen(rememberNavController())
 }

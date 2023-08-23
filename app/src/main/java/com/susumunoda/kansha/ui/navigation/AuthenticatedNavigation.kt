@@ -30,9 +30,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.screen.explore.ExploreScreen
-import com.susumunoda.kansha.ui.screen.notes.NotesScreen
 import com.susumunoda.kansha.ui.screen.reminders.RemindersScreen
-import com.susumunoda.kansha.ui.screen.settings.SettingsScreen
 
 enum class Destination(
     @StringRes val titleId: Int,
@@ -74,7 +72,7 @@ fun AuthenticatedNavigation(navController: NavHostController = rememberNavContro
                     ExploreScreen()
                 }
                 composable(Destination.NOTES.name) {
-                    NotesScreen()
+                    NotesNavigation()
                 }
                 composable(Destination.REMINDERS.name) {
                     RemindersScreen()

@@ -12,11 +12,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NotesScreenViewModel @Inject constructor (
+class ViewCategoriesScreenViewModel @Inject constructor (
     authController: AuthController,
     categoryRepository: CategoryRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(NotesScreenState())
+    private val _uiState = MutableStateFlow(ViewCategoriesScreenState())
     val uiState = _uiState.asStateFlow()
 
     init {
