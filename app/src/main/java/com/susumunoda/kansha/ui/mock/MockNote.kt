@@ -1,6 +1,5 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.note.Label
 import com.susumunoda.kansha.data.note.Note
 import java.util.Calendar
 import java.util.Date
@@ -8,13 +7,13 @@ import java.util.Date
 internal data class MockNote(
     override val createdAt: Date = Calendar.getInstance().time,
     override val message: String = "",
-    override val labels: List<Label> = emptyList()
+    override val category: String = ""
 ) : Note {
     class Builder private constructor(
         private val message: String,
-        private val labels: List<Label>
+        private val category: String
     ) {
-        constructor() : this("", emptyList())
+        constructor() : this("", "")
 
         companion object {
             private const val MESSAGE =
@@ -24,11 +23,11 @@ internal data class MockNote(
             private val LONG_MESSAGE = MESSAGE.substring(0, 200)
         }
 
-        fun message(message: String) = Builder(message, labels)
+        fun message(message: String) = Builder(message, category)
         fun shortMessage() = message(SHORT_MESSAGE)
         fun mediumMessage() = message(MEDIUM_MESSAGE)
         fun longMessage() = message(LONG_MESSAGE)
-        fun labels(vararg labels: Label) = Builder(message, labels.asList())
-        fun build() = MockNote(message = message, labels = labels)
+        fun category(category: String) = Builder(message, category)
+        fun build() = MockNote(message = message, category = category)
     }
 }

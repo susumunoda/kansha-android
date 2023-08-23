@@ -1,5 +1,7 @@
 package com.susumunoda.kansha.data
 
+import com.susumunoda.kansha.data.category.CategoryRepository
+import com.susumunoda.kansha.data.category.FirebaseCategoryRepository
 import com.susumunoda.kansha.data.note.FirebaseNoteRepository
 import com.susumunoda.kansha.data.note.NoteRepository
 import com.susumunoda.kansha.data.user.FirebaseUserRepository
@@ -17,4 +19,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindNoteRepository(noteRepository: FirebaseNoteRepository): NoteRepository
+
+    @Binds
+    abstract fun bindCategoryRepository(categoryRepository: FirebaseCategoryRepository): CategoryRepository
 }

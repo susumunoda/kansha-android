@@ -20,47 +20,25 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
+import com.susumunoda.kansha.data.category.Category
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
-import com.susumunoda.kansha.ui.component.TabOption
-
-data class Category(
-    val name: String,
-    val photoUrl: String
-)
-
-val categories = listOf(
-    Category("All", "https://images.pexels.com/photos/2882660/pexels-photo-2882660.jpeg"),
-    Category("Family", "https://images.pexels.com/photos/4452209/pexels-photo-4452209.jpeg"),
-    Category("Friends", "https://images.pexels.com/photos/4834142/pexels-photo-4834142.jpeg"),
-    Category("Nature", "https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg"),
-    Category("Music", "https://images.pexels.com/photos/1407322/pexels-photo-1407322.jpeg"),
-    Category("Food", "https://images.pexels.com/photos/14013441/pexels-photo-14013441.jpeg"),
-    Category(
-        "Relaxation",
-        "https://images.pexels.com/photos/7034022/pexels-photo-7034022.jpeg"
-    ),
-    Category("Travel", "https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg"),
-    Category(
-        "Uncategorized",
-        "https://images.pexels.com/photos/1486612/pexels-photo-1486612.jpeg"
-    )
-)
-
-private val allTab = TabOption(R.string.notes_tab_all)
-private val categoriesTab = TabOption(R.string.notes_tab_categories)
-private val notesTabs = listOf(allTab, categoriesTab)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotesScreen() {
+fun NotesScreen(viewModel: NotesScreenViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+
     ScaffoldWithStatusBarInsets(
         topBar = {
             CenterAlignedTopAppBar(
@@ -70,13 +48,13 @@ fun NotesScreen() {
             )
         }
     ) {
-        CategoriesGrid()
+        CategoriesGrid(uiState.categories)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesGrid(modifier: Modifier = Modifier) {
+fun CategoriesGrid(categories: List<Category>, modifier: Modifier = Modifier) {
     val gridPadding = dimensionResource(R.dimen.padding_medium)
 
     LazyVerticalGrid(
@@ -86,6 +64,21 @@ fun CategoriesGrid(modifier: Modifier = Modifier) {
         contentPadding = PaddingValues(gridPadding),
         modifier = modifier
     ) {
+        item {
+            ElevatedCard(onClick = {}) {
+                Box(
+                    modifier = Modifier
+                        .height(dimensionResource(R.dimen.card_height))
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.notes_category_all),
+                        modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
+                    )
+                }
+            }
+        }
         items(categories) { category ->
             ElevatedCard(
                 shape = MaterialTheme.shapes.medium,
@@ -114,9 +107,24 @@ fun CategoriesGrid(modifier: Modifier = Modifier) {
                         .fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Filled.Add, stringResource(R.string.notes_new_category))
                     Text(
-                        text = stringResource(R.string.notes_new_category),
+                        text = stringResource(R.string.notes_category_none),
+                        modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
+                    )
+                }
+            }
+        }
+        item {
+            ElevatedCard(onClick = {}) {
+                Box(
+                    modifier = Modifier
+                        .height(dimensionResource(R.dimen.card_height))
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Filled.Add, stringResource(R.string.notes_category_new))
+                    Text(
+                        text = stringResource(R.string.notes_category_new),
                         modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
                     )
                 }

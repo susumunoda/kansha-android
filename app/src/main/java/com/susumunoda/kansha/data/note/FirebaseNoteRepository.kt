@@ -15,8 +15,8 @@ import kotlin.coroutines.suspendCoroutine
 class FirebaseNoteRepository @Inject constructor() : NoteRepository {
     private val db = Firebase.firestore
 
-    override fun newInstance(message: String, labels: List<Label>) =
-        FirebaseNote(message = message, labels = labels)
+    override fun newInstance(message: String, category: String) =
+        FirebaseNote(message = message, category = category)
 
     override fun notesFlow(userId: String) =
         db.collection("notes/$userId/self")
@@ -30,10 +30,4 @@ class FirebaseNoteRepository @Inject constructor() : NoteRepository {
             .addOnSuccessListener { cont.resume(Unit) }
             .addOnFailureListener { cont.resumeWithException(it) }
     }
-
-    override fun labelsFlow(userId: String) =
-        db.collection("notes/$userId/labels")
-            .orderBy("order")
-            .snapshots()
-            .map { snapshot -> snapshot.documents.mapNotNull { it.toObject<Label>() } }
 }

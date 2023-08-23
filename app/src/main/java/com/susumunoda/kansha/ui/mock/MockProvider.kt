@@ -1,7 +1,6 @@
 package com.susumunoda.kansha.ui.mock
 
 import com.susumunoda.kansha.auth.Session
-import com.susumunoda.kansha.data.note.Label
 
 internal class MockProvider {
     // Session.User
@@ -40,21 +39,17 @@ internal class MockProvider {
         )
 
     // MockNoteRepository
-    var noteRepositoryNotes: MutableMap<String, MutableList<MockNote>> = mutableMapOf()
-    var noteRepositoryLabels: MutableMap<String, MutableList<Label>> = mutableMapOf()
+    var noteRepositoryDatabase: MutableMap<String, MutableList<MockNote>> = mutableMapOf()
     var noteRepositoryMockLatency: Boolean = false
     var noteRepositoryMockLatencyMillis: Long = 1000
     var noteRepositoryErrorOnAddNote: Boolean = false
     var noteRepositoryErrorOnNotesFlow: Boolean = false
-    var noteRepositoryErrorOnLabelsFlow: Boolean = false
     val noteRepository
         get() = MockNoteRepository(
-            notes = noteRepositoryNotes,
-            labels = noteRepositoryLabels,
+            database = noteRepositoryDatabase,
             mockLatency = noteRepositoryMockLatency,
             mockLatencyMillis = noteRepositoryMockLatencyMillis,
             errorOnAddNote = noteRepositoryErrorOnAddNote,
-            errorOnNotesFlow = noteRepositoryErrorOnNotesFlow,
-            errorOnLabelsFlow = noteRepositoryErrorOnLabelsFlow
+            errorOnNotesFlow = noteRepositoryErrorOnNotesFlow
         )
 }

@@ -54,9 +54,9 @@
     <!-- Notes screen -->
     <string name="notes_destination">Notes</string>
     <string name="notes_title">Your notes</string>
-    <string name="notes_tab_all">All</string>
-    <string name="notes_tab_categories">Categories</string>
-    <string name="notes_new_category">New category</string>
+    <string name="notes_category_all">All</string>
+    <string name="notes_category_none">Uncategorized</string>
+    <string name="notes_category_new">New category</string>
     <!-- Reminders screen -->
     <string name="reminders_destination">Reminders</string>
     <string name="reminders_tab_upcoming">Upcoming</string>
