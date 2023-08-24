@@ -14,7 +14,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 import com.susumunoda.kansha.ui.screen.Validator
@@ -53,6 +55,7 @@ fun LoginScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
+    val buttonColors = ButtonDefaults.buttonColors()
 
     ScaffoldWithStatusBarInsets(
         topBar = {
@@ -87,17 +90,26 @@ fun LoginScreen(
             Column {
                 EmailField(viewModel, uiState)
                 PasswordField(viewModel, uiState)
-                SubmitButton(
-                    label = stringResource(R.string.login_button_text),
-                    enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
-                    validateForm = {
-                        viewModel.validateEmail(EmailValidator(context))
-                        viewModel.validatePassword(PasswordValidator(context))
-                    },
-                    submitForm = {
-                        scope.launch { viewModel.logInUser() }
-                    }
-                )
+                if (uiState.requestInFlight) {
+                    SubmissionInProgressButton(
+                        colors = buttonColors,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    SubmitButton(
+                        label = stringResource(R.string.login_button_text),
+                        enabled = uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
+                        validateForm = {
+                            viewModel.validateEmail(EmailValidator(context))
+                            viewModel.validatePassword(PasswordValidator(context))
+                        },
+                        submitForm = {
+                            scope.launch { viewModel.logInUser() }
+                        },
+                        colors = buttonColors,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 if (uiState.errorResponse != null) {
                     Text(
                         stringResource(R.string.login_failed_message),
@@ -118,8 +130,6 @@ fun LoginScreen(
             }
         }
     }
-
-    LoadingIndicatorOverlay(showLoadingIndicator = uiState.requestInFlight)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,6 +141,7 @@ fun SignupScreen(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
+    val buttonColors = ButtonDefaults.buttonColors()
 
     ScaffoldWithStatusBarInsets(
         topBar = {
@@ -157,18 +168,27 @@ fun SignupScreen(
                 DisplayNameField(viewModel, uiState)
                 EmailField(viewModel, uiState)
                 PasswordField(viewModel, uiState)
-                SubmitButton(
-                    label = stringResource(R.string.signup_button_text),
-                    enabled = uiState.displayName.isNotEmpty() && uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
-                    validateForm = {
-                        viewModel.validateDisplayName(DisplayNameValidator(context))
-                        viewModel.validateEmail(EmailValidator(context))
-                        viewModel.validatePassword(PasswordValidator(context))
-                    },
-                    submitForm = {
-                        scope.launch { viewModel.createUser() }
-                    }
-                )
+                if (uiState.requestInFlight) {
+                    SubmissionInProgressButton(
+                        colors = buttonColors,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    SubmitButton(
+                        label = stringResource(R.string.signup_button_text),
+                        enabled = uiState.displayName.isNotEmpty() && uiState.email.isNotEmpty() && uiState.password.isNotEmpty(),
+                        validateForm = {
+                            viewModel.validateDisplayName(DisplayNameValidator(context))
+                            viewModel.validateEmail(EmailValidator(context))
+                            viewModel.validatePassword(PasswordValidator(context))
+                        },
+                        submitForm = {
+                            scope.launch { viewModel.createUser() }
+                        },
+                        colors = buttonColors,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 if (uiState.errorResponse != null) {
                     Text(
                         stringResource(
@@ -181,8 +201,6 @@ fun SignupScreen(
             }
         }
     }
-
-    LoadingIndicatorOverlay(showLoadingIndicator = uiState.requestInFlight)
 }
 
 @Composable
@@ -234,7 +252,9 @@ private fun SubmitButton(
     label: String,
     enabled: Boolean,
     validateForm: () -> Unit,
-    submitForm: () -> Unit
+    submitForm: () -> Unit,
+    colors: ButtonColors,
+    modifier: Modifier = Modifier
 ) {
     val focusManager = LocalFocusManager.current
     Button(
@@ -245,9 +265,25 @@ private fun SubmitButton(
             validateForm()
             submitForm()
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier,
+        colors = colors
     ) {
         Text(label)
+    }
+}
+
+@Composable
+private fun SubmissionInProgressButton(colors: ButtonColors, modifier: Modifier = Modifier) {
+    Button(
+        onClick = {},
+        enabled = false,
+        modifier = modifier,
+        colors = colors
+    ) {
+        CircularProgressIndicator(
+            color = colors.disabledContentColor,
+            modifier = Modifier.size(dimensionResource(R.dimen.icon))
+        )
     }
 }
 
