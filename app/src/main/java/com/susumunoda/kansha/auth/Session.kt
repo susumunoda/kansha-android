@@ -4,12 +4,13 @@ class Session(val user: User) {
     constructor(userId: String) : this(User(userId))
 
     companion object {
-        val LOGGED_OUT = Session(User.UNAUTHENTICATED)
+        val LOGGED_OUT = Session(User.ANONYMOUS)
+        val UNKNOWN = Session(User.ANONYMOUS)
     }
 
     class User(val id: String) {
         companion object {
-            val UNAUTHENTICATED = User("")
+            val ANONYMOUS = User("")
         }
     }
 }
