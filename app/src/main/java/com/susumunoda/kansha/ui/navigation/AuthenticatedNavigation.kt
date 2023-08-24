@@ -119,7 +119,7 @@ fun BottomNavigation(
                     Icon(
                         painterResource(destination.iconId),
                         contentDescription = stringResource(destination.titleId),
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(dimensionResource(R.dimen.icon))
                     )
                 },
                 selected = selected,

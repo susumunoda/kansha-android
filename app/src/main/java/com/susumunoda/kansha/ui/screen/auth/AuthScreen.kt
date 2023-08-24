@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -37,7 +38,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.LoadingIndicatorOverlay
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
@@ -70,7 +70,7 @@ fun LoginScreen(
                             Icon(
                                 imageVector = Icons.Rounded.Star,
                                 contentDescription = null,
-                                modifier = Modifier.size(dimensionResource(R.dimen.icon_button))
+                                modifier = Modifier.size(dimensionResource(R.dimen.icon))
                             )
                         }
                     }
@@ -136,7 +136,14 @@ fun SignupScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.create_account_top_bar_text)) },
-                navigationIcon = { BackButton { navController.popBackStack() } }
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            Icons.Rounded.ArrowBack,
+                            contentDescription = stringResource(R.string.back_button_description)
+                        )
+                    }
+                }
             )
         }
     ) {
