@@ -18,7 +18,7 @@ class FirebaseAuthController @Inject constructor() : AuthController {
     init {
         auth.addAuthStateListener { newAuth ->
             if (newAuth.currentUser != null) {
-                _sessionFlow.update { Session(newAuth.currentUser!!.uid) }
+                _sessionFlow.update { Session(Session.User(newAuth.currentUser!!.uid)) }
             } else {
                 _sessionFlow.update { Session.LOGGED_OUT }
             }
