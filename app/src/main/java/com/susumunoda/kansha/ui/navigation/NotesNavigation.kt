@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.ui.animation.enterSlidingUp
 import com.susumunoda.kansha.ui.animation.exitSlidingDown
 import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
@@ -19,7 +18,7 @@ enum class NotesScreen {
 }
 
 @Composable
-fun NotesNavigation(navController: NavHostController = rememberNavController()) {
+fun NotesNavigation(navController: NavHostController) {
     NavHost(navController = navController, startDestination = NotesScreen.VIEW_CATEGORIES.name) {
         composable(NotesScreen.VIEW_CATEGORIES.name) {
             ViewCategoriesScreen(navController)

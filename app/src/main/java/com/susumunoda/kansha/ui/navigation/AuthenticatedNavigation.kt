@@ -32,7 +32,7 @@ enum class Destination(
     private val provideNavController: Boolean
 ) {
     EXPLORE(R.string.explore_destination, R.drawable.explore_icon, false),
-    NOTES(R.string.notes_destination, R.drawable.notes_icon, false),
+    NOTES(R.string.notes_destination, R.drawable.notes_icon, true),
     REMINDERS(R.string.reminders_destination, R.drawable.calendar_icon, false),
     SETTINGS(R.string.settings_destination, R.drawable.settings_icon, true);
 
@@ -73,7 +73,7 @@ fun AuthenticatedNavigation() {
                 }
 
                 Destination.NOTES -> {
-                    NotesNavigation()
+                    NotesNavigation(Destination.NOTES.navController!!)
                 }
 
                 Destination.REMINDERS -> {
