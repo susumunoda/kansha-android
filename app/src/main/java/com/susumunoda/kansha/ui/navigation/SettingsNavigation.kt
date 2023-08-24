@@ -6,8 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.susumunoda.kansha.ui.animation.enterSlidingUp
-import com.susumunoda.kansha.ui.animation.exitSlidingDown
+import com.susumunoda.kansha.ui.animation.enterSlidingLeft
+import com.susumunoda.kansha.ui.animation.exitSlidingRight
 import com.susumunoda.kansha.ui.screen.profile.ProfileScreen
 import com.susumunoda.kansha.ui.screen.settings.SettingsScreen
 
@@ -29,8 +29,8 @@ fun SettingsNavigation(navController: NavHostController) {
 
         composable(
             route = SettingsScreen.PROFILE.name,
-            enterTransition = { enterSlidingUp() },
-            exitTransition = { exitSlidingDown() }
+            enterTransition = { enterSlidingLeft() },
+            exitTransition = { exitSlidingRight() }
         ) {
             ProfileScreen(navController)
         }
