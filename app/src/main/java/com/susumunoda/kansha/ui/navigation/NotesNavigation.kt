@@ -1,9 +1,11 @@
 package com.susumunoda.kansha.ui.navigation
 
-import androidx.compose.runtime.Composable
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.susumunoda.kansha.ui.animation.enterSlidingUp
 import com.susumunoda.kansha.ui.animation.exitSlidingDown
 import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
@@ -17,13 +19,23 @@ enum class NotesScreen {
     ADD_NOTE
 }
 
-@Composable
-fun NotesNavigation(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = NotesScreen.VIEW_CATEGORIES.name) {
-        composable(NotesScreen.VIEW_CATEGORIES.name) {
+fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
+    navigation(
+        route = Destination.NOTES.name,
+        startDestination = NotesScreen.VIEW_CATEGORIES.name
+    ) {
+        composable(
+            route = NotesScreen.VIEW_CATEGORIES.name,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             ViewCategoriesScreen(navController)
         }
-        composable("${NotesScreen.VIEW_CATEGORY.name}/{categoryId}/{categoryName}") {
+        composable(
+            route = "${NotesScreen.VIEW_CATEGORY.name}/{categoryId}/{categoryName}",
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
             val arguments = it.arguments!!
             val categoryId = arguments.getString("categoryId")!!
             val categoryName = arguments.getString("categoryName")!!
@@ -33,7 +45,11 @@ fun NotesNavigation(navController: NavHostController) {
                 categoryName = categoryName
             )
         }
-        composable(NotesScreen.ADD_CATEGORY.name) {
+        composable(
+            route = NotesScreen.ADD_CATEGORY.name,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None }
+        ) {
 //            AddCategoryScreen()
         }
         composable(

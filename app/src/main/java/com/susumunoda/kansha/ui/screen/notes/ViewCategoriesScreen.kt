@@ -58,7 +58,13 @@ fun ViewCategoriesScreen(
                     Text(stringResource(R.string.notes_title))
                 },
                 actions = {
-                    IconButton(onClick = { navController.navigate(NotesScreen.ADD_NOTE.name) }) {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(NotesScreen.ADD_NOTE.name) {
+                                restoreState = true
+                            }
+                        }
+                    ) {
                         Icon(
                             Icons.Filled.Create,
                             contentDescription = stringResource(R.string.notes_add_note)
