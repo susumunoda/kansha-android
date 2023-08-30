@@ -23,15 +23,14 @@ enum class TabType { PRIMARY, SECONDARY }
 
 @Composable
 fun Tabs(
-    type: TabType,
+    tabType: TabType,
     tabOptions: List<TabOption>,
-    selectedTab: TabOption,
-    onSelectTab: (TabOption) -> Unit
+    selectedTabIndex: Int,
+    onSelectTabIndex: (Int) -> Unit
 ) {
-    val selectedTabIndex = tabOptions.indexOf(selectedTab)
     val indicator = @Composable { tabPositions: List<TabPosition> ->
         if (selectedTabIndex < tabPositions.size) {
-            when (type) {
+            when (tabType) {
                 TabType.PRIMARY -> {
                     val width by animateDpAsState(
                         label = "tab animation",
@@ -55,14 +54,14 @@ fun Tabs(
         selectedTabIndex = selectedTabIndex,
         indicator = indicator
     ) {
-        tabOptions.forEach {
+        tabOptions.forEachIndexed { index, tabOption ->
             Tab(
-                selected = selectedTab == it,
-                onClick = { onSelectTab(it) },
+                selected = selectedTabIndex == index,
+                onClick = { onSelectTabIndex(index) },
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(
-                    stringResource(it.titleId),
+                    stringResource(tabOption.titleId),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
