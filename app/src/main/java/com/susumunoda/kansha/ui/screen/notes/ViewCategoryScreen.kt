@@ -15,10 +15,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
+import com.susumunoda.kansha.ui.mock.MockNote
+import com.susumunoda.kansha.ui.mock.MockProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,4 +64,30 @@ fun ViewCategoryScreen(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun ViewCategoryScreenPreview() {
+    val categoryId = "category_123"
+    val categoryName = "My Category"
+    val navController = rememberNavController()
+    val mockProvider = MockProvider().apply {
+        noteRepositoryDatabase[sessionUserId] = mutableListOf(
+            MockNote.Builder().shortMessage().categoryId(categoryId).build(),
+            MockNote.Builder().shortMessage().categoryId("other_category_1").build(),
+            MockNote.Builder().mediumMessage().categoryId(categoryId).build(),
+            MockNote.Builder().mediumMessage().categoryId("other_category_2").build(),
+            MockNote.Builder().longMessage().categoryId(categoryId).build(),
+            MockNote.Builder().longMessage().categoryId("other_category_3").build()
+        )
+    }
+    val viewModel =
+        ViewCategoryScreenViewModel(mockProvider.authController, mockProvider.noteRepository)
+    ViewCategoryScreen(
+        navController = navController,
+        categoryId = categoryId,
+        categoryName = categoryName,
+        viewModel = viewModel
+    )
 }
