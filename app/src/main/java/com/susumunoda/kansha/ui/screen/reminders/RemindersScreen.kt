@@ -1,16 +1,13 @@
 package com.susumunoda.kansha.ui.screen.reminders
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.susumunoda.kansha.R
+import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.component.TabOption
 import com.susumunoda.kansha.ui.component.TabType
 import com.susumunoda.kansha.ui.component.Tabs
@@ -23,18 +20,16 @@ private val remindersTabs = listOf(upcomingTab, recurringTab)
 fun RemindersScreen() {
     var selectedTab by remember { mutableStateOf(upcomingTab) }
 
-    Scaffold { contentPadding ->
-        Column(modifier = Modifier.padding(top = contentPadding.calculateTopPadding())) {
-            Tabs(
-                type = TabType.PRIMARY,
-                tabOptions = remindersTabs,
-                selectedTab = selectedTab,
-                onSelectTab = { selectedTab = it }
-            )
-            when (selectedTab) {
-                upcomingTab -> {}
-                recurringTab -> {}
-            }
+    ScaffoldWithStatusBarInsets {
+        Tabs(
+            type = TabType.PRIMARY,
+            tabOptions = remindersTabs,
+            selectedTab = selectedTab,
+            onSelectTab = { selectedTab = it }
+        )
+        when (selectedTab) {
+            upcomingTab -> {}
+            recurringTab -> {}
         }
     }
 }
