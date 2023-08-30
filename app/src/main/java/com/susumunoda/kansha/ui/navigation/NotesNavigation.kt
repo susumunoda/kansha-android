@@ -1,7 +1,5 @@
 package com.susumunoda.kansha.ui.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -24,18 +22,11 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
         route = Destination.NOTES.name,
         startDestination = NotesScreen.VIEW_CATEGORIES.name
     ) {
-        composable(
-            route = NotesScreen.VIEW_CATEGORIES.name,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-        ) {
+        composableWithoutTransitions(NotesScreen.VIEW_CATEGORIES.name) {
             ViewCategoriesScreen(navController)
         }
-        composable(
-            route = "${NotesScreen.VIEW_CATEGORY.name}/{categoryId}/{categoryName}",
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-        ) {
+
+        composableWithoutTransitions("${NotesScreen.VIEW_CATEGORY.name}/{categoryId}/{categoryName}") {
             val arguments = it.arguments!!
             val categoryId = arguments.getString("categoryId")!!
             val categoryName = arguments.getString("categoryName")!!
@@ -45,13 +36,11 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
                 categoryName = categoryName
             )
         }
-        composable(
-            route = NotesScreen.ADD_CATEGORY.name,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-        ) {
+
+        composableWithoutTransitions(NotesScreen.ADD_CATEGORY.name) {
 //            AddCategoryScreen()
         }
+
         composable(
             route = NotesScreen.ADD_NOTE.name,
             enterTransition = { enterSlidingUp() },

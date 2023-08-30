@@ -2,8 +2,6 @@ package com.susumunoda.kansha.ui.navigation
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -24,7 +22,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
@@ -52,23 +49,16 @@ fun AuthenticatedNavigation() {
                 .weight(1f)
         ) {
             NavHost(navController = navController, startDestination = Destination.EXPLORE.name) {
-                composable(
-                    route = Destination.EXPLORE.name,
-                    enterTransition = { EnterTransition.None },
-                    exitTransition = { ExitTransition.None }
-                ) {
+                composableWithoutTransitions(Destination.EXPLORE.name) {
                     ExploreScreen()
                 }
 
-                composable(
-                    route = Destination.REMINDERS.name,
-                    enterTransition = { EnterTransition.None },
-                    exitTransition = { ExitTransition.None }
-                ) {
+                composableWithoutTransitions(Destination.REMINDERS.name) {
                     RemindersScreen()
                 }
 
                 notesNavigation(navController)
+
                 settingsNavigation(navController)
             }
         }

@@ -1,7 +1,5 @@
 package com.susumunoda.kansha.ui.navigation
 
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -18,11 +16,7 @@ enum class SettingsScreen {
 
 fun NavGraphBuilder.settingsNavigation(navController: NavHostController) {
     navigation(route = Destination.SETTINGS.name, startDestination = SettingsScreen.MAIN.name) {
-        composable(
-            route = SettingsScreen.MAIN.name,
-            enterTransition = { EnterTransition.None },
-            exitTransition = { ExitTransition.None }
-        ) {
+        composableWithoutTransitions(SettingsScreen.MAIN.name) {
             SettingsScreen(navController)
         }
 
