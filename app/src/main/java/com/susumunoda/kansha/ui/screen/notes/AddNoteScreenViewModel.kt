@@ -80,7 +80,7 @@ class AddNoteScreenViewModel @Inject constructor(
             val currentUser = authController.sessionFlow.value.user
             val note = noteRepository.newInstance(
                 message = _uiState.value.trimmedMessage,
-                category = _uiState.value.selectedCategory?.name ?: ""
+                categoryId = _uiState.value.selectedCategory?.id
             )
             try {
                 noteRepository.addNote(currentUser.id, note)

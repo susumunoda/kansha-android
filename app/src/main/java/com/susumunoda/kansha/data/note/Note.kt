@@ -5,5 +5,5 @@ import java.util.Date
 interface Note {
     val createdAt: Date
     val message: String
-    val category: String
+    val categoryId: String?
 }

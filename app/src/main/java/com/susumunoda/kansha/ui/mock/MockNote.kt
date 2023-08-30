@@ -7,13 +7,13 @@ import java.util.Date
 internal data class MockNote(
     override val createdAt: Date = Calendar.getInstance().time,
     override val message: String = "",
-    override val category: String = ""
+    override val categoryId: String? = null
 ) : Note {
     class Builder private constructor(
         private val message: String,
-        private val category: String
+        private val categoryId: String?
     ) {
-        constructor() : this("", "")
+        constructor() : this("", null)
 
         companion object {
             private const val MESSAGE =
@@ -23,11 +23,11 @@ internal data class MockNote(
             private val LONG_MESSAGE = MESSAGE.substring(0, 200)
         }
 
-        fun message(message: String) = Builder(message, category)
+        fun message(message: String) = Builder(message, categoryId)
         fun shortMessage() = message(SHORT_MESSAGE)
         fun mediumMessage() = message(MEDIUM_MESSAGE)
         fun longMessage() = message(LONG_MESSAGE)
-        fun category(category: String) = Builder(message, category)
-        fun build() = MockNote(message = message, category = category)
+        fun categoryId(categoryId: String?) = Builder(message, categoryId)
+        fun build() = MockNote(message = message, categoryId = categoryId)
     }
 }
