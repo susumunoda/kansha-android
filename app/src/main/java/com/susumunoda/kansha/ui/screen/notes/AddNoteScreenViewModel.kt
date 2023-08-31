@@ -7,7 +7,7 @@ import com.susumunoda.kansha.auth.AuthController
 import com.susumunoda.kansha.data.category.Category
 import com.susumunoda.kansha.data.category.CategoryRepository
 import com.susumunoda.kansha.data.note.NoteRepository
-import com.susumunoda.kansha.ui.screen.Validator
+import com.susumunoda.kansha.ui.validation.StringValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,7 +64,7 @@ class AddNoteScreenViewModel @Inject constructor(
         }
     }
 
-    fun validateNote(validator: Validator) {
+    fun validateNote(validator: StringValidator) {
         _uiState.update { it.copy(validationMessage = validator.validate(it.trimmedMessage)) }
     }
 

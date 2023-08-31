@@ -43,7 +43,7 @@ import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
-import com.susumunoda.kansha.ui.screen.Validator
+import com.susumunoda.kansha.ui.validation.StringValidator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -287,22 +287,21 @@ private fun SubmissionInProgressButton(colors: ButtonColors, modifier: Modifier 
     }
 }
 
-private class DisplayNameValidator(private val context: Context) : Validator() {
+private class DisplayNameValidator(context: Context) :
+    StringValidator(context.getString(R.string.display_name_validation)) {
     override fun isValid(value: String) = value.isNotEmpty()
-    override fun validationMessage() = context.getString(R.string.display_name_validation)
 }
 
-private class EmailValidator(private val context: Context) : Validator() {
+private class EmailValidator(context: Context) :
+    StringValidator(context.getString(R.string.email_format_validation)) {
     override fun isValid(value: String) = Patterns.EMAIL_ADDRESS.matcher(value).matches()
-    override fun validationMessage() = context.getString(R.string.email_format_validation)
 }
 
-private class PasswordValidator(private val context: Context) : Validator() {
+private class PasswordValidator(context: Context) :
+    StringValidator(context.getString(R.string.password_length_validation, MIN_LENGTH)) {
     companion object {
         const val MIN_LENGTH = 6
     }
 
     override fun isValid(value: String) = value.length >= MIN_LENGTH
-    override fun validationMessage() =
-        context.getString(R.string.password_length_validation, MIN_LENGTH)
 }

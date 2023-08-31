@@ -38,7 +38,7 @@ import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.category.Category
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
-import com.susumunoda.kansha.ui.screen.Validator
+import com.susumunoda.kansha.ui.validation.StringValidator
 import kotlinx.coroutines.launch
 
 @Composable
@@ -194,14 +194,13 @@ private fun ErrorSection(errorMessage: String?, modifier: Modifier = Modifier) {
     }
 }
 
-private class NoteLengthValidator(private val context: Context) : Validator() {
+private class NoteLengthValidator(context: Context) :
+    StringValidator(context.getString(R.string.add_note_length_validation, MAX_LENGTH)) {
     companion object {
         private const val MAX_LENGTH = 250
     }
 
     override fun isValid(value: String) = value.length <= MAX_LENGTH
-    override fun validationMessage() =
-        context.getString(R.string.add_note_length_validation, MAX_LENGTH)
 }
 
 //@Preview
