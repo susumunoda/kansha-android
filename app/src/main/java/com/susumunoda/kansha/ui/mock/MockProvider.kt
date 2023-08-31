@@ -52,4 +52,17 @@ internal class MockProvider {
             errorOnAddNote = noteRepositoryErrorOnAddNote,
             errorOnNotesFlow = noteRepositoryErrorOnNotesFlow
         )
+
+    // MockCategoryRepository
+    var categoryRepositoryDatabase: MutableMap<String, MutableList<MockCategory>> = mutableMapOf()
+    var categoryRepositoryMockLatency: Boolean = false
+    var categoryRepositoryMockLatencyMillis: Long = 1000
+    var categoryRepositoryErrorOnCategoriesFlow: Boolean = false
+    val categoryRepository
+        get() = MockCategoryRepository(
+            database = categoryRepositoryDatabase,
+            mockLatency = categoryRepositoryMockLatency,
+            mockLatencyMillis = categoryRepositoryMockLatencyMillis,
+            errorOnCategoriesFlow = categoryRepositoryErrorOnCategoriesFlow
+        )
 }

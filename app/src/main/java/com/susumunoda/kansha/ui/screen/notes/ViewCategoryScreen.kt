@@ -21,6 +21,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
+import com.susumunoda.kansha.ui.mock.MockCategory
 import com.susumunoda.kansha.ui.mock.MockNote
 import com.susumunoda.kansha.ui.mock.MockProvider
 
@@ -32,6 +33,10 @@ fun ViewCategoryScreen(
     categoryName: String,
     viewModel: ViewCategoryScreenViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.fetchCategory(categoryId)
+    }
+
     LaunchedEffect(Unit) {
         viewModel.fetchNotes(categoryId)
     }
@@ -54,6 +59,9 @@ fun ViewCategoryScreen(
         }
     ) {
         LazyColumn {
+            item {
+                Text(uiState.category.photoUrl ?: "")
+            }
             items(uiState.notes) { note ->
                 ListItem(
                     headlineContent = {
@@ -81,9 +89,16 @@ fun ViewCategoryScreenPreview() {
             MockNote.Builder().longMessage().categoryId(categoryId).build(),
             MockNote.Builder().longMessage().categoryId("other_category_3").build()
         )
+        categoryRepositoryDatabase[sessionUserId] = mutableListOf(
+            MockCategory(id = categoryId, name = categoryName)
+        )
     }
     val viewModel =
-        ViewCategoryScreenViewModel(mockProvider.authController, mockProvider.noteRepository)
+        ViewCategoryScreenViewModel(
+            authController = mockProvider.authController,
+            noteRepository = mockProvider.noteRepository,
+            categoryRepository = mockProvider.categoryRepository
+        )
     ViewCategoryScreen(
         navController = navController,
         categoryId = categoryId,

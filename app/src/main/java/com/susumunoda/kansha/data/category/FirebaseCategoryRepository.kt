@@ -10,8 +10,10 @@ import javax.inject.Inject
 class FirebaseCategoryRepository @Inject constructor() : CategoryRepository {
     private val db = Firebase.firestore
 
+    override fun newInstance() = FirebaseCategory()
+
     override fun categoriesFlow(userId: String) =
-        db.collection("categories/$userId/all")
+        db.collection(collectionPath(userId))
             .orderBy("order")
             .snapshots()
             .map { snapshot ->
@@ -22,4 +24,6 @@ class FirebaseCategoryRepository @Inject constructor() : CategoryRepository {
                     }
                 }
             }
+
+    private fun collectionPath(userId: String) = "categories/$userId/all"
 }

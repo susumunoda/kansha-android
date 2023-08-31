@@ -26,10 +26,12 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
             ViewCategoriesScreen(navController)
         }
 
-        composableWithoutTransitions("${NotesScreen.VIEW_CATEGORY.name}/{categoryId}/{categoryName}") {
+        val categoryIdKey = "categoryId"
+        val categoryNameKey = "categoryName"
+        composableWithoutTransitions("${NotesScreen.VIEW_CATEGORY.name}/{$categoryIdKey}/{$categoryNameKey}") {
             val arguments = it.arguments!!
-            val categoryId = arguments.getString("categoryId")!!
-            val categoryName = arguments.getString("categoryName")!!
+            val categoryId = arguments.getString(categoryIdKey)!!
+            val categoryName = arguments.getString(categoryNameKey)!!
             ViewCategoryScreen(
                 navController = navController,
                 categoryId = categoryId,
