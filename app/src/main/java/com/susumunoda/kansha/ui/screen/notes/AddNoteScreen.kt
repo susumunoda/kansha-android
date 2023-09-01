@@ -37,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.data.category.Category
+import com.susumunoda.kansha.ui.component.ProgressIndicator
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.validation.StringValidator
 import kotlinx.coroutines.launch
@@ -66,7 +67,7 @@ fun AddNoteScreen(
     ) {
         Column {
             ProgressIndicator(
-                requestInFlight = uiState.requestInFlight,
+                showIndicator = uiState.requestInFlight,
                 modifier = Modifier.fillMaxWidth()
             )
             MessageSection(
@@ -121,16 +122,6 @@ private fun TopBar(
             }
         }
     )
-}
-
-@Composable
-private fun ProgressIndicator(requestInFlight: Boolean, modifier: Modifier = Modifier) {
-    val height = dimensionResource(R.dimen.linear_progress_indicator_height)
-    if (requestInFlight) {
-        LinearProgressIndicator(modifier.height(height))
-    } else {
-        Spacer(modifier.height(height))
-    }
 }
 
 @Composable
