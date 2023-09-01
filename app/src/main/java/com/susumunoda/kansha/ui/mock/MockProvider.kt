@@ -58,11 +58,13 @@ internal class MockProvider {
     var categoryRepositoryMockLatency: Boolean = false
     var categoryRepositoryMockLatencyMillis: Long = 1000
     var categoryRepositoryErrorOnCategoriesFlow: Boolean = false
+    var categoryRepositoryErrorOnAddCategory: Boolean = false
     val categoryRepository
         get() = MockCategoryRepository(
             database = categoryRepositoryDatabase,
             mockLatency = categoryRepositoryMockLatency,
             mockLatencyMillis = categoryRepositoryMockLatencyMillis,
-            errorOnCategoriesFlow = categoryRepositoryErrorOnCategoriesFlow
+            errorOnCategoriesFlow = categoryRepositoryErrorOnCategoriesFlow,
+            errorOnAddCategory = categoryRepositoryErrorOnAddCategory
         )
 }
