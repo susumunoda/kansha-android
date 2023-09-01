@@ -1,4 +1,4 @@
-package com.susumunoda.kansha.data.category
+package com.susumunoda.kansha.repository.category
 
 interface Category {
     val id: String

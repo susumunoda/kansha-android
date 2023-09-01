@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.data.category.Category
-import com.susumunoda.kansha.data.category.CategoryRepository
-import com.susumunoda.kansha.data.note.NoteRepository
+import com.susumunoda.kansha.repository.category.Category
+import com.susumunoda.kansha.repository.category.CategoryRepository
+import com.susumunoda.kansha.repository.note.NoteRepository
 import com.susumunoda.kansha.ui.validation.StringValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -2,8 +2,8 @@ package com.susumunoda.kansha.ui.screen.notes
 
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.data.category.CategoryRepository
-import com.susumunoda.kansha.data.note.NoteRepository
+import com.susumunoda.kansha.repository.category.CategoryRepository
+import com.susumunoda.kansha.repository.note.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

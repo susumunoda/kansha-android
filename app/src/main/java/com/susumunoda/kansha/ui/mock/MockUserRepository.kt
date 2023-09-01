@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.user.User
-import com.susumunoda.kansha.data.user.UserRepository
+import com.susumunoda.kansha.repository.user.User
+import com.susumunoda.kansha.repository.user.UserRepository
 import kotlinx.coroutines.delay
 
 

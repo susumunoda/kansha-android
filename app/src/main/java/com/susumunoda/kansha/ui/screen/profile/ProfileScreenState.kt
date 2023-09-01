@@ -1,6 +1,6 @@
 package com.susumunoda.kansha.ui.screen.profile
 
-import com.susumunoda.kansha.data.user.User
+import com.susumunoda.kansha.repository.user.User
 
 data class ProfileScreenState(
     val user: User? = null,

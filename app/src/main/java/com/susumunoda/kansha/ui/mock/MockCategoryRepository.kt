@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.category.Category
-import com.susumunoda.kansha.data.category.CategoryRepository
+import com.susumunoda.kansha.repository.category.Category
+import com.susumunoda.kansha.repository.category.CategoryRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 

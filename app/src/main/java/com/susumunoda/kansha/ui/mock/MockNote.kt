@@ -1,6 +1,6 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.note.Note
+import com.susumunoda.kansha.repository.note.Note
 import java.util.Calendar
 import java.util.Date
 

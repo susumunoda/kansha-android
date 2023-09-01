@@ -1,4 +1,4 @@
-package com.susumunoda.kansha.data.note
+package com.susumunoda.kansha.repository.note
 
 import kotlinx.coroutines.flow.Flow
 

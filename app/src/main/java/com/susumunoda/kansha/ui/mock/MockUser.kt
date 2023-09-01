@@ -1,6 +1,6 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.user.User
+import com.susumunoda.kansha.repository.user.User
 import java.util.Calendar
 import java.util.Date
 

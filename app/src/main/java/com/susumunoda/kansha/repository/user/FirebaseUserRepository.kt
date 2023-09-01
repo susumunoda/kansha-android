@@ -1,4 +1,4 @@
-package com.susumunoda.kansha.data.user
+package com.susumunoda.kansha.repository.user
 
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject

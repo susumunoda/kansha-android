@@ -35,7 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.data.category.Category
+import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.NotesScreen
 import com.susumunoda.kansha.ui.navigation.categoryDestination

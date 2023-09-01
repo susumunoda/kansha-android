@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.note.Note
-import com.susumunoda.kansha.data.note.NoteRepository
+import com.susumunoda.kansha.repository.note.Note
+import com.susumunoda.kansha.repository.note.NoteRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

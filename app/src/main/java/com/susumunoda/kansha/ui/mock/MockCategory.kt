@@ -1,6 +1,6 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.data.category.Category
+import com.susumunoda.kansha.repository.category.Category
 
 data class MockCategory(
     override var id: String = "",
