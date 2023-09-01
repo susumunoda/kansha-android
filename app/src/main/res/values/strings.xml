@@ -70,4 +70,13 @@
     <!-- Profile screen -->
     <string name="profile_title">Your profile</string>
     <string name="profile_fetch_error">Failed to load user data: %1$s</string>
+    <!-- Add/edit category screen -->
+    <string name="new_category_title">New category</string>
+    <string name="category_name">Name</string>
+    <string name="category_name_validation">Another category with this name already exists</string>
+    <string name="category_photo_url">Photo URL (optional)</string>
+    <string name="category_photo_url_validation">Invalid URL format</string>
+    <string name="category_preview">Preview</string>
+    <string name="category_preview_description">New category image preview</string>
+    <string name="create_category_description">Create category</string>
 </resources>
