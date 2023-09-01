@@ -49,8 +49,6 @@ fun ViewCategoriesScreen(
     navController: NavHostController,
     viewModel: ViewCategoriesScreenViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-
     ScaffoldWithStatusBarInsets(
         topBar = {
             CenterAlignedTopAppBar(
@@ -74,7 +72,12 @@ fun ViewCategoriesScreen(
             )
         }
     ) {
-        CategoriesGrid(navController, uiState.categories)
+        // This is the top-level entry point for viewing categories. All subsequent reads from the
+        // categories repo will not need to observe the state for changes in this way; they can
+        // simply read the latest value from it. Here, however, we must observe the state until the
+        // repo's StateFlow has been updated with the fetched categories.
+        val categories by viewModel.categoriesStateFlow.collectAsState()
+        CategoriesGrid(navController, categories)
     }
 }
 

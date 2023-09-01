@@ -54,17 +54,15 @@ internal class MockProvider {
         )
 
     // MockCategoryRepository
-    var categoryRepositoryDatabase: MutableMap<String, MutableList<MockCategory>> = mutableMapOf()
+    var categoryRepositoryCategories: List<MockCategory> = emptyList()
     var categoryRepositoryMockLatency: Boolean = false
     var categoryRepositoryMockLatencyMillis: Long = 1000
-    var categoryRepositoryErrorOnCategoriesFlow: Boolean = false
     var categoryRepositoryErrorOnAddCategory: Boolean = false
     val categoryRepository
         get() = MockCategoryRepository(
-            database = categoryRepositoryDatabase,
+            categories = categoryRepositoryCategories,
             mockLatency = categoryRepositoryMockLatency,
             mockLatencyMillis = categoryRepositoryMockLatencyMillis,
-            errorOnCategoriesFlow = categoryRepositoryErrorOnCategoriesFlow,
             errorOnAddCategory = categoryRepositoryErrorOnAddCategory
         )
 }

@@ -1,38 +1,47 @@
 package com.susumunoda.kansha.repository.category
 
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.snapshots
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.flow.map
+import com.susumunoda.kansha.auth.AuthController
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class FirebaseCategoryRepository @Inject constructor() : CategoryRepository {
+class FirebaseCategoryRepository @Inject constructor(
+    authController: AuthController
+) : CategoryRepository {
     private val db = Firebase.firestore
+    private val _categoriesStateFlow = MutableStateFlow<List<FirebaseCategory>>(emptyList())
+    override val categoriesStateFlow = _categoriesStateFlow.asStateFlow()
 
-    override fun newInstance() = FirebaseCategory()
+    init {
+        // Assume that the user is already logged by the time this instance is initialized
+        db.collection(collectionPath(authController.sessionFlow.value.user.id))
+            .orderBy("order")
+            .addSnapshotListener { snapshot, exception ->
+                if (exception == null) {
+                    _categoriesStateFlow.update {
+                        snapshot!!.documents.mapNotNull {
+                            it.toObject<FirebaseCategory>()?.apply {
+                                // ID is not a persisted field, so add it here dynamically
+                                id = it.id
+                            }
+                        }
+                    }
+                }
+            }
+    }
 
     override fun newInstance(name: String, photoUrl: String, order: Int) = FirebaseCategory(
         name = name,
         photoUrl = photoUrl,
         order = order
     )
-
-    override fun categoriesFlow(userId: String) =
-        db.collection(collectionPath(userId))
-            .orderBy("order")
-            .snapshots()
-            .map { snapshot ->
-                snapshot.documents.mapNotNull {
-                    it.toObject<FirebaseCategory>()?.apply {
-                        // ID is not a persisted field, so add it here dynamically
-                        id = it.id
-                    }
-                }
-            }
 
     override suspend fun addCategory(userId: String, category: Category) =
         suspendCoroutine { cont ->

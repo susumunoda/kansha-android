@@ -3,38 +3,24 @@ package com.susumunoda.kansha.ui.mock
 import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 internal class MockCategoryRepository(
-    private val database: MutableMap<String, MutableList<MockCategory>> = mutableMapOf(),
+    categories: List<MockCategory> = emptyList(),
     private val mockLatency: Boolean = false,
     private val mockLatencyMillis: Long = 1000,
-    private val errorOnCategoriesFlow: Boolean = false,
     private val errorOnAddCategory: Boolean = false
 ) : CategoryRepository {
-    override fun newInstance() = MockCategory()
+    private val _categoriesStateFlow = MutableStateFlow(categories)
+    override val categoriesStateFlow = _categoriesStateFlow.asStateFlow()
 
     override fun newInstance(name: String, photoUrl: String, order: Int) = MockCategory(
         name = name,
         photoUrl = photoUrl,
         order = order
     )
-
-    override fun categoriesFlow(userId: String) = flow {
-        if (mockLatency) {
-            delay(mockLatencyMillis)
-        }
-
-        if (errorOnCategoriesFlow) {
-            throw IllegalArgumentException("Could not get categories for user $userId")
-        }
-
-        if (database[userId] == null) {
-            database[userId] = mutableListOf()
-        }
-
-        emit(database[userId]!!)
-    }
 
     override suspend fun addCategory(userId: String, category: Category) {
         if (mockLatency) {
@@ -45,10 +31,8 @@ internal class MockCategoryRepository(
             throw IllegalArgumentException("Could not add category $category for user $userId")
         }
 
-        if (database[userId] == null) {
-            database[userId] = mutableListOf()
+        _categoriesStateFlow.update {
+            listOf(*_categoriesStateFlow.value.toTypedArray(), category as MockCategory)
         }
-
-        database[userId]!!.add(category as MockCategory)
     }
 }

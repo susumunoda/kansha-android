@@ -1,10 +1,9 @@
 package com.susumunoda.kansha.repository.category
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface CategoryRepository {
-    fun newInstance(): Category
     fun newInstance(name: String, photoUrl: String, order: Int): Category
-    fun categoriesFlow(userId: String): Flow<List<Category>>
+    val categoriesStateFlow: StateFlow<List<Category>>
     suspend fun addCategory(userId: String, category: Category)
 }

@@ -2,6 +2,7 @@ package com.susumunoda.kansha.ui.screen.notes
 
 import androidx.lifecycle.ViewModel
 import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.note.NoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,21 +20,26 @@ class ViewCategoryScreenViewModel @Inject constructor(
     private val categoryRepository: CategoryRepository
 ) : ViewModel() {
     private val _uiState =
-        MutableStateFlow(ViewCategoryScreenState(categoryRepository.newInstance()))
+        MutableStateFlow(ViewCategoryScreenState())
     val uiState = _uiState.asStateFlow()
 
-    suspend fun fetchCategory(categoryId: String) {
+    private lateinit var _category: Category
+
+    fun getCategory(categoryId: String): Category? {
+        if (this::_category.isInitialized) {
+            return _category
+        }
+
         if (categoryId != CATEGORY_ALL && categoryId != CATEGORY_NONE) {
-            val currentUserId = authController.sessionFlow.value.user.id
-            withContext(Dispatchers.IO) {
-                categoryRepository.categoriesFlow(currentUserId)
-            }.collect { categories ->
-                val category = categories.find { category -> category.id == categoryId }
-                if (category != null) {
-                    _uiState.update { it.copy(category = category) }
-                }
+            val categories = categoryRepository.categoriesStateFlow.value
+            val category = categories.find { it.id == categoryId }
+            if (category != null) {
+                _category = category
+                return _category
             }
         }
+
+        return null
     }
 
     suspend fun fetchNotes(categoryId: String) {

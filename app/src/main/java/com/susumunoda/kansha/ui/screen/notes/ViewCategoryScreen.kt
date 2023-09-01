@@ -54,23 +54,23 @@ fun ViewCategoryScreen(
     viewModel: ViewCategoryScreenViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.fetchCategory(categoryId)
-    }
-    LaunchedEffect(Unit) {
         viewModel.fetchNotes(categoryId)
     }
 
     Box(Modifier.fillMaxSize()) {
         val uiState by viewModel.uiState.collectAsState()
+        val category = viewModel.getCategory(categoryId)
 
-        AsyncImage(
-            model = uiState.category.photoUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .blur(BACKGROUND_BLUR_RADIUS)
-                .fillMaxSize()
-        )
+        if (category != null) {
+            AsyncImage(
+                model = category.photoUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .blur(BACKGROUND_BLUR_RADIUS)
+                    .fillMaxSize()
+            )
+        }
 
         val transparentBackgroundColor =
             MaterialTheme.colorScheme.surface.copy(alpha = TRANSPARENT_BACKGROUND_ALPHA)
@@ -132,7 +132,7 @@ fun ViewCategoryScreenPreview() {
             MockNote.Builder().longMessage().categoryId(categoryId).build(),
             MockNote.Builder().longMessage().categoryId("other_category_3").build()
         )
-        categoryRepositoryDatabase[sessionUserId] = mutableListOf(
+        categoryRepositoryCategories = mutableListOf(
             MockCategory(id = categoryId, name = categoryName)
         )
     }

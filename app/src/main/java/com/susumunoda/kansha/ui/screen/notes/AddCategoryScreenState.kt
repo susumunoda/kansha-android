@@ -1,9 +1,6 @@
 package com.susumunoda.kansha.ui.screen.notes
 
-import com.susumunoda.kansha.repository.category.Category
-
 data class AddCategoryScreenState(
-    val categories: List<Category> = emptyList(),
     val name: String = "",
     val nameValidation: String? = null,
     val photoUrl: String = "",

@@ -58,7 +58,7 @@ fun AddCategoryScreen(
             TopBar(
                 saveEnabled = uiState.name.isNotBlank(),
                 onSave = {
-                    viewModel.validateName(NameValidator(uiState.categories, context))
+                    viewModel.validateName(NameValidator(viewModel.categories, context))
                     viewModel.validatePhotoUrl(PhotoUrlValidator(context))
                     scope.launch {
                         viewModel.submit {
@@ -207,7 +207,7 @@ private class PhotoUrlValidator(context: Context) :
 fun AddCategoryScreenPreview() {
     val navController = rememberNavController()
     val mockProvider = MockProvider().apply {
-        categoryRepositoryDatabase[sessionUserId] = mutableListOf(
+        categoryRepositoryCategories = mutableListOf(
             MockCategory(name = "cat_1"),
             MockCategory(name = "cat_2"),
             MockCategory(name = "cat_3")

@@ -74,7 +74,7 @@ fun AddNoteScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             CategorySection(
-                allCategories = uiState.allCategories,
+                allCategories = viewModel.categories,
                 selectedCategory = uiState.selectedCategory,
                 onSelectCategory = viewModel::selectCategory,
                 onDeselectCategory = viewModel::deselectCategory,
