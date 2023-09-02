@@ -43,6 +43,8 @@ class ViewCategoryScreenViewModel @Inject constructor(
     }
 
     suspend fun fetchNotes(categoryId: String) {
+        _uiState.update { it.copy(notesFetchInProgress = true) }
+
         val currentUserId = authController.sessionFlow.value.user.id
         withContext(Dispatchers.IO) {
             when (categoryId) {
@@ -59,7 +61,12 @@ class ViewCategoryScreenViewModel @Inject constructor(
                 }
             }
         }.collect { notes ->
-            _uiState.update { it.copy(notes = notes) }
+            _uiState.update {
+                it.copy(
+                    notes = notes,
+                    notesFetchInProgress = false
+                )
+            }
         }
     }
 }

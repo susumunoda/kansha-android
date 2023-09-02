@@ -1,5 +1,7 @@
 package com.susumunoda.kansha.ui.screen.notes
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -57,10 +59,6 @@ fun ViewCategoryScreen(
     categoryName: String,
     viewModel: ViewCategoryScreenViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.fetchNotes(categoryId)
-    }
-
     val uiState by viewModel.uiState.collectAsState()
     val category = viewModel.getCategory(categoryId)
     val hasBackgroundPhoto = category?.photoUrl?.isNotBlank() == true
@@ -107,7 +105,18 @@ fun ViewCategoryScreen(
                 val imageLoadingSucceeded = painter?.state is AsyncImagePainter.State.Success
                 val imageLoadingFailed = painter?.state is AsyncImagePainter.State.Error
                 if (!hasBackgroundPhoto || imageLoadingSucceeded || imageLoadingFailed) {
-                    NotesList(uiState.notes)
+                    LaunchedEffect(Unit) {
+                        viewModel.fetchNotes(categoryId)
+                    }
+                    AnimatedVisibility(
+                        visible = !uiState.notesFetchInProgress,
+                        enter = slideInVertically(
+                            initialOffsetY = { it / 8 }
+                        ),
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        NotesList(uiState.notes)
+                    }
                 } else {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
