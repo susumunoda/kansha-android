@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">Kansha</string>
     <!-- ally: icon buttons -->
-    <string name="back_button_description">Go back</string>
-    <string name="filter_button_description">Show/hide filter</string>
-    <string name="logout_button_description">Log out</string>
-    <string name="send_button_description">Send</string>
-    <string name="submit_button_description">Submit</string>
-    <string name="remove_button_description">Remove</string>
-    <string name="expand_menu_description">Expand menu</string>
+    <string name="back_button">Back</string>
+    <string name="done_button">Done</string>
     <!-- Auth: login -->
     <string name="login_top_bar_text">Sign In</string>
     <string name="login_button_text">Sign in</string>

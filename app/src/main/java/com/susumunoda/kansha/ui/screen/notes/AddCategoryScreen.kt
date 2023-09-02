@@ -10,13 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -37,6 +33,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.category.Category
+import com.susumunoda.kansha.ui.component.BackButton
+import com.susumunoda.kansha.ui.component.DoneButton
 import com.susumunoda.kansha.ui.component.ProgressIndicator
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.mock.MockCategory
@@ -44,6 +42,7 @@ import com.susumunoda.kansha.ui.mock.MockProvider
 import com.susumunoda.kansha.ui.validation.StringValidator
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddCategoryScreen(
     navController: NavHostController,
@@ -55,16 +54,22 @@ fun AddCategoryScreen(
 
     ScaffoldWithStatusBarInsets(
         topBar = {
-            TopBar(
-                saveEnabled = uiState.name.isNotBlank(),
-                onSave = {
-                    viewModel.validateName(NameValidator(viewModel.categories, context))
-                    viewModel.validatePhotoUrl(PhotoUrlValidator(context))
-                    scope.launch {
-                        viewModel.submit {
-                            navController.popBackStack()
+            CenterAlignedTopAppBar(
+                title = { Text(stringResource(R.string.new_category_title)) },
+                navigationIcon = { BackButton(onClick = { navController.popBackStack() }) },
+                actions = {
+                    DoneButton(
+                        enabled = uiState.name.isNotBlank(),
+                        onClick = {
+                            viewModel.validateName(NameValidator(viewModel.categories, context))
+                            viewModel.validatePhotoUrl(PhotoUrlValidator(context))
+                            scope.launch {
+                                viewModel.submit {
+                                    navController.popBackStack()
+                                }
+                            }
                         }
-                    }
+                    )
                 }
             )
         }
@@ -93,26 +98,6 @@ fun AddCategoryScreen(
             )
         }
     }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun TopBar(saveEnabled: Boolean, onSave: () -> Unit, modifier: Modifier = Modifier) {
-    CenterAlignedTopAppBar(
-        title = { Text(stringResource(R.string.new_category_title)) },
-        actions = {
-            IconButton(
-                enabled = saveEnabled,
-                onClick = onSave
-            ) {
-                Icon(
-                    Icons.Filled.Done,
-                    stringResource(R.string.create_category_description)
-                )
-            }
-        },
-        modifier = modifier
-    )
 }
 
 @Composable

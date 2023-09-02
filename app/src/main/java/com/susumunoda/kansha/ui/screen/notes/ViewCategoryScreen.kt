@@ -11,14 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,6 +40,7 @@ import coil.request.ImageRequest
 import coil.size.Size
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.note.Note
+import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.mock.MockCategory
 import com.susumunoda.kansha.ui.mock.MockNote
@@ -53,6 +49,7 @@ import com.susumunoda.kansha.ui.mock.MockProvider
 private const val TRANSPARENT_BACKGROUND_ALPHA = 0.75f
 private val BACKGROUND_BLUR_RADIUS = 16.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ViewCategoryScreen(
     navController: NavHostController,
@@ -93,10 +90,12 @@ fun ViewCategoryScreen(
         ScaffoldWithStatusBarInsets(
             containerColor = Color.Transparent,
             topBar = {
-                TopBar(
-                    title = categoryName,
-                    backgroundColor = transparentBackgroundColor,
-                    onBackPressed = { navController.popBackStack() }
+                CenterAlignedTopAppBar(
+                    title = { Text(categoryName) },
+                    navigationIcon = { BackButton(onClick = { navController.popBackStack() }) },
+                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                        containerColor = transparentBackgroundColor
+                    )
                 )
             }
         ) {
@@ -115,29 +114,6 @@ fun ViewCategoryScreen(
             }
         }
     }
-}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun TopBar(
-    title: String,
-    backgroundColor: Color,
-    onBackPressed: () -> Unit
-) {
-    CenterAlignedTopAppBar(
-        title = { Text(title) },
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(
-                    Icons.Rounded.ArrowBack,
-                    contentDescription = stringResource(R.string.back_button_description)
-                )
-            }
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = backgroundColor
-        )
-    )
 }
 
 @Composable
