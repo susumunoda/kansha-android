@@ -28,3 +28,8 @@ class SessionAwareRepositoryHandler @Inject constructor(
         }
     }
 }
+
+interface SessionAwareRepository {
+    fun onLogin(userId: String)
+    fun onLogout()
+}
