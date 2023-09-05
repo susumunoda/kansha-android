@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.kansha.repository.SessionAwareRepositoryHandler
 import com.susumunoda.kansha.ui.theme.KanshaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,6 +18,10 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var authController: AuthController
+
+    // Top-level injection is necessary as this handler is not a direct dependency of any other type
+    @Inject
+    lateinit var sessionAwareRepositoryHandler: SessionAwareRepositoryHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

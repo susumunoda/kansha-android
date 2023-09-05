@@ -8,6 +8,7 @@ import com.susumunoda.kansha.repository.user.FirebaseUserRepository
 import com.susumunoda.kansha.repository.user.UserRepository
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -15,6 +16,15 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
+    companion object {
+        @Provides
+        fun provideSessionAwareRepositories(
+            categoryRepository: FirebaseCategoryRepository
+        ): List<SessionAwareRepository> {
+            return listOf(categoryRepository)
+        }
+    }
+
     @Binds
     abstract fun bindUserRepository(userRepository: FirebaseUserRepository): UserRepository
 
