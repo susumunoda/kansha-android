@@ -2,7 +2,6 @@ package com.susumunoda.kansha.ui.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.susumunoda.kansha.ui.animation.enterSlidingUp
 import com.susumunoda.kansha.ui.animation.exitSlidingDown
@@ -40,18 +39,22 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
             )
         }
 
-        composable(
+        composableWithConditionalTransitions(
             route = NotesScreen.ADD_CATEGORY.name,
             enterTransition = { enterSlidingUp() },
-            exitTransition = { exitSlidingDown() }
+            enterTransitionFrom = NotesScreen.VIEW_CATEGORIES.name,
+            exitTransition = { exitSlidingDown() },
+            exitTransitionTo = NotesScreen.VIEW_CATEGORIES.name
         ) {
             AddCategoryScreen(navController)
         }
 
-        composable(
+        composableWithConditionalTransitions(
             route = NotesScreen.ADD_NOTE.name,
             enterTransition = { enterSlidingUp() },
-            exitTransition = { exitSlidingDown() }
+            enterTransitionFrom = NotesScreen.VIEW_CATEGORIES.name,
+            exitTransition = { exitSlidingDown() },
+            exitTransitionTo = NotesScreen.VIEW_CATEGORIES.name
         ) {
             AddNoteScreen(navController = navController)
         }

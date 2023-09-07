@@ -3,11 +3,10 @@ package com.susumunoda.kansha.ui.animation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.navigation.NavBackStackEntry
 
 private const val SLIDE_DURATION_MILLIS = 350
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.enterSlidingUp(
+fun AnimatedContentTransitionScope<*>.enterSlidingUp(
     durationMillis: Int = SLIDE_DURATION_MILLIS,
     targetOffset: (Int) -> Int = { it }
 ) =
@@ -20,7 +19,7 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.enterSlidingUp(
         targetOffset
     )
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.exitSlidingDown(
+fun AnimatedContentTransitionScope<*>.exitSlidingDown(
     durationMillis: Int = SLIDE_DURATION_MILLIS,
     targetOffset: (Int) -> Int = { it }
 ) =
@@ -33,7 +32,7 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.exitSlidingDown(
         targetOffset
     )
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.enterSlidingLeft(
+fun AnimatedContentTransitionScope<*>.enterSlidingLeft(
     durationMillis: Int = SLIDE_DURATION_MILLIS,
     targetOffset: (Int) -> Int = { it }
 ) =
@@ -46,7 +45,7 @@ fun AnimatedContentTransitionScope<NavBackStackEntry>.enterSlidingLeft(
         targetOffset
     )
 
-fun AnimatedContentTransitionScope<NavBackStackEntry>.exitSlidingRight(
+fun AnimatedContentTransitionScope<*>.exitSlidingRight(
     durationMillis: Int = SLIDE_DURATION_MILLIS,
     targetOffset: (Int) -> Int = { it }
 ) =
