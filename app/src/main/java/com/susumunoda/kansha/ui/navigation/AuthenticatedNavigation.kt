@@ -19,8 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -70,6 +72,8 @@ fun AuthenticatedNavigation() {
 @Composable
 fun BottomNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val backStackHierarchy = currentBackStackEntry?.destination?.hierarchy
+    val globalStartDestinationId = navController.graph.findStartDestination().id
 
     NavigationBar(
         modifier = modifier,
@@ -81,8 +85,7 @@ fun BottomNavigation(navController: NavHostController, modifier: Modifier = Modi
         ),
     ) {
         Destination.values().forEach() { destination ->
-            val selected =
-                currentBackStackEntry?.destination?.hierarchy?.any { it.route == destination.name } == true
+            val selected = backStackHierarchy?.any { it.route == destination.name } == true
 
             NavigationBarItem(
                 label = { Text(stringResource(destination.titleId)) },
@@ -95,22 +98,36 @@ fun BottomNavigation(navController: NavHostController, modifier: Modifier = Modi
                 },
                 selected = selected,
                 onClick = {
-                    navController.navigate(destination.name) {
-                        // Pop up to the main navigation root to avoid creating a large backstack
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            // If navigating to a different top-level destination, save the state
-                            // (including backstack) of the current destination and restore it for
-                            // the destination being navigated to.
-                            // Otherwise, navigate to the root of the selected destination.
-                            if (!selected) {
-                                saveState = true
+                    // Navigate to the root of the currently selected top-level destination
+                    if (selected) {
+                        val popToDestination = backStackHierarchy?.last { dest ->
+                            !(dest is NavGraph && dest.startDestinationId == globalStartDestinationId)
+                        }
+                        // If the root is simply a destination and not a nested NavGraph, just pop
+                        // to there; otherwise, pop to the start destination of the nested graph.
+                        when (popToDestination) {
+                            is ComposeNavigator.Destination -> {
+                                navController.popBackStack(popToDestination.route!!, false)
+                            }
+
+                            is NavGraph -> {
+                                navController.popBackStack(
+                                    popToDestination.startDestinationRoute!!,
+                                    false
+                                )
                             }
                         }
-                        if (!selected) {
+                    } else {
+                        // If navigating to a different top-level destination, save the state
+                        // (including backstack) of the current destination and restore it for the
+                        // destination being navigated to.
+                        navController.navigate(destination.name) {
+                            // Pop up to the main navigation root to avoid creating a large backstack
+                            popUpTo(globalStartDestinationId) {
+                                saveState = true
+                            }
                             restoreState = true
                         }
-                        // Avoid multiple copies of the destination at the top of the backstack
-                        launchSingleTop = true
                     }
                 }
             )
