@@ -40,6 +40,8 @@ enum class Destination(
     SETTINGS(R.string.settings_destination, R.drawable.settings_icon);
 }
 
+private val START_DESTINATION = Destination.EXPLORE
+
 @Composable
 fun AuthenticatedNavigation() {
     val navController = rememberNavController()
@@ -50,7 +52,7 @@ fun AuthenticatedNavigation() {
                 .fillMaxSize()
                 .weight(1f)
         ) {
-            NavHost(navController = navController, startDestination = Destination.EXPLORE.name) {
+            NavHost(navController = navController, startDestination = START_DESTINATION.name) {
                 composableWithoutTransitions(Destination.EXPLORE.name) {
                     ExploreScreen()
                 }
@@ -73,7 +75,6 @@ fun AuthenticatedNavigation() {
 fun BottomNavigation(navController: NavHostController, modifier: Modifier = Modifier) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val backStackHierarchy = currentBackStackEntry?.destination?.hierarchy
-    val globalStartDestinationId = navController.graph.findStartDestination().id
 
     NavigationBar(
         modifier = modifier,
@@ -100,8 +101,9 @@ fun BottomNavigation(navController: NavHostController, modifier: Modifier = Modi
                 onClick = {
                     // Navigate to the root of the currently selected top-level destination
                     if (selected) {
+                        // Find the root destination or NavGraph
                         val popToDestination = backStackHierarchy?.last { dest ->
-                            !(dest is NavGraph && dest.startDestinationId == globalStartDestinationId)
+                            !(dest is NavGraph && dest.startDestinationRoute == START_DESTINATION.name)
                         }
                         // If the root is simply a destination and not a nested NavGraph, just pop
                         // to there; otherwise, pop to the start destination of the nested graph.
@@ -123,7 +125,7 @@ fun BottomNavigation(navController: NavHostController, modifier: Modifier = Modi
                         // destination being navigated to.
                         navController.navigate(destination.name) {
                             // Pop up to the main navigation root to avoid creating a large backstack
-                            popUpTo(globalStartDestinationId) {
+                            popUpTo(navController.graph.findStartDestination().id) {
                                 saveState = true
                             }
                             restoreState = true
