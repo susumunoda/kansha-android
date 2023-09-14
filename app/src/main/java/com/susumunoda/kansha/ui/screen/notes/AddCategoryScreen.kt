@@ -31,12 +31,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.susumunoda.compose.material3.BackButton
+import com.susumunoda.compose.material3.DoneButton
+import com.susumunoda.compose.material3.ProgressIndicator
+import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.category.Category
-import com.susumunoda.kansha.ui.component.BackButton
-import com.susumunoda.kansha.ui.component.DoneButton
-import com.susumunoda.kansha.ui.component.ProgressIndicator
-import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.mock.MockCategory
 import com.susumunoda.kansha.ui.mock.MockProvider
 import com.susumunoda.kansha.ui.validation.StringValidator

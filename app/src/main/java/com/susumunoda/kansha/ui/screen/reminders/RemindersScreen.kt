@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
+import com.susumunoda.compose.material3.TabOption
+import com.susumunoda.compose.material3.TabType
+import com.susumunoda.compose.material3.Tabs
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
-import com.susumunoda.kansha.ui.component.TabOption
-import com.susumunoda.kansha.ui.component.TabType
-import com.susumunoda.kansha.ui.component.Tabs
 
 private val upcomingTab = TabOption(R.string.reminders_tab_upcoming)
 private val recurringTab = TabOption(R.string.reminders_tab_recurring)

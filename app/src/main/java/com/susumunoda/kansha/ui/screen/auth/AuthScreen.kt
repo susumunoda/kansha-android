@@ -38,10 +38,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.susumunoda.compose.material3.BackButton
+import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.BuildConfig
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.component.BackButton
-import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedScreen
 import com.susumunoda.kansha.ui.validation.StringValidator
 import kotlinx.coroutines.launch

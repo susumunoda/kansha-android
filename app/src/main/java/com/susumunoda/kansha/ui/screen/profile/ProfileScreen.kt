@@ -28,10 +28,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.susumunoda.compose.material3.BackButton
+import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.component.BackButton
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
-import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.ui.component.UserPhoto
 import com.susumunoda.kansha.ui.mock.MockProvider
 
