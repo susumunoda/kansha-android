@@ -8,26 +8,21 @@ import com.susumunoda.kansha.ui.animation.exitSlidingRight
 import com.susumunoda.kansha.ui.screen.profile.ProfileScreen
 import com.susumunoda.kansha.ui.screen.settings.SettingsScreen
 
-enum class SettingsScreen {
-    SETTINGS_ROOT,
-    PROFILE
-}
-
 fun NavGraphBuilder.settingsNavigation(navController: NavHostController) {
     navigation(
         route = Destination.SETTINGS.route,
-        startDestination = SettingsScreen.SETTINGS_ROOT.name
+        startDestination = Destination.SETTINGS_ROOT.route
     ) {
-        composableWithoutTransitions(SettingsScreen.SETTINGS_ROOT.name) {
+        composableWithoutTransitions(Destination.SETTINGS_ROOT.route) {
             SettingsScreen(navController)
         }
 
         composableWithConditionalTransitions(
-            route = SettingsScreen.PROFILE.name,
+            route = Destination.PROFILE.route,
             enterTransition = { enterSlidingLeft() },
-            enterTransitionFrom = SettingsScreen.SETTINGS_ROOT.name,
+            enterTransitionFrom = Destination.SETTINGS_ROOT.route,
             exitTransition = { exitSlidingRight() },
-            exitTransitionTo = SettingsScreen.SETTINGS_ROOT.name
+            exitTransitionTo = Destination.SETTINGS_ROOT.route
         ) {
             ProfileScreen(navController)
         }

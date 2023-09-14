@@ -37,7 +37,7 @@ import coil.compose.AsyncImage
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
-import com.susumunoda.kansha.ui.navigation.NotesScreen
+import com.susumunoda.kansha.ui.navigation.Destination
 import com.susumunoda.kansha.ui.navigation.categoryDestination
 
 const val CATEGORY_ALL = "all"
@@ -58,7 +58,7 @@ fun ViewCategoriesScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            navController.navigate(NotesScreen.ADD_NOTE.name) {
+                            navController.navigate(Destination.ADD_NOTE.route) {
                                 restoreState = true
                             }
                         }
@@ -175,7 +175,7 @@ fun CategoriesGrid(
             }
         }
         item {
-            ElevatedCard(onClick = { navController.navigate(NotesScreen.ADD_CATEGORY.name) }) {
+            ElevatedCard(onClick = { navController.navigate(Destination.ADD_CATEGORY.route) }) {
                 Box(
                     modifier = Modifier
                         .height(dimensionResource(R.dimen.card_height))

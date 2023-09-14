@@ -18,9 +18,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.mock.MockAuthController
 import com.susumunoda.kansha.ui.component.ScaffoldWithStatusBarInsets
-import com.susumunoda.kansha.ui.navigation.SettingsScreen
+import com.susumunoda.kansha.ui.mock.MockAuthController
+import com.susumunoda.kansha.ui.navigation.Destination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,7 +39,7 @@ fun SettingsScreen(
                 ListItem(
                     leadingContent = { Icon(Icons.Rounded.Person, profileText) },
                     headlineContent = { Text(profileText) },
-                    modifier = Modifier.clickable { navController.navigate(SettingsScreen.PROFILE.name) }
+                    modifier = Modifier.clickable { navController.navigate(Destination.PROFILE.route) }
                 )
             }
             item {
