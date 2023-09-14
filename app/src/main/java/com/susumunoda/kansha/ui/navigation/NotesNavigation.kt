@@ -19,7 +19,7 @@ enum class NotesScreen {
 
 fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
     navigation(
-        route = Destination.NOTES.name,
+        route = Destination.NOTES.route,
         startDestination = NotesScreen.VIEW_CATEGORIES.name
     ) {
         composableWithoutTransitions(NotesScreen.VIEW_CATEGORIES.name) {

@@ -15,7 +15,7 @@ enum class SettingsScreen {
 
 fun NavGraphBuilder.settingsNavigation(navController: NavHostController) {
     navigation(
-        route = Destination.SETTINGS.name,
+        route = Destination.SETTINGS.route,
         startDestination = SettingsScreen.SETTINGS_ROOT.name
     ) {
         composableWithoutTransitions(SettingsScreen.SETTINGS_ROOT.name) {
