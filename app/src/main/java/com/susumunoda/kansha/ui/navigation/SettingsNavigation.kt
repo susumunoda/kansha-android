@@ -3,8 +3,8 @@ package com.susumunoda.kansha.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
-import com.susumunoda.kansha.ui.animation.enterSlidingLeft
-import com.susumunoda.kansha.ui.animation.exitSlidingRight
+import com.susumunoda.compose.animation.enterSlidingLeft
+import com.susumunoda.compose.animation.exitSlidingRight
 import com.susumunoda.kansha.ui.screen.profile.ProfileScreen
 import com.susumunoda.kansha.ui.screen.settings.SettingsScreen
 

@@ -83,6 +83,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.2.0-alpha05")
     implementation("androidx.navigation:navigation-compose:2.7.0")
     implementation("com.github.susumunoda:compose-navigation:a6f8b1aeca")
+    implementation("com.github.susumunoda:compose-animation:6f52281543")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

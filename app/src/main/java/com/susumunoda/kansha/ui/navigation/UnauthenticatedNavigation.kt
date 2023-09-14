@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.susumunoda.kansha.ui.animation.enterSlidingLeft
-import com.susumunoda.kansha.ui.animation.exitSlidingRight
+import com.susumunoda.compose.animation.enterSlidingLeft
+import com.susumunoda.compose.animation.exitSlidingRight
 import com.susumunoda.kansha.ui.screen.auth.LoginScreen
 import com.susumunoda.kansha.ui.screen.auth.SignupScreen
 

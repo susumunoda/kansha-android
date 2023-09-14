@@ -3,8 +3,8 @@ package com.susumunoda.kansha.ui.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
-import com.susumunoda.kansha.ui.animation.enterSlidingUp
-import com.susumunoda.kansha.ui.animation.exitSlidingDown
+import com.susumunoda.compose.animation.enterSlidingUp
+import com.susumunoda.compose.animation.exitSlidingDown
 import com.susumunoda.kansha.ui.screen.notes.AddCategoryScreen
 import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoriesScreen
