@@ -1,19 +1,22 @@
 package com.susumunoda.kansha.auth
 
 import com.susumunoda.android.auth.AuthController
-import dagger.Binds
+import com.susumunoda.android.firebase.auth.FirebaseAuthController
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AuthModule {
+object AuthModule {
     // Scope this as a singleton so that all uses of AuthController refer to the same instance.
     // This is important because the application subscribes to changes in the auth state (e.g.
     // login and logout events), and all clients must be observing the same source of information.
     @Singleton
-    @Binds
-    abstract fun bindAuthController(authController: FirebaseAuthController): AuthController
+    @Provides
+    fun provideAuthController(): AuthController {
+        return FirebaseAuthController()
+    }
 }

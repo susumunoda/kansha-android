@@ -61,7 +61,6 @@ android {
 dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
-    implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
     // Hilt
@@ -86,6 +85,7 @@ dependencies {
     implementation("com.github.susumunoda:compose-animation:6f52281543")
     implementation("com.github.susumunoda:compose-material3-components:ee846b7f86")
     implementation("com.github.susumunoda:android-firebase-firestore:3a89c197f1")
+    implementation("com.github.susumunoda:android-firebase-auth:7249879952")
     implementation("com.github.susumunoda:android-auth:f4d65b5c2b")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
