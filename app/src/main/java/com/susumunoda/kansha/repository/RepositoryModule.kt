@@ -1,5 +1,6 @@
 package com.susumunoda.kansha.repository
 
+import com.susumunoda.android.firebase.firestore.FirestoreService
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.category.FirebaseCategoryRepository
 import com.susumunoda.kansha.repository.note.FirebaseNoteRepository
@@ -22,6 +23,11 @@ abstract class RepositoryModule {
             categoryRepository: FirebaseCategoryRepository
         ): List<SessionAwareRepository> {
             return listOf(categoryRepository)
+        }
+
+        @Provides
+        fun provideFirestoreService(): FirestoreService {
+            return FirestoreService()
         }
     }
 

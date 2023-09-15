@@ -1,10 +1,10 @@
 package com.susumunoda.kansha.repository.user
 
-import com.susumunoda.kansha.repository.FirebaseFirestoreService
+import com.susumunoda.android.firebase.firestore.FirestoreService
 import javax.inject.Inject
 
 class FirebaseUserRepository @Inject constructor(
-    private val firestoreService: FirebaseFirestoreService
+    private val firestoreService: FirestoreService
 ) : UserRepository {
     companion object {
         const val COLLECTION = "users"

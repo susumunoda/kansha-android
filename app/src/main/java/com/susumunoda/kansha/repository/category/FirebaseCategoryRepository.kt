@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.repository.category
 
-import com.google.firebase.firestore.Query
-import com.susumunoda.kansha.repository.FirebaseFirestoreService
+import com.susumunoda.android.firebase.firestore.FirestoreService
+import com.susumunoda.android.firebase.firestore.Order
 import com.susumunoda.kansha.repository.SessionAwareRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -16,18 +16,22 @@ import javax.inject.Singleton
 // instance — e.g. RepositoryModule#provideCategoryRepository and #provideSessionAwareRepositories
 @Singleton
 class FirebaseCategoryRepository @Inject constructor(
-    private val firestoreService: FirebaseFirestoreService,
+    private val firestoreService: FirestoreService,
     private val coroutineScope: CoroutineScope
 ) : CategoryRepository, SessionAwareRepository {
     private val _categoriesStateFlow = MutableStateFlow<List<FirebaseCategory>>(emptyList())
     override val categoriesStateFlow = _categoriesStateFlow.asStateFlow()
     private var job: Job? = null
 
+    private enum class Field(val fieldName: String) {
+        ORDER("order")
+    }
+
     override fun onLogin(userId: String) {
         job = coroutineScope.launch {
             firestoreService.getDocumentsFlow<FirebaseCategory>(
                 path = collectionPath(userId),
-                order = FirebaseFirestoreService.Order("order", Query.Direction.ASCENDING)
+                order = Order.ascending(Field.ORDER.fieldName)
             ) { document ->
                 id = document.id
             }.collect { categories ->
