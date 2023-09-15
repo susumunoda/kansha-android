@@ -1,46 +1,20 @@
 package com.susumunoda.kansha.repository.user
 
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
+import com.susumunoda.kansha.repository.FirebaseFirestoreService
 import javax.inject.Inject
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-class FirebaseUserRepository @Inject constructor() : UserRepository {
-    private val db = Firebase.firestore
-
+class FirebaseUserRepository @Inject constructor(
+    private val firestoreService: FirebaseFirestoreService
+) : UserRepository {
     companion object {
         const val COLLECTION = "users"
     }
 
     override fun newInstance(displayName: String): User = FirebaseUser(displayName = displayName)
 
-    // No need for withContext(Dispatchers.IO) because the Firebase API uses callbacks (i.e. the
-    // code block provided here does not block the main thread).
-    override suspend fun getUser(id: String) = suspendCoroutine { cont ->
-        db.collection(COLLECTION)
-            .document(id)
-            .get()
-            .addOnSuccessListener { document ->
-                val user = document.toObject<FirebaseUser>()
-                if (user != null) {
-                    cont.resume(user)
-                } else {
-                    cont.resumeWithException(IllegalArgumentException("Could not find user with id $id"))
-                }
-            }
-            .addOnFailureListener { cont.resumeWithException(it) }
-    }
+    override suspend fun getUser(id: String): FirebaseUser =
+        firestoreService.getDocument(COLLECTION, id)
 
-    override suspend fun setUser(id: String, user: User) = suspendCoroutine { cont ->
-        assert(user is FirebaseUser)
-
-        db.collection(COLLECTION)
-            .document(id)
-            .set(user)
-            .addOnSuccessListener { cont.resume(Unit) }
-            .addOnFailureListener { cont.resumeWithException(it) }
-    }
+    override suspend fun setUser(id: String, user: User) =
+        firestoreService.setDocument(COLLECTION, id, user)
 }
