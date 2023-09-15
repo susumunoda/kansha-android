@@ -1,7 +1,7 @@
 package com.susumunoda.kansha.ui.screen.notes
 
 import androidx.lifecycle.ViewModel
-import com.susumunoda.kansha.auth.AuthController
+import com.susumunoda.android.auth.AuthController
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.ui.validation.StringValidator
 import dagger.hilt.android.lifecycle.HiltViewModel

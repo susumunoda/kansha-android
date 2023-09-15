@@ -1,5 +1,8 @@
 package com.susumunoda.kansha.repository
 
+import com.susumunoda.android.auth.AuthController
+import com.susumunoda.android.auth.SessionListener
+import com.susumunoda.android.auth.SessionListenerHandler
 import com.susumunoda.android.firebase.firestore.FirestoreService
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.category.FirebaseCategoryRepository
@@ -12,6 +15,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
 @Module
@@ -19,16 +23,21 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     companion object {
         @Provides
-        fun provideSessionAwareRepositories(
-            categoryRepository: FirebaseCategoryRepository
-        ): List<SessionAwareRepository> {
-            return listOf(categoryRepository)
-        }
+        fun provideSessionListeners(categoryRepository: FirebaseCategoryRepository): List<SessionListener> =
+            listOf(categoryRepository)
+
+        // Singleton to ensure that only one instance is ever reacting to changes to the session,
+        // including across configuration changes
+        @Singleton
+        @Provides
+        fun provideSessionListenerHandler(
+            listeners: List<@JvmSuppressWildcards SessionListener>,
+            authController: AuthController,
+            coroutineScope: CoroutineScope
+        ) = SessionListenerHandler(listeners, authController, coroutineScope)
 
         @Provides
-        fun provideFirestoreService(): FirestoreService {
-            return FirestoreService()
-        }
+        fun provideFirestoreService() = FirestoreService()
     }
 
     @Binds

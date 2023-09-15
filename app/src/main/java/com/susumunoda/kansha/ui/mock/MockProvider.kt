@@ -1,12 +1,14 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.kansha.auth.Session
+import com.susumunoda.android.auth.Session
+import com.susumunoda.android.auth.User
+import com.susumunoda.android.auth.mock.MockAuthController
 
 internal class MockProvider {
     // Session.User
     var sessionUserId: String = "1"
     val sesssionUser
-        get() = Session.User(sessionUserId)
+        get() = User(sessionUserId)
 
     // MockAuthController
     val authController

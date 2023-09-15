@@ -86,6 +86,7 @@ dependencies {
     implementation("com.github.susumunoda:compose-animation:6f52281543")
     implementation("com.github.susumunoda:compose-material3-components:ee846b7f86")
     implementation("com.github.susumunoda:android-firebase-firestore:3a89c197f1")
+    implementation("com.github.susumunoda:android-auth:f4d65b5c2b")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

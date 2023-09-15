@@ -3,8 +3,8 @@ package com.susumunoda.kansha
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.auth.Session
+import com.susumunoda.android.auth.AuthController
+import com.susumunoda.android.auth.Session
 import com.susumunoda.kansha.ui.navigation.AuthenticatedNavigation
 import com.susumunoda.kansha.ui.navigation.UnauthenticatedNavigation
 

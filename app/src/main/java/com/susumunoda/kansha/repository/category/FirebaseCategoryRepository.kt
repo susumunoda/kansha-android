@@ -1,8 +1,8 @@
 package com.susumunoda.kansha.repository.category
 
+import com.susumunoda.android.auth.SessionListener
 import com.susumunoda.android.firebase.firestore.FirestoreService
 import com.susumunoda.android.firebase.firestore.Order
-import com.susumunoda.kansha.repository.SessionAwareRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 class FirebaseCategoryRepository @Inject constructor(
     private val firestoreService: FirestoreService,
     private val coroutineScope: CoroutineScope
-) : CategoryRepository, SessionAwareRepository {
+) : CategoryRepository, SessionListener {
     private val _categoriesStateFlow = MutableStateFlow<List<FirebaseCategory>>(emptyList())
     override val categoriesStateFlow = _categoriesStateFlow.asStateFlow()
     private var job: Job? = null

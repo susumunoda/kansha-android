@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.susumunoda.kansha.auth.AuthController
-import com.susumunoda.kansha.repository.SessionAwareRepositoryHandler
+import com.susumunoda.android.auth.AuthController
+import com.susumunoda.android.auth.SessionListenerHandler
 import com.susumunoda.kansha.ui.theme.KanshaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
 
     // Top-level injection is necessary as this handler is not a direct dependency of any other type
     @Inject
-    lateinit var sessionAwareRepositoryHandler: SessionAwareRepositoryHandler
+    lateinit var sessionListenerHandler: SessionListenerHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

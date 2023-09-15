@@ -2,6 +2,9 @@ package com.susumunoda.kansha.auth
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.susumunoda.android.auth.AuthController
+import com.susumunoda.android.auth.Session
+import com.susumunoda.android.auth.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -18,7 +21,7 @@ class FirebaseAuthController @Inject constructor() : AuthController {
     init {
         auth.addAuthStateListener { newAuth ->
             if (newAuth.currentUser != null) {
-                _sessionFlow.update { Session(Session.User(newAuth.currentUser!!.uid)) }
+                _sessionFlow.update { Session(User(newAuth.currentUser!!.uid)) }
             } else {
                 _sessionFlow.update { Session.LOGGED_OUT }
             }

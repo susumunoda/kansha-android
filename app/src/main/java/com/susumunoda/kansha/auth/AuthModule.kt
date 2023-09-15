@@ -1,5 +1,6 @@
 package com.susumunoda.kansha.auth
 
+import com.susumunoda.android.auth.AuthController
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
