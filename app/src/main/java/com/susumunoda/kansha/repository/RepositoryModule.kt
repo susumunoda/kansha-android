@@ -4,6 +4,7 @@ import com.susumunoda.android.auth.AuthController
 import com.susumunoda.android.auth.SessionListener
 import com.susumunoda.android.auth.SessionListenerHandler
 import com.susumunoda.android.firebase.firestore.FirestoreService
+import com.susumunoda.android.firebase.firestore.FirestoreServiceImpl
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.category.FirebaseCategoryRepository
 import com.susumunoda.kansha.repository.note.FirebaseNoteRepository
@@ -37,7 +38,7 @@ abstract class RepositoryModule {
         ) = SessionListenerHandler(listeners, authController, coroutineScope)
 
         @Provides
-        fun provideFirestoreService() = FirestoreService()
+        fun provideFirestoreService(): FirestoreService = FirestoreServiceImpl()
     }
 
     @Binds

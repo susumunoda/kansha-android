@@ -1,5 +1,6 @@
 package com.susumunoda.kansha.repository.category
 
+import com.google.firebase.firestore.ktx.toObject
 import com.susumunoda.android.auth.SessionListener
 import com.susumunoda.android.firebase.firestore.FirestoreService
 import com.susumunoda.android.firebase.firestore.Order
@@ -7,6 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,11 +31,15 @@ class FirebaseCategoryRepository @Inject constructor(
 
     override fun onLogin(userId: String) {
         job = coroutineScope.launch {
-            firestoreService.getDocumentsFlow<FirebaseCategory>(
+            firestoreService.getDocumentsFlow(
                 path = collectionPath(userId),
                 order = Order.ascending(Field.ORDER.fieldName)
-            ) { document ->
-                id = document.id
+            ).map { documents ->
+                documents.mapNotNull { document ->
+                    document.toObject<FirebaseCategory>()?.apply {
+                        id = document.id
+                    }
+                }
             }.collect { categories ->
                 _categoriesStateFlow.update { categories }
             }
