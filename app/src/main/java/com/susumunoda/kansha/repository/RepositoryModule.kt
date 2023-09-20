@@ -1,10 +1,10 @@
 package com.susumunoda.kansha.repository
 
-import com.susumunoda.android.auth.AuthController
-import com.susumunoda.android.auth.SessionListener
-import com.susumunoda.android.auth.SessionListenerHandler
 import com.susumunoda.android.firebase.firestore.FirestoreService
 import com.susumunoda.android.firebase.firestore.FirestoreServiceImpl
+import com.susumunoda.auth.AuthController
+import com.susumunoda.auth.SessionListener
+import com.susumunoda.auth.SessionListenerHandler
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.category.FirebaseCategoryRepository
 import com.susumunoda.kansha.repository.note.FirebaseNoteRepository

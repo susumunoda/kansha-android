@@ -2,7 +2,7 @@ package com.susumunoda.kansha.ui.screen.auth
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.susumunoda.android.auth.AuthController
+import com.susumunoda.auth.AuthController
 import com.susumunoda.kansha.repository.user.UserRepository
 import com.susumunoda.kansha.ui.validation.StringValidator
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -3,7 +3,7 @@ package com.susumunoda.kansha.ui.screen.profile
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.susumunoda.android.auth.AuthController
+import com.susumunoda.auth.AuthController
 import com.susumunoda.kansha.repository.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

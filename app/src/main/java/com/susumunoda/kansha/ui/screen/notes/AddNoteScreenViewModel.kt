@@ -2,7 +2,7 @@ package com.susumunoda.kansha.ui.screen.notes
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.susumunoda.android.auth.AuthController
+import com.susumunoda.auth.AuthController
 import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.note.NoteRepository

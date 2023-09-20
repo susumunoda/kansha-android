@@ -1,11 +1,12 @@
 package com.susumunoda.kansha.auth
 
-import com.susumunoda.android.auth.AuthController
-import com.susumunoda.android.firebase.auth.FirebaseAuthController
+import com.susumunoda.auth.AuthController
+import com.susumunoda.firebase.auth.FirebaseAuthController
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
 @Module
@@ -16,7 +17,7 @@ object AuthModule {
     // login and logout events), and all clients must be observing the same source of information.
     @Singleton
     @Provides
-    fun provideAuthController(): AuthController {
-        return FirebaseAuthController()
+    fun provideAuthController(coroutineScope: CoroutineScope): AuthController {
+        return FirebaseAuthController(coroutineScope)
     }
 }

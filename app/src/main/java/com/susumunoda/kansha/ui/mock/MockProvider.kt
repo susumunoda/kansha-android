@@ -1,8 +1,8 @@
 package com.susumunoda.kansha.ui.mock
 
-import com.susumunoda.android.auth.Session
-import com.susumunoda.android.auth.User
-import com.susumunoda.android.auth.mock.MockAuthController
+import com.susumunoda.auth.Session
+import com.susumunoda.auth.User
+import com.susumunoda.auth.mock.MockAuthController
 
 internal class MockProvider {
     // Session.User

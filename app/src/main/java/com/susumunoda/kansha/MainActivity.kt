@@ -8,8 +8,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import com.susumunoda.android.auth.AuthController
-import com.susumunoda.android.auth.SessionListenerHandler
+import com.susumunoda.auth.AuthController
+import com.susumunoda.auth.SessionListenerHandler
 import com.susumunoda.kansha.ui.theme.KanshaTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

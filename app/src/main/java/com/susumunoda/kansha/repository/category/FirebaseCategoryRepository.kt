@@ -1,9 +1,9 @@
 package com.susumunoda.kansha.repository.category
 
 import com.google.firebase.firestore.ktx.toObject
-import com.susumunoda.android.auth.SessionListener
 import com.susumunoda.android.firebase.firestore.FirestoreService
 import com.susumunoda.android.firebase.firestore.Order
+import com.susumunoda.auth.SessionListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow

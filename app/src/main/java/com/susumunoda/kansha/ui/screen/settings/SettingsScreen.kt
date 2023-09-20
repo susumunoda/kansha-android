@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.susumunoda.android.auth.mock.MockAuthController
+import com.susumunoda.auth.mock.MockAuthController
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.navigation.Destination
