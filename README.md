@@ -34,3 +34,4 @@ As of now, the MVP of allowing users to create categories and notes in mostly co
 See [open issues](https://github.com/susumunoda/kansha-android/issues) for a complete list of remaining work items.
 
 # Demo
+TBD
