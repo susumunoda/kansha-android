@@ -39,7 +39,7 @@ Dependency injection is handled by [Hilt](https://developer.android.com/training
 This project makes heavy use of [Kotlin coroutines](https://kotlinlang.org/docs/coroutines-overview.html) for handling asynchronous code. In addition, [Kotlin flows](https://kotlinlang.org/docs/flow.html#flow-cancellation-basics) are used heavily for observing changes to data over time, such as [emitting state changes in view models](https://github.com/susumunoda/kansha-android/blob/main/app/src/main/java/com/susumunoda/kansha/ui/screen/notes/AddCategoryScreenViewModel.kt#L24C10-L29) and [observing the changed state in a composable function](https://github.com/susumunoda/kansha-android/blob/main/app/src/main/java/com/susumunoda/kansha/ui/screen/notes/AddCategoryScreen.kt#L51), or [observing a stream of realtime data over the network](https://github.com/susumunoda/kansha-android/blob/main/app/src/main/java/com/susumunoda/kansha/ui/screen/notes/ViewCategoryScreenViewModel.kt#L49-L70).
 
 # Progress
-As of now, the MVP of allowing users to create categories and notes in mostly complete. Still missing are the abilities to edit and delete categories and notes.
+As of now, the MVP of allowing users to create categories and notes is mostly complete. Still missing are the abilities to edit and delete categories and notes.
 
 See [open issues](https://github.com/susumunoda/kansha-android/issues) for a complete list of remaining work items.
 
