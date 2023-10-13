@@ -1,9 +1,7 @@
 package com.susumunoda.kansha.ui.screen.profile
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
+import com.susumunoda.kansha.repository.user.User
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
 import com.susumunoda.kansha.ui.component.UserPhoto
 import com.susumunoda.kansha.ui.mock.MockProvider
@@ -36,8 +35,6 @@ import com.susumunoda.kansha.ui.mock.MockProvider
 @Composable
 fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-    val user = uiState.user
-    val error = uiState.error
 
     ScaffoldWithStatusBarInsets(
         topBar = {
@@ -46,59 +43,63 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
             )
         }
     ) {
-        Box(contentAlignment = Alignment.Center) {
-            if (user != null) {
-                if (user.backgroundPhotoUrl.isNotBlank()) {
-                    AsyncImage(
-                        model = user.backgroundPhotoUrl,
-                        contentDescription = stringResource(R.string.profile_background_photo_description),
-                        modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
-                        contentScale = ContentScale.Crop,
-                        // Only for displaying in an @Preview
-                        placeholder = if (LocalInspectionMode.current) {
-                            painterResource(R.drawable.preview_background_photo)
-                        } else null
-                    )
-                } else {
-                    Spacer(Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)))
-                }
-                if (user.profilePhotoUrl.isBlank()) {
-                    DefaultUserPhoto(
-                        size = dimensionResource(R.dimen.profile_photo_size_large)
-                    )
-                } else {
-                    UserPhoto(
-                        url = user.profilePhotoUrl,
-                        size = dimensionResource(R.dimen.profile_photo_size_large),
-                        // Only for displaying in an @Preview
-                        placeholder = if (LocalInspectionMode.current) {
-                            painterResource(R.drawable.preview_profile_photo)
-                        } else null
-                    )
-                }
+        UserInfoSection(uiState.user, uiState.error)
+    }
+}
 
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .background(Color.Black.copy(alpha = 0.2f))
-                        .height(dimensionResource(R.dimen.profile_name_background_height))
-                        .fillMaxWidth()
-                ) {
-                    Text(
-                        user.displayName,
-                        style = MaterialTheme.typography.titleLarge,
-                        color = Color.White
-                    )
-                }
-            } else if (error != null) {
-                Box(Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
-                    Text(
-                        stringResource(R.string.profile_fetch_error, error.message ?: ""),
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
+@Composable
+private fun UserInfoSection(user: User?, error: Exception?) {
+    Box(contentAlignment = Alignment.Center) {
+        if (user != null) {
+            if (user.backgroundPhotoUrl.isNotBlank()) {
+                AsyncImage(
+                    model = user.backgroundPhotoUrl,
+                    contentDescription = stringResource(R.string.profile_background_photo_description),
+                    modifier = Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)),
+                    contentScale = ContentScale.Crop,
+                    // Only for displaying in an @Preview
+                    placeholder = if (LocalInspectionMode.current) {
+                        painterResource(R.drawable.preview_background_photo)
+                    } else null
+                )
+            } else {
+                Spacer(Modifier.height(dimensionResource(R.dimen.profile_background_photo_height)))
+            }
+            if (user.profilePhotoUrl.isBlank()) {
+                DefaultUserPhoto(
+                    size = dimensionResource(R.dimen.profile_photo_size_large)
+                )
+            } else {
+                UserPhoto(
+                    url = user.profilePhotoUrl,
+                    size = dimensionResource(R.dimen.profile_photo_size_large),
+                    // Only for displaying in an @Preview
+                    placeholder = if (LocalInspectionMode.current) {
+                        painterResource(R.drawable.preview_profile_photo)
+                    } else null
+                )
+            }
+
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .background(Color.Black.copy(alpha = 0.2f))
+                    .height(dimensionResource(R.dimen.profile_name_background_height))
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    user.displayName,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = Color.White
+                )
+            }
+        } else if (error != null) {
+            Box(Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
+                Text(
+                    stringResource(R.string.profile_fetch_error, error.message ?: ""),
+                    color = MaterialTheme.colorScheme.error
+                )
             }
         }
     }
