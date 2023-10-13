@@ -42,6 +42,7 @@
     <string name="profile_destination">Your profile</string>
     <string name="profile_title">Your profile</string>
     <string name="profile_fetch_error">Failed to load user data: %1$s</string>
+    <string name="profile_notes_added_header">You\'ve added…</string>
     <!-- Notes screen -->
     <string name="notes_destination">Notes</string>
     <string name="notes_title">Your notes</string>

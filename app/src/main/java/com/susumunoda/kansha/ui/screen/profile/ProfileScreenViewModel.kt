@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.susumunoda.auth.AuthController
+import com.susumunoda.kansha.repository.note.NoteRepository
 import com.susumunoda.kansha.repository.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileScreenViewModel @Inject constructor(
     authController: AuthController,
-    private val userRepository: UserRepository,
+    userRepository: UserRepository,
+    noteRepository: NoteRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProfileScreenState())
     val uiState = _uiState.asStateFlow()
@@ -42,6 +44,12 @@ class ProfileScreenViewModel @Inject constructor(
                 _uiState.update {
                     it.copy(error = e)
                 }
+            }
+        }
+
+        viewModelScope.launch {
+            noteRepository.notesFlow(currentUser.id).collect { notes ->
+                _uiState.update { it.copy(notes = notes) }
             }
         }
     }
