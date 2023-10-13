@@ -7,11 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.susumunoda.kansha.ui.screen.explore.ExploreScreen
+import com.susumunoda.kansha.ui.screen.profile.ProfileScreen
 import com.susumunoda.kansha.ui.screen.reminders.RemindersScreen
 
 enum class Destination(val route: String) {
-    EXPLORE("explore"),
     NOTES("notes"),
     VIEW_CATEGORIES("view_categories"),
     VIEW_CATEGORY("view_category"),
@@ -33,9 +32,9 @@ fun AuthenticatedNavigation() {
                 .fillMaxSize()
                 .weight(1f)
         ) {
-            NavHost(navController = navController, startDestination = Destination.EXPLORE.route) {
-                composableWithoutTransitions(Destination.EXPLORE.route) {
-                    ExploreScreen()
+            NavHost(navController = navController, startDestination = Destination.PROFILE.route) {
+                composableWithoutTransitions(Destination.PROFILE.route) {
+                    ProfileScreen()
                 }
 
                 composableWithoutTransitions(Destination.REMINDERS.route) {

@@ -8,9 +8,9 @@ import com.susumunoda.kansha.R
 
 private val BOTTOM_NAV_DESTINATIONS = listOf(
     BottomNavDestination(
-        route = Destination.EXPLORE.route,
-        titleResId = R.string.explore_destination,
-        iconResId = R.drawable.explore_icon
+        route = Destination.PROFILE.route,
+        titleResId = R.string.profile_destination,
+        iconResId = R.drawable.profile_icon
     ),
     BottomNavDestination(
         route = Destination.NOTES.route,

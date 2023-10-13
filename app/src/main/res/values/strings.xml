@@ -38,14 +38,10 @@
     <!-- View notes -->
     <string name="notes_filter_clear_text">Clear</string>
     <string name="note_multiple_labels_text">%s + %d more</string>
-
-    <!-- Explore screen -->
-    <string name="explore_destination">Explore</string>
-    <string name="explore_title">Explore</string>
-    <string name="explore_card_add_note">Add a note</string>
-    <string name="explore_card_add_note_description">What are you grateful for today?</string>
-    <string name="explore_card_set_reminder">Set a reminder</string>
-    <string name="explore_card_set_reminder_description">Set a periodic reminder to take a moment to be grateful</string>
+    <!-- Profile screen -->
+    <string name="profile_destination">Your profile</string>
+    <string name="profile_title">Your profile</string>
+    <string name="profile_fetch_error">Failed to load user data: %1$s</string>
     <!-- Notes screen -->
     <string name="notes_destination">Notes</string>
     <string name="notes_title">Your notes</string>
@@ -62,9 +58,6 @@
     <string name="settings_title">Settings</string>
     <string name="settings_item_profile">Your profile</string>
     <string name="settings_item_sign_out">Sign out</string>
-    <!-- Profile screen -->
-    <string name="profile_title">Your profile</string>
-    <string name="profile_fetch_error">Failed to load user data: %1$s</string>
     <!-- Add/edit category screen -->
     <string name="new_category_title">New category</string>
     <string name="category_name">Name</string>

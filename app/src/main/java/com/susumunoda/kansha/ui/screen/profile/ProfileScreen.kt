@@ -25,10 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.susumunoda.compose.material3.BackButton
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
@@ -37,10 +34,7 @@ import com.susumunoda.kansha.ui.mock.MockProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(
-    navController: NavHostController,
-    viewModel: ProfileScreenViewModel = hiltViewModel()
-) {
+fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val user = uiState.user
     val error = uiState.error
@@ -48,8 +42,7 @@ fun ProfileScreen(
     ScaffoldWithStatusBarInsets(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.profile_title)) },
-                navigationIcon = { BackButton(onClick = { navController.popBackStack() }) }
+                title = { Text(stringResource(R.string.profile_title)) }
             )
         }
     ) {
@@ -114,21 +107,19 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    val navController = rememberNavController()
     val mockProvider = MockProvider().apply { userRepositoryDatabase[sessionUserId] = user }
     val authController = mockProvider.authController
     val userRepository = mockProvider.userRepository
     val viewModel = ProfileScreenViewModel(authController, userRepository)
-    ProfileScreen(navController, viewModel)
+    ProfileScreen(viewModel)
 }
 
 @Preview
 @Composable
 fun ProfileScreenErrorPreview() {
-    val navController = rememberNavController()
     val mockProvider = MockProvider().apply { userRepositoryErrorOnGetUser = true }
     val authController = mockProvider.authController
     val userRepository = mockProvider.userRepository
     val viewModel = ProfileScreenViewModel(authController, userRepository)
-    ProfileScreen(navController, viewModel)
+    ProfileScreen(viewModel)
 }

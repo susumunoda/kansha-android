@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExitToApp
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -20,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import com.susumunoda.auth.mock.MockAuthController
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
-import com.susumunoda.kansha.ui.navigation.Destination
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,14 +32,6 @@ fun SettingsScreen(
         }
     ) {
         LazyColumn {
-            item {
-                val profileText = stringResource(R.string.settings_item_profile)
-                ListItem(
-                    leadingContent = { Icon(Icons.Rounded.Person, profileText) },
-                    headlineContent = { Text(profileText) },
-                    modifier = Modifier.clickable { navController.navigate(Destination.PROFILE.route) }
-                )
-            }
             item {
                 val signOutText = stringResource(R.string.settings_item_sign_out)
                 ListItem(
