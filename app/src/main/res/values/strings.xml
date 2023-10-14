@@ -43,6 +43,13 @@
     <string name="profile_title">Your profile</string>
     <string name="profile_fetch_error">Failed to load user data: %1$s</string>
     <string name="profile_notes_added_header">You\'ve added…</string>
+    <string name="profile_suggestions_header">Suggestions</string>
+    <string name="profile_suggestion_create_category">Create a category</string>
+    <string name="profile_suggestion_create_category_description">Create a category for something that you are grateful for</string>
+    <string name="profile_suggestion_add_note">Add a note</string>
+    <string name="profile_suggestion_add_note_description">What are you grateful for today?</string>
+    <string name="profile_suggestion_set_reminder">Set a reminder</string>
+    <string name="profile_suggestion_set_reminder_description">Set a periodic reminder to take a moment to be grateful</string>
     <!-- Notes screen -->
     <string name="notes_destination">Notes</string>
     <string name="notes_title">Your notes</string>

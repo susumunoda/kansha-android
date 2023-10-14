@@ -34,7 +34,7 @@ fun AuthenticatedNavigation() {
         ) {
             NavHost(navController = navController, startDestination = Destination.PROFILE.route) {
                 composableWithoutTransitions(Destination.PROFILE.route) {
-                    ProfileScreen()
+                    ProfileScreen(navController)
                 }
 
                 composableWithoutTransitions(Destination.REMINDERS.route) {

@@ -13,4 +13,5 @@
     <dimen name="linear_progress_indicator_height">4dp</dimen>
     <dimen name="card_height">160dp</dimen>
     <dimen name="card_image_height">120dp</dimen>
+    <dimen name="profile_suggestion_image_size">80dp</dimen>
 </resources>

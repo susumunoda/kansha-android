@@ -1,13 +1,23 @@
 package com.susumunoda.kansha.ui.screen.profile
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -25,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
@@ -33,11 +45,15 @@ import com.susumunoda.kansha.repository.user.User
 import com.susumunoda.kansha.ui.component.DefaultUserPhoto
 import com.susumunoda.kansha.ui.component.UserPhoto
 import com.susumunoda.kansha.ui.mock.MockProvider
+import com.susumunoda.kansha.ui.navigation.Destination
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
+fun ProfileScreen(
+    navController: NavHostController,
+    viewModel: ProfileScreenViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     ScaffoldWithStatusBarInsets(
@@ -49,7 +65,17 @@ fun ProfileScreen(viewModel: ProfileScreenViewModel = hiltViewModel()) {
     ) {
         Column {
             UserInfoSection(uiState.user, uiState.error)
-            NotesInfoSection(uiState.notes)
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                item {
+                    NotesInfoSection(uiState.notes)
+                }
+                item {
+                    SuggestionsSection(navController)
+                }
+            }
         }
     }
 }
@@ -114,11 +140,7 @@ private fun UserInfoSection(user: User?, error: Exception?) {
 
 @Composable
 private fun NotesInfoSection(notes: List<Note>, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(dimensionResource(R.dimen.padding_medium))
-    ) {
+    Column(modifier = modifier.padding(dimensionResource(R.dimen.padding_medium))) {
         Text(
             text = stringResource(R.string.profile_notes_added_header),
             style = MaterialTheme.typography.titleLarge,
@@ -151,24 +173,88 @@ private fun pluralizeNotes(numNotes: Int) = if (numNotes == 1) "1 note" else "$n
 private fun pluralizeCategories(numCategories: Int) =
     if (numCategories == 1) "1 category" else "$numCategories categories"
 
+@Composable
+private fun SuggestionsSection(navController: NavHostController, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(dimensionResource(R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
+    ) {
+        Text(
+            text = stringResource(R.string.profile_suggestions_header),
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+        SuggestionCard(
+            imageResId = R.drawable.undraw_thank_you,
+            titleResId = R.string.profile_suggestion_create_category,
+            descriptionResId = R.string.profile_suggestion_create_category_description,
+            onClick = { navController.navigate(Destination.ADD_CATEGORY.route) }
+        )
+        SuggestionCard(
+            imageResId = R.drawable.undraw_diary,
+            titleResId = R.string.profile_suggestion_add_note,
+            descriptionResId = R.string.profile_suggestion_add_note_description,
+            onClick = { navController.navigate(Destination.ADD_NOTE.route) }
+        )
+        SuggestionCard(
+            imageResId = R.drawable.undraw_clock,
+            titleResId = R.string.profile_suggestion_set_reminder,
+            descriptionResId = R.string.profile_suggestion_set_reminder_description,
+            onClick = { navController.navigate(Destination.REMINDERS.route) }
+        )
+    }
+}
+
+@Composable
+private fun SuggestionCard(
+    @DrawableRes imageResId: Int,
+    @StringRes titleResId: Int,
+    @StringRes descriptionResId: Int,
+    onClick: () -> Unit
+) {
+    ElevatedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
+        Row {
+            Image(
+                painter = painterResource(imageResId),
+                contentDescription = null,
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .size(dimensionResource(R.dimen.profile_suggestion_image_size))
+            )
+            Column(
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            ) {
+                Text(stringResource(titleResId), style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(descriptionResId), style = MaterialTheme.typography.bodyMedium)
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 fun ProfileScreenPreview() {
+    val navController = rememberNavController()
     val mockProvider = MockProvider().apply { userRepositoryDatabase[sessionUserId] = user }
     val authController = mockProvider.authController
     val userRepository = mockProvider.userRepository
     val noteRepository = mockProvider.noteRepository
     val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)
-    ProfileScreen(viewModel)
+    ProfileScreen(navController, viewModel)
 }
 
 @Preview
 @Composable
 fun ProfileScreenErrorPreview() {
+    val navController = rememberNavController()
     val mockProvider = MockProvider().apply { userRepositoryErrorOnGetUser = true }
     val authController = mockProvider.authController
     val userRepository = mockProvider.userRepository
     val noteRepository = mockProvider.noteRepository
     val viewModel = ProfileScreenViewModel(authController, userRepository, noteRepository)
-    ProfileScreen(viewModel)
+    ProfileScreen(navController, viewModel)
 }
