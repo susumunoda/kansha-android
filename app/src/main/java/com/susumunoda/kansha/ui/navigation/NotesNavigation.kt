@@ -10,6 +10,9 @@ import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoriesScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoryScreen
 
+private const val CATEGORY_ID_KEY = "categoryId"
+private const val CATEGORY_NAME_KEY = "categoryName"
+
 fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
     navigation(
         route = Destination.NOTES.route,
@@ -19,12 +22,10 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
             ViewCategoriesScreen(navController)
         }
 
-        val categoryIdKey = "categoryId"
-        val categoryNameKey = "categoryName"
-        composableWithoutTransitions("${Destination.VIEW_CATEGORY.route}/{$categoryIdKey}/{$categoryNameKey}") {
+        composableWithoutTransitions("${Destination.VIEW_CATEGORY.route}/{$CATEGORY_ID_KEY}/{$CATEGORY_NAME_KEY}") {
             val arguments = it.arguments!!
-            val categoryId = arguments.getString(categoryIdKey)!!
-            val categoryName = arguments.getString(categoryNameKey)!!
+            val categoryId = arguments.getString(CATEGORY_ID_KEY)!!
+            val categoryName = arguments.getString(CATEGORY_NAME_KEY)!!
             ViewCategoryScreen(
                 navController = navController,
                 categoryId = categoryId,
@@ -43,16 +44,20 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
         }
 
         composableWithConditionalTransitions(
-            route = Destination.ADD_NOTE.route,
+            route = "${Destination.ADD_NOTE.route}/{$CATEGORY_ID_KEY}",
             enterTransition = { enterSlidingUp() },
             enterTransitionFrom = Destination.VIEW_CATEGORIES.route,
             exitTransition = { exitSlidingDown() },
             exitTransitionTo = Destination.VIEW_CATEGORIES.route
         ) {
-            AddNoteScreen(navController = navController)
+            val arguments = it.arguments!!
+            val categoryId = arguments.getString(CATEGORY_ID_KEY)!!
+            AddNoteScreen(navController = navController, categoryId = categoryId)
         }
     }
 }
 
 fun categoryDestination(categoryId: String, categoryName: String) =
     "${Destination.VIEW_CATEGORY.route}/$categoryId/$categoryName"
+
+fun addNoteDestination(categoryId: String) = "${Destination.ADD_NOTE.route}/$categoryId"

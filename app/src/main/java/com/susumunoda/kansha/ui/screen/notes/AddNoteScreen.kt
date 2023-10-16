@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,6 +41,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddNoteScreen(
     navController: NavHostController,
+    categoryId: String,
     viewModel: AddNoteScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -47,6 +49,13 @@ fun AddNoteScreen(
     val context = LocalContext.current
     val isSaveEnabled =
         uiState.message.isNotBlank() && uiState.selectedCategory != null && !uiState.requestInFlight
+
+    if (categoryId != CATEGORY_ALL) {
+        // Pre-select the passed in category
+        LaunchedEffect(Unit) {
+            viewModel.selectCategory(categoryId)
+        }
+    }
 
     ScaffoldWithStatusBarInsets(
         topBar = {
@@ -122,7 +131,7 @@ private fun MessageSection(
 private fun CategorySection(
     allCategories: List<Category>,
     selectedCategory: Category?,
-    onSelectCategory: (Category) -> Unit,
+    onSelectCategory: (String) -> Unit,
     onDeselectCategory: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -138,7 +147,7 @@ private fun CategorySection(
                     if (selected) {
                         onDeselectCategory()
                     } else {
-                        onSelectCategory(category)
+                        onSelectCategory(category.id)
                     }
                 },
                 label = { Text(category.name) }

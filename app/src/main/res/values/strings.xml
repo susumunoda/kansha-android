@@ -52,9 +52,9 @@
     <string name="profile_suggestion_set_reminder_description">Set a periodic reminder to take a moment to be grateful</string>
     <!-- Notes screen -->
     <string name="notes_destination">Notes</string>
-    <string name="notes_title">Your notes</string>
-    <string name="notes_category_all">All</string>
-    <string name="notes_category_new">New category</string>
+    <string name="view_categories_title">Categories</string>
+    <string name="notes_all_category">All</string>
+    <string name="notes_new_category">New category</string>
     <string name="notes_add_note">Add note</string>
     <!-- Reminders screen -->
     <string name="reminders_destination">Reminders</string>

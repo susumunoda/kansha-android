@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,19 +51,19 @@ fun ViewCategoriesScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(stringResource(R.string.notes_title))
+                    Text(stringResource(R.string.view_categories_title))
                 },
                 actions = {
                     IconButton(
                         onClick = {
-                            navController.navigate(Destination.ADD_NOTE.route) {
+                            navController.navigate(Destination.ADD_CATEGORY.route) {
                                 restoreState = true
                             }
                         }
                     ) {
                         Icon(
-                            Icons.Filled.Create,
-                            contentDescription = stringResource(R.string.notes_add_note)
+                            Icons.Filled.Add,
+                            contentDescription = stringResource(R.string.notes_new_category)
                         )
                     }
                 }
@@ -97,7 +96,7 @@ fun CategoriesGrid(
         modifier = modifier
     ) {
         item {
-            val categoryAllText = stringResource(R.string.notes_category_all)
+            val categoryAllText = stringResource(R.string.notes_all_category)
             ElevatedCard(
                 onClick = {
                     navController.navigate(
@@ -145,22 +144,6 @@ fun CategoriesGrid(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(category.name)
-                }
-            }
-        }
-        item {
-            ElevatedCard(onClick = { navController.navigate(Destination.ADD_CATEGORY.route) }) {
-                Box(
-                    modifier = Modifier
-                        .height(dimensionResource(R.dimen.card_height))
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(Icons.Filled.Add, stringResource(R.string.notes_category_new))
-                    Text(
-                        text = stringResource(R.string.notes_category_new),
-                        modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
-                    )
                 }
             }
         }

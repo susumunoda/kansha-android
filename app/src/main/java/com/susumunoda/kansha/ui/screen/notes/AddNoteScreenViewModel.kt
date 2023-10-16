@@ -3,7 +3,6 @@ package com.susumunoda.kansha.ui.screen.notes
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.susumunoda.auth.AuthController
-import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.repository.note.NoteRepository
 import com.susumunoda.kansha.ui.validation.StringValidator
@@ -38,7 +37,8 @@ class AddNoteScreenViewModel @Inject constructor(
         }
     }
 
-    fun selectCategory(category: Category) {
+    fun selectCategory(categoryId: String) {
+        val category = categories.find { it.id == categoryId }
         if (_uiState.value.selectedCategory != category) {
             _uiState.update { it.copy(selectedCategory = category) }
         }

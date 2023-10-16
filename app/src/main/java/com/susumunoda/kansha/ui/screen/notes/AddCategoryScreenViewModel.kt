@@ -58,7 +58,7 @@ class AddCategoryScreenViewModel @Inject constructor(
                 photoUrl = uiState.value.trimmedPhotoUrl,
                 // For now, manually increment the order field so that new categories appear at the
                 // end of the categories list
-                order = categories.maxOf { it.order } + 1
+                order = if (categories.isEmpty()) 0 else categories.maxOf { it.order } + 1
             )
             try {
                 categoryRepository.addCategory(userId, category)
