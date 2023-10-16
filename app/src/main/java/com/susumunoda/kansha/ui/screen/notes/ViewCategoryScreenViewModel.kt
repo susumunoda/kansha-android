@@ -30,7 +30,7 @@ class ViewCategoryScreenViewModel @Inject constructor(
             return _category
         }
 
-        if (categoryId != CATEGORY_ALL && categoryId != CATEGORY_NONE) {
+        if (categoryId != CATEGORY_ALL) {
             val categories = categoryRepository.categoriesStateFlow.value
             val category = categories.find { it.id == categoryId }
             if (category != null) {
@@ -50,10 +50,6 @@ class ViewCategoryScreenViewModel @Inject constructor(
             when (categoryId) {
                 CATEGORY_ALL -> {
                     noteRepository.notesFlow(currentUserId)
-                }
-
-                CATEGORY_NONE -> {
-                    noteRepository.notesFlow(currentUserId, null)
                 }
 
                 else -> {

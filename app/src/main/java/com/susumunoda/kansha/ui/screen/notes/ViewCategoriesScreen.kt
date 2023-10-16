@@ -41,7 +41,6 @@ import com.susumunoda.kansha.ui.navigation.Destination
 import com.susumunoda.kansha.ui.navigation.categoryDestination
 
 const val CATEGORY_ALL = "all"
-const val CATEGORY_NONE = "none"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,31 +145,6 @@ fun CategoriesGrid(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(category.name)
-                }
-            }
-        }
-        item {
-            val categoryNoneText = stringResource(R.string.notes_category_none)
-            ElevatedCard(
-                onClick = {
-                    navController.navigate(
-                        categoryDestination(
-                            categoryId = CATEGORY_NONE,
-                            categoryName = categoryNoneText
-                        )
-                    )
-                }
-            ) {
-                Box(
-                    modifier = Modifier
-                        .height(dimensionResource(R.dimen.card_height))
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = categoryNoneText,
-                        modifier = Modifier.padding(top = dimensionResource(R.dimen.card_image_height))
-                    )
                 }
             }
         }

@@ -45,6 +45,8 @@ fun AddNoteScreen(
     val uiState by viewModel.uiState.collectAsState()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val isSaveEnabled =
+        uiState.message.isNotBlank() && uiState.selectedCategory != null && !uiState.requestInFlight
 
     ScaffoldWithStatusBarInsets(
         topBar = {
@@ -53,7 +55,7 @@ fun AddNoteScreen(
                 navigationIcon = { BackButton(onClick = { navController.popBackStack() }) },
                 actions = {
                     DoneButton(
-                        enabled = uiState.message.isNotBlank() && !uiState.requestInFlight,
+                        enabled = isSaveEnabled,
                         onClick = {
                             viewModel.validateNote(NoteLengthValidator(context))
                             scope.launch {
