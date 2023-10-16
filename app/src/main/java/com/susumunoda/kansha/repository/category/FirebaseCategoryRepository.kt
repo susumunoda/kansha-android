@@ -58,7 +58,7 @@ class FirebaseCategoryRepository @Inject constructor(
     )
 
     override suspend fun addCategory(userId: String, category: Category) =
-        firestoreService.addDocument(collectionPath(userId), category)
+        firestoreService.addDocument(collectionPath(userId), category).id
 
 
     private fun collectionPath(userId: String) = "categories/$userId/all"

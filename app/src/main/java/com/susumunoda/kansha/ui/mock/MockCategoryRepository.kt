@@ -6,6 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import java.util.UUID
 
 internal class MockCategoryRepository(
     categories: List<MockCategory> = emptyList(),
@@ -22,7 +23,9 @@ internal class MockCategoryRepository(
         order = order
     )
 
-    override suspend fun addCategory(userId: String, category: Category) {
+    override suspend fun addCategory(userId: String, category: Category): String {
+        val mockCategory = category as MockCategory
+
         if (mockLatency) {
             delay(mockLatencyMillis)
         }
@@ -32,7 +35,10 @@ internal class MockCategoryRepository(
         }
 
         _categoriesStateFlow.update {
-            listOf(*_categoriesStateFlow.value.toTypedArray(), category as MockCategory)
+            listOf(*_categoriesStateFlow.value.toTypedArray(), mockCategory)
         }
+
+        mockCategory.id = UUID.randomUUID().toString()
+        return mockCategory.id
     }
 }

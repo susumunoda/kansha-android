@@ -84,7 +84,7 @@ dependencies {
     implementation("com.github.susumunoda:compose-navigation:a6f8b1aeca")
     implementation("com.github.susumunoda:compose-animation:6f52281543")
     implementation("com.github.susumunoda:compose-material3-components:ee846b7f86")
-    implementation("com.github.susumunoda:android-firebase-firestore:94879b189f")
+    implementation("com.susumunoda.firebase:android-firebase-firestore:0.1.0")
     implementation("com.susumunoda.firebase:firebase-auth:1.0")
     implementation("com.susumunoda.auth:authcontroller:1.0")
     testImplementation("junit:junit:4.13.2")

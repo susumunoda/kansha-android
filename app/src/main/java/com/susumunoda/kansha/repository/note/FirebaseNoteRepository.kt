@@ -39,8 +39,9 @@ class FirebaseNoteRepository @Inject constructor(
             }
         }
 
-    override suspend fun addNote(userId: String, note: Note) =
+    override suspend fun addNote(userId: String, note: Note) {
         firestoreService.addDocument(collectionPath(userId), note)
+    }
 
     private fun collectionPath(userId: String) = "notes/$userId/all"
 }
