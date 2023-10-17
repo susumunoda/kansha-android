@@ -39,10 +39,12 @@
     <string name="notes_filter_clear_text">Clear</string>
     <string name="note_multiple_labels_text">%s + %d more</string>
     <!-- Profile screen -->
-    <string name="profile_destination">Your profile</string>
-    <string name="profile_title">Your profile</string>
+    <string name="profile_destination">Summary</string>
+    <string name="profile_title">Summary</string>
     <string name="profile_fetch_error">Failed to load user data: %1$s</string>
-    <string name="profile_notes_added_header">You\'ve added…</string>
+    <string name="profile_summary_past_week_tab">Past week</string>
+    <string name="profile_summary_past_month_tab">Past month</string>
+    <string name="profile_summary_past_year_tab">Past year</string>
     <string name="profile_suggestions_header">Suggestions</string>
     <string name="profile_suggestion_create_category">Create a category</string>
     <string name="profile_suggestion_create_category_description">Create a category for something that you are grateful for</string>

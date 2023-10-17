@@ -24,6 +24,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +43,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
+import com.susumunoda.compose.material3.TabOption
+import com.susumunoda.compose.material3.TabType
+import com.susumunoda.compose.material3.Tabs
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.note.Note
 import com.susumunoda.kansha.repository.user.User
@@ -71,7 +77,7 @@ fun ProfileScreen(
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 item {
-                    NotesInfoSection(uiState.notes)
+                    SummarySection(uiState.notes)
                 }
                 item {
                     SuggestionsSection(navController)
@@ -139,33 +145,66 @@ private fun UserInfoSection(user: User?, error: Exception?) {
     }
 }
 
+private val lastWeekTab = TabOption(R.string.profile_summary_past_week_tab)
+private val lastMonthTab = TabOption(R.string.profile_summary_past_month_tab)
+private val lastYearTab = TabOption(R.string.profile_summary_past_year_tab)
+private val summaryTabs = listOf(lastWeekTab, lastMonthTab, lastYearTab)
+
 @Composable
-private fun NotesInfoSection(notes: List<Note>, modifier: Modifier = Modifier) {
+private fun SummarySection(notes: List<Note>, modifier: Modifier = Modifier) {
+    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
+
+    Tabs(
+        tabType = TabType.PRIMARY,
+        tabOptions = summaryTabs,
+        selectedTabIndex = selectedTabIndex,
+        onSelectTabIndex = { selectedTabIndex = it }
+    )
+
     Column(modifier = modifier.padding(dimensionResource(R.dimen.padding_medium))) {
-        Text(
-            text = stringResource(R.string.profile_notes_added_header),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = dimensionResource(R.dimen.padding_small))
-        )
+        when (summaryTabs[selectedTabIndex]) {
+            lastWeekTab -> {
+                val lastWeekCalendar = Calendar.getInstance()
+                lastWeekCalendar.add(Calendar.DATE, -7)
+                val lastWeekNotes = notes.filter { it.createdAt > lastWeekCalendar.time }
+                val lastWeekCategories = lastWeekNotes.map { it.categoryId }.distinct()
+                Text(
+                    "You've added ${pluralizeNotes(lastWeekNotes.size)} in ${
+                        pluralizeCategories(
+                            lastWeekCategories.size
+                        )
+                    }"
+                )
+            }
 
-        val lastWeekCalendar = Calendar.getInstance()
-        lastWeekCalendar.add(Calendar.DATE, -7)
-        val lastWeekNotes = notes.filter { it.createdAt > lastWeekCalendar.time }
-        val lastWeekCategories = lastWeekNotes.map { it.categoryId }.distinct()
-        Text("${pluralizeNotes(lastWeekNotes.size)} in ${pluralizeCategories(lastWeekCategories.size)} in the last week")
+            lastMonthTab -> {
+                val lastMonthCalendar = Calendar.getInstance()
+                lastMonthCalendar.add(Calendar.MONTH, -1)
+                val lastMonthNotes = notes.filter { it.createdAt > lastMonthCalendar.time }
+                val lastMonthCategories = lastMonthNotes.map { it.categoryId }.distinct()
+                Text(
+                    "You've added ${pluralizeNotes(lastMonthNotes.size)} in ${
+                        pluralizeCategories(
+                            lastMonthCategories.size
+                        )
+                    }"
+                )
+            }
 
-        val lastMonthCalendar = Calendar.getInstance()
-        lastMonthCalendar.add(Calendar.MONTH, -1)
-        val lastMonthNotes = notes.filter { it.createdAt > lastMonthCalendar.time }
-        val lastMonthCategories = lastMonthNotes.map { it.categoryId }.distinct()
-        Text("${pluralizeNotes(lastMonthNotes.size)} in ${pluralizeCategories(lastMonthCategories.size)} in the last month")
-
-        val lastYearCalendar = Calendar.getInstance()
-        lastYearCalendar.add(Calendar.YEAR, -1)
-        val lastYearNotes = notes.filter { it.createdAt > lastYearCalendar.time }
-        val lastYearCategories = lastYearNotes.map { it.categoryId }.distinct()
-        Text("${pluralizeNotes(lastYearNotes.size)} in ${pluralizeCategories(lastYearCategories.size)} in the last year")
+            lastYearTab -> {
+                val lastYearCalendar = Calendar.getInstance()
+                lastYearCalendar.add(Calendar.YEAR, -1)
+                val lastYearNotes = notes.filter { it.createdAt > lastYearCalendar.time }
+                val lastYearCategories = lastYearNotes.map { it.categoryId }.distinct()
+                Text(
+                    "You've added ${pluralizeNotes(lastYearNotes.size)} in ${
+                        pluralizeCategories(
+                            lastYearCategories.size
+                        )
+                    }"
+                )
+            }
+        }
     }
 }
 
