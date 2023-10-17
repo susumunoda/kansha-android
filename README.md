@@ -43,5 +43,7 @@ As of now, the MVP of allowing users to create categories and notes is mostly co
 
 See [open issues](https://github.com/susumunoda/kansha-android/issues) for a complete list of remaining work items.
 
-# Demo
-TBD
+# Screenshots
+<img width="283" alt="Screenshot 2023-10-17 at 11 52 26 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/d2006a9d-c367-466a-9421-55340e78c65b">
+<img width="283" alt="Screenshot 2023-10-17 at 11 49 30 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/099843dc-fd80-4e4d-9995-6247066cc251">
+<img width="283" alt="Screenshot 2023-10-17 at 11 52 04 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/7d4c494e-1e01-43a6-97fb-97795925bb3e">
