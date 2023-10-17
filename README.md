@@ -47,3 +47,5 @@ See [open issues](https://github.com/susumunoda/kansha-android/issues) for a com
 <img width="283" alt="Screenshot 2023-10-17 at 11 52 26 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/d2006a9d-c367-466a-9421-55340e78c65b">
 <img width="283" alt="Screenshot 2023-10-17 at 11 49 30 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/099843dc-fd80-4e4d-9995-6247066cc251">
 <img width="283" alt="Screenshot 2023-10-17 at 11 52 04 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/7d4c494e-1e01-43a6-97fb-97795925bb3e">
+<img width="283" alt="Screenshot 2023-10-17 at 11 57 49 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/2e7d71f3-fb30-4755-868a-daf6d9c6457b">
+<img width="283" alt="Screenshot 2023-10-17 at 11 59 29 AM" src="https://github.com/susumunoda/kansha-android/assets/5313576/e23bd694-b1d7-4871-8f01-d4f4b4200fe4">
