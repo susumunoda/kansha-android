@@ -5,6 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.susumunoda.compose.animation.enterSlidingUp
 import com.susumunoda.compose.animation.exitSlidingDown
+import com.susumunoda.compose.navigation.composableWithConditionalTransitions
+import com.susumunoda.compose.navigation.composableWithoutTransitions
 import com.susumunoda.kansha.ui.screen.notes.AddCategoryScreen
 import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoriesScreen
