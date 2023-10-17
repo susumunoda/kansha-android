@@ -1,13 +1,16 @@
 package com.susumunoda.kansha.ui.screen.notes
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.susumunoda.auth.AuthController
+import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.repository.category.CategoryRepository
 import com.susumunoda.kansha.ui.validation.StringValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,7 +51,7 @@ class AddCategoryScreenViewModel @Inject constructor(
         }
     }
 
-    suspend fun submit(onSuccess: () -> Unit) {
+    fun submit(onSuccess: (Category, String) -> Unit) {
         if (_uiState.value.nameValidation == null && _uiState.value.photoUrlValidation == null) {
             _uiState.update { it.copy(requestInFlight = true) }
 
@@ -60,15 +63,17 @@ class AddCategoryScreenViewModel @Inject constructor(
                 // end of the categories list
                 order = if (categories.isEmpty()) 0 else categories.maxOf { it.order } + 1
             )
-            try {
-                categoryRepository.addCategory(userId, category)
-                onSuccess()
-            } catch (e: Exception) {
-                _uiState.update {
-                    it.copy(
-                        requestInFlight = false,
-                        errorMessage = e.message
-                    )
+            viewModelScope.launch {
+                try {
+                    val categoryId = categoryRepository.addCategory(userId, category)
+                    onSuccess(category, categoryId)
+                } catch (e: Exception) {
+                    _uiState.update {
+                        it.copy(
+                            requestInFlight = false,
+                            errorMessage = e.message
+                        )
+                    }
                 }
             }
         }

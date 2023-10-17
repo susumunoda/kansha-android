@@ -52,6 +52,7 @@ import com.susumunoda.kansha.repository.note.Note
 import com.susumunoda.kansha.ui.mock.MockCategory
 import com.susumunoda.kansha.ui.mock.MockNote
 import com.susumunoda.kansha.ui.mock.MockProvider
+import com.susumunoda.kansha.ui.navigation.Destination
 import com.susumunoda.kansha.ui.navigation.addNoteDestination
 
 private const val TRANSPARENT_BACKGROUND_ALPHA = 0.75f
@@ -100,7 +101,12 @@ fun ViewCategoryScreen(
                     actions = {
                         IconButton(
                             onClick = {
-                                navController.navigate(addNoteDestination(categoryId)) {
+                                val addNoteDestination = if (categoryId == CATEGORY_ALL) {
+                                    Destination.ADD_NOTE.route
+                                } else {
+                                    addNoteDestination(categoryId)
+                                }
+                                navController.navigate(addNoteDestination) {
                                     restoreState = true
                                 }
                             }

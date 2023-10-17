@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -188,13 +189,41 @@ private fun SuggestionsSection(navController: NavHostController, modifier: Modif
             imageResId = R.drawable.undraw_thank_you,
             titleResId = R.string.profile_suggestion_create_category,
             descriptionResId = R.string.profile_suggestion_create_category_description,
-            onClick = { navController.navigate(Destination.ADD_CATEGORY.route) }
+            onClick = {
+                // Add the notes destination to the backstack so that the user can back-navigate to
+                // the categories list view from the category view after category creation
+                navController.navigate(Destination.NOTES.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Ensure we are using the same nested backstack at the notes destination
+                    restoreState = true
+                }
+                navController.navigate(Destination.ADD_CATEGORY.route) {
+                    // Avoid multiple copies of the same route at the top of the backstack
+                    launchSingleTop = true
+                }
+            }
         )
         SuggestionCard(
             imageResId = R.drawable.undraw_diary,
             titleResId = R.string.profile_suggestion_add_note,
             descriptionResId = R.string.profile_suggestion_add_note_description,
-            onClick = { navController.navigate(Destination.ADD_NOTE.route) }
+            onClick = {
+                // Add the notes destination to the backstack so that the user can back-navigate to
+                // the categories list view from the category view after note creation
+                navController.navigate(Destination.NOTES.route) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    // Ensure we are using the same nested backstack at the notes destination
+                    restoreState = true
+                }
+                navController.navigate(Destination.ADD_NOTE.route) {
+                    // Avoid multiple copies of the same route at the top of the backstack
+                    launchSingleTop = true
+                }
+            }
         )
         SuggestionCard(
             imageResId = R.drawable.undraw_clock,

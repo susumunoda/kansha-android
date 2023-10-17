@@ -13,13 +13,19 @@ import com.susumunoda.kansha.ui.screen.reminders.RemindersScreen
 enum class Destination(val route: String) {
     NOTES("notes"),
     VIEW_CATEGORIES("view_categories"),
-    VIEW_CATEGORY("view_category"),
+    VIEW_CATEGORY("view_category/{${Params.CATEGORY_ID}}/{${Params.CATEGORY_NAME}}"),
     ADD_CATEGORY("add_category"),
     ADD_NOTE("add_note"),
+    ADD_NOTE_WITH_CATEGORY("add_note/{${Params.CATEGORY_ID}}"),
     REMINDERS("reminders"),
     SETTINGS("settings"),
     SETTINGS_ROOT("settings_root"),
-    PROFILE("profile")
+    PROFILE("profile");
+
+    object Params {
+        const val CATEGORY_ID = "categoryId"
+        const val CATEGORY_NAME = "categoryName"
+    }
 }
 
 @Composable

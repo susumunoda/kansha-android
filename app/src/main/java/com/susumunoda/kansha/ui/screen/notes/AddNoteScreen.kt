@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -34,23 +33,23 @@ import com.susumunoda.compose.material3.ProgressIndicator
 import com.susumunoda.compose.material3.ScaffoldWithStatusBarInsets
 import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.category.Category
+import com.susumunoda.kansha.ui.navigation.Destination
+import com.susumunoda.kansha.ui.navigation.categoryDestination
 import com.susumunoda.kansha.ui.validation.StringValidator
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddNoteScreen(
     navController: NavHostController,
-    categoryId: String,
+    categoryId: String? = null,
     viewModel: AddNoteScreenViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val isSaveEnabled =
         uiState.message.isNotBlank() && uiState.selectedCategory != null && !uiState.requestInFlight
 
-    if (categoryId != CATEGORY_ALL) {
+    if (categoryId != null) {
         // Pre-select the passed in category
         LaunchedEffect(Unit) {
             viewModel.selectCategory(categoryId)
@@ -67,8 +66,29 @@ fun AddNoteScreen(
                         enabled = isSaveEnabled,
                         onClick = {
                             viewModel.validateNote(NoteLengthValidator(context))
-                            scope.launch {
-                                viewModel.saveNote { navController.popBackStack() }
+                            viewModel.saveNote {
+                                navController.popBackStack()
+
+                                val backStackEntry = navController.currentBackStackEntry
+                                val isViewingSelectedCategory =
+                                    backStackEntry?.destination?.route == Destination.VIEW_CATEGORY.route &&
+                                            backStackEntry.arguments?.getString(Destination.Params.CATEGORY_ID) == categoryId
+
+                                // Navigate to the selected category if creating a note from somewhere
+                                // other than the selected category's screen (e.g. profile screen).
+                                // Pop up to the categories list view in case there were other entries
+                                // on the nav stack at the time of note creation.
+                                if (!isViewingSelectedCategory) {
+                                    val category = uiState.selectedCategory!!
+                                    navController.navigate(
+                                        categoryDestination(
+                                            categoryId = category.id,
+                                            categoryName = category.name
+                                        )
+                                    ) {
+                                        popUpTo(Destination.VIEW_CATEGORIES.route)
+                                    }
+                                }
                             }
                         }
                     )

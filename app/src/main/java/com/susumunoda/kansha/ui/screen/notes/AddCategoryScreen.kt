@@ -19,7 +19,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -39,8 +38,9 @@ import com.susumunoda.kansha.R
 import com.susumunoda.kansha.repository.category.Category
 import com.susumunoda.kansha.ui.mock.MockCategory
 import com.susumunoda.kansha.ui.mock.MockProvider
+import com.susumunoda.kansha.ui.navigation.Destination
+import com.susumunoda.kansha.ui.navigation.categoryDestination
 import com.susumunoda.kansha.ui.validation.StringValidator
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +50,6 @@ fun AddCategoryScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
 
     ScaffoldWithStatusBarInsets(
         topBar = {
@@ -63,9 +62,14 @@ fun AddCategoryScreen(
                         onClick = {
                             viewModel.validateName(NameValidator(viewModel.categories, context))
                             viewModel.validatePhotoUrl(PhotoUrlValidator(context))
-                            scope.launch {
-                                viewModel.submit {
-                                    navController.popBackStack()
+                            viewModel.submit { category, categoryId ->
+                                navController.navigate(
+                                    categoryDestination(
+                                        categoryId = categoryId,
+                                        categoryName = category.name
+                                    )
+                                ) {
+                                    popUpTo(Destination.VIEW_CATEGORIES.route)
                                 }
                             }
                         }

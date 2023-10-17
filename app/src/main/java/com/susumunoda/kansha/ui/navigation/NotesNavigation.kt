@@ -10,9 +10,6 @@ import com.susumunoda.kansha.ui.screen.notes.AddNoteScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoriesScreen
 import com.susumunoda.kansha.ui.screen.notes.ViewCategoryScreen
 
-private const val CATEGORY_ID_KEY = "categoryId"
-private const val CATEGORY_NAME_KEY = "categoryName"
-
 fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
     navigation(
         route = Destination.NOTES.route,
@@ -22,10 +19,10 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
             ViewCategoriesScreen(navController)
         }
 
-        composableWithoutTransitions("${Destination.VIEW_CATEGORY.route}/{$CATEGORY_ID_KEY}/{$CATEGORY_NAME_KEY}") {
+        composableWithoutTransitions(Destination.VIEW_CATEGORY.route) {
             val arguments = it.arguments!!
-            val categoryId = arguments.getString(CATEGORY_ID_KEY)!!
-            val categoryName = arguments.getString(CATEGORY_NAME_KEY)!!
+            val categoryId = arguments.getString(Destination.Params.CATEGORY_ID)!!
+            val categoryName = arguments.getString(Destination.Params.CATEGORY_NAME)!!
             ViewCategoryScreen(
                 navController = navController,
                 categoryId = categoryId,
@@ -44,20 +41,32 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
         }
 
         composableWithConditionalTransitions(
-            route = "${Destination.ADD_NOTE.route}/{$CATEGORY_ID_KEY}",
+            route = Destination.ADD_NOTE.route,
+            enterTransition = { enterSlidingUp() },
+            enterTransitionFrom = Destination.VIEW_CATEGORIES.route,
+            exitTransition = { exitSlidingDown() },
+            exitTransitionTo = Destination.VIEW_CATEGORIES.route
+        ) {
+            AddNoteScreen(navController = navController)
+        }
+
+        composableWithConditionalTransitions(
+            route = Destination.ADD_NOTE_WITH_CATEGORY.route,
             enterTransition = { enterSlidingUp() },
             enterTransitionFrom = Destination.VIEW_CATEGORIES.route,
             exitTransition = { exitSlidingDown() },
             exitTransitionTo = Destination.VIEW_CATEGORIES.route
         ) {
             val arguments = it.arguments!!
-            val categoryId = arguments.getString(CATEGORY_ID_KEY)!!
+            val categoryId = arguments.getString(Destination.Params.CATEGORY_ID)!!
             AddNoteScreen(navController = navController, categoryId = categoryId)
         }
     }
 }
 
-fun categoryDestination(categoryId: String, categoryName: String) =
-    "${Destination.VIEW_CATEGORY.route}/$categoryId/$categoryName"
+fun categoryDestination(categoryId: String, categoryName: String) = Destination.VIEW_CATEGORY.route
+    .replace("{${Destination.Params.CATEGORY_ID}}", categoryId)
+    .replace("{${Destination.Params.CATEGORY_NAME}}", categoryName)
 
-fun addNoteDestination(categoryId: String) = "${Destination.ADD_NOTE.route}/$categoryId"
+fun addNoteDestination(categoryId: String) = Destination.ADD_NOTE_WITH_CATEGORY.route
+    .replace("{${Destination.Params.CATEGORY_ID}}", categoryId)
