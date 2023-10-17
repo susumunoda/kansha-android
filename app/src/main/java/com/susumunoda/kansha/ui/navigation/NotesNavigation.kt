@@ -55,9 +55,9 @@ fun NavGraphBuilder.notesNavigation(navController: NavHostController) {
         composableWithConditionalTransitions(
             route = Destination.ADD_NOTE_WITH_CATEGORY.route,
             enterTransition = { enterSlidingUp() },
-            enterTransitionFrom = Destination.VIEW_CATEGORIES.route,
+            enterTransitionFrom = Destination.VIEW_CATEGORY.route,
             exitTransition = { exitSlidingDown() },
-            exitTransitionTo = Destination.VIEW_CATEGORIES.route
+            exitTransitionTo = Destination.VIEW_CATEGORY.route
         ) {
             val arguments = it.arguments!!
             val categoryId = arguments.getString(Destination.Params.CATEGORY_ID)!!
